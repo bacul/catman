@@ -1,0 +1,26 @@
+{
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es2021": true
+    },
+    "extends": "plugin:react/recommended",
+    "overrides": [
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": "latest"
+    },
+    "plugins": [
+        "react",
+        "@typescript-eslint"
+    ],
+    "rules": {
+        "react/react-in-jsx-scope": "off",
+        "no-empty": "warn",
+        "no-console": "warn",
+        "max-classes-per-file": ["error", 1],
+        "@typescript-eslint/explicit-member-accessibility": ["warn", { "accessibility": "no-public"} ],
+        "@typescript-eslint/naming-convention": ["warn", { "selector": "class", "format": ["PascalCase"] }]
+    }
+}

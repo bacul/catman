@@ -1,0 +1,28 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    background-color: black;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+img {
+    display: none;
+}
+
+.canvas-wrapper {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid white;
+}
+
+.canvas {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    position: absolute;
+}
