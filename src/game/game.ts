@@ -13,33 +13,48 @@ interface Character {
     stepSize: number;
 }
 
+interface Background {
+    borderColor: string;
+    borderRadius: number;
+}
+
+interface GameSize {
+    width: number;
+    height: number;
+}
+
 interface Game {
+    gameSize: GameSize;
     character: Character;
-    /** TODO нужно ли это вообще */
-    sprite: any;
     direction: MoveDirection;
+    background: Background;
 }
 
 const game: Game = {
-    character: {
-        width: 32,
-        height: 42,
-        currentX: 0,
-        currentY: 0,
-        stepSize: 1
+    gameSize: {
+        width: 480,
+        height: 600
     },
-    /** TODO нужно ли это вообще */
-    sprite: {
-        spriteWith: 144,
-        spriteHeight: 192
+    character: {
+        width: 30,
+        height: 30,
+        currentX: 80,
+        currentY: 60,
+        stepSize: 1
     },
     direction: {
         up: false,
         down: false,
         left: false,
         right: false
+    },
+    background: {
+        borderColor: '#009511',
+        borderRadius: 5
     }
 };
 
 export const character: Character = game.character;
 export const direction: MoveDirection = game.direction;
+export const background: Background = game.background;
+export const gameSize: GameSize = game.gameSize;

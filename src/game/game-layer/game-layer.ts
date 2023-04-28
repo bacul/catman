@@ -1,12 +1,10 @@
-import {character, direction} from '../game';
+import {character, direction, gameSize} from '../game';
 
-import {Config} from '../../config';
 import {CharacterMovement} from './character';
 import {GameLayerContext} from './game-layer-context';
 import {WallCollision} from './wall-collision';
 
 export class GameLayer {
-    private readonly gameSize = Config.gameSize;
     private readonly wallCollision: WallCollision;
     private readonly characterMovement: CharacterMovement;
 
@@ -17,7 +15,7 @@ export class GameLayer {
     }
 
     draw() {
-        GameLayerContext.context.clearRect(0, 0, this.gameSize.width, this.gameSize.height);
+        GameLayerContext.context.clearRect(0, 0, gameSize.width, gameSize.height);
         GameLayerContext.context.fillRect(character.currentX, character.currentY, character.width, character.height);
         GameLayerContext.context.fillStyle = '#0095DD';
 
@@ -29,7 +27,7 @@ export class GameLayer {
             }
             this.characterMovement.setUpView();
         } else if (direction.down) {
-            if (character.currentY < Config.gameSize.height - character.height) {
+            if (character.currentY < gameSize.height - character.height) {
                 if (!this.wallCollision.stuckBottom()) {
                     character.currentY += character.stepSize;
                 }
@@ -43,7 +41,7 @@ export class GameLayer {
             }
             this.characterMovement.setLeftView();
         } else if (direction.right) {
-            if (character.currentX < Config.gameSize.width - character.width) {
+            if (character.currentX < gameSize.width - character.width) {
                 if (!this.wallCollision.stuckRight()) {
                     character.currentX += character.stepSize;
                 }

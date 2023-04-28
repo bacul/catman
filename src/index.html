@@ -6,15 +6,13 @@
         <link rel="stylesheet" href="style.css" />
     </head>
     <body>
-        <div class="canvas-wrapper" style="width: 640px; height: 360px">
-            <canvas width="640px" height="360px" class="canvas background-layer" id="background-layer"></canvas>
-            <canvas width="640px" height="360px" class="canvas game-layer" id="game-layer"></canvas>
+        <div class="canvas-wrapper game-field">
+            <canvas class="canvas background-layer game-field" id="background-layer"></canvas>
+            <canvas class="canvas game-layer game-field" id="game-layer"></canvas>
         </div>
-
         <div class="debug">
             <button id="stop">stop</button>
         </div>
-
         <img
             style="display: none"
             id="mainCharacter"

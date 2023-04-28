@@ -1,6 +1,4 @@
-import {character, direction} from '../game';
-
-import {GameLayerContext} from './game-layer-context';
+import {direction} from '../game';
 
 enum ControlKey {
     arrowUp = 'ArrowUp',
@@ -54,16 +52,17 @@ export class CharacterMovement {
     }
 
     private setView(spritePositionX: number, spritePositionY: number) {
-        GameLayerContext.context.drawImage(
-            GameLayerContext.characterImage,
-            spritePositionX,
-            spritePositionY,
-            50,
-            50,
-            character.currentX - 6,
-            character.currentY - 7,
-            50,
-            50
-        );
+        // TODO найти квадратные спрайты
+        // GameLayerContext.context.drawImage(
+        //     GameLayerContext.characterImage,
+        //     spritePositionX,
+        //     spritePositionY,
+        //     50,
+        //     50,
+        //     character.currentX - 6,
+        //     character.currentY - 7,
+        //     50,
+        //     50
+        // );
     }
 }

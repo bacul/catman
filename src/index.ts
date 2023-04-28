@@ -1,32 +1,55 @@
+import {character, gameSize} from './game/game';
+
 import {BackgroundLayer} from './game/background-layer/background-layer';
-import {character} from './game/game';
 import {GameLayer} from './game/game-layer/game-layer';
 
-const gameLayer = new GameLayer();
-const backgroundLayer = new BackgroundLayer();
-
-backgroundLayer.drawWalls();
-
 let animationFrameId: number;
+const gameLayer = new GameLayer();
+class Application {
+    private readonly backgroundLayer = new BackgroundLayer();
 
-function main(): void {
-    animationFrameId = window.requestAnimationFrame(main);
-    gameLayer.draw();
-}
-main();
+    constructor() {
+        this.initConfig();
+        this.initDebug();
 
-window.document.querySelector('#stop').addEventListener('click', stop);
-window.document.addEventListener('keydown', stop);
+        this.backgroundLayer.initBackgroundStyle();
+        this.backgroundLayer.drawWalls();
 
-function stop(event: Event): void {
-    const isKeyboardEvent = event instanceof KeyboardEvent;
-    if (isKeyboardEvent) {
-        if (event.key === 'Space') {
+        main();
+    }
+
+    private initConfig(): void {
+        document.querySelectorAll('.game-field').forEach((element) => {
+            if (element.nodeName === 'CANVAS') {
+                element.setAttribute('width', `${gameSize.width}px`);
+                element.setAttribute('height', `${gameSize.height}px`);
+            } else {
+                element.setAttribute('style', `width: ${gameSize.width}px ;height: ${gameSize.height}px`);
+            }
+        });
+    }
+
+    private initDebug(): void {
+        window.document.querySelector('#stop').addEventListener('click', this.stop);
+        window.document.addEventListener('keydown', this.stop);
+    }
+
+    private stop(event: Event): void {
+        const isKeyboardEvent = event instanceof KeyboardEvent;
+        if (isKeyboardEvent) {
+            if (event.key === 'Space') {
+                character.stepSize = 0;
+                window.cancelAnimationFrame(animationFrameId);
+            }
+        } else {
             character.stepSize = 0;
             window.cancelAnimationFrame(animationFrameId);
         }
-    } else {
-        character.stepSize = 0;
-        window.cancelAnimationFrame(animationFrameId);
     }
+}
+new Application();
+
+function main() {
+    animationFrameId = window.requestAnimationFrame(main);
+    gameLayer.draw();
 }
