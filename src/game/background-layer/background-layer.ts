@@ -114,7 +114,7 @@ export class BackgroundLayer {
         this.context.closePath();
     }
 
-    drawWalls(): void {
+    drawFigures(): void {
         backgroundLayer.figures.forEach((figures) => {
             switch (figures.type) {
                 case FigureType.rectangle:

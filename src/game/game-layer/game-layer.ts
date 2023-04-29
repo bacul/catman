@@ -2,14 +2,14 @@ import {character, direction, gameSize} from '../game';
 
 import {CharacterMovement} from './character';
 import {GameLayerContext} from './game-layer-context';
-import {WallCollision} from './wall-collision';
+import {FigureCollision} from './wall-collision';
 
 export class GameLayer {
-    private readonly wallCollision: WallCollision;
+    private readonly figureCollision: FigureCollision;
     private readonly characterMovement: CharacterMovement;
 
     constructor() {
-        this.wallCollision = new WallCollision();
+        this.figureCollision = new FigureCollision();
         this.characterMovement = new CharacterMovement();
         document.addEventListener('keydown', this.characterMovement.changeDirectionHandler, false);
     }
@@ -21,28 +21,28 @@ export class GameLayer {
 
         if (direction.up) {
             if (character.currentY > 0) {
-                if (!this.wallCollision.stuckTop()) {
+                if (!this.figureCollision.stuckTop()) {
                     character.currentY -= character.stepSize;
                 }
             }
             this.characterMovement.setUpView();
         } else if (direction.down) {
             if (character.currentY < gameSize.height - character.height) {
-                if (!this.wallCollision.stuckBottom()) {
+                if (!this.figureCollision.stuckBottom()) {
                     character.currentY += character.stepSize;
                 }
             }
             this.characterMovement.setDownView();
         } else if (direction.left) {
             if (character.currentX > 0) {
-                if (!this.wallCollision.stuckLeft()) {
+                if (!this.figureCollision.stuckLeft()) {
                     character.currentX -= character.stepSize;
                 }
             }
             this.characterMovement.setLeftView();
         } else if (direction.right) {
             if (character.currentX < gameSize.width - character.width) {
-                if (!this.wallCollision.stuckRight()) {
+                if (!this.figureCollision.stuckRight()) {
                     character.currentX += character.stepSize;
                 }
             }

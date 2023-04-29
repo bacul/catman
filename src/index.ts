@@ -13,7 +13,7 @@ class Application {
         this.initDebug();
 
         this.backgroundLayer.initBackgroundStyle();
-        this.backgroundLayer.drawWalls();
+        this.backgroundLayer.drawFigures();
 
         main();
     }

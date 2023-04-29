@@ -1,4 +1,4 @@
-import {Figure, FigureType, Point, backgroundLayer} from '../background-layer/background-layer';
+import {Figure, FigureType, backgroundLayer} from '../background-layer/background-layer';
 
 import {character} from '../game';
 
@@ -8,44 +8,108 @@ interface HorizontalLine {
     y: number;
 }
 
-export class WallCollision {
+interface VerticalLine {
+    start: number;
+    end: number;
+    x: number;
+}
+
+export class FigureCollision {
     stuckRight(): boolean {
         return backgroundLayer.figures.some((figure) => {
-            if (figure.type !== FigureType.rectangle) {
-                return false;
+            if (figure.type === FigureType.rectangle) {
+                const isWallPassed = figure.offsetX + figure.width <= character.currentX + character.width;
+                if (isWallPassed) {
+                    return false;
+                }
+
+                const reachRightEdge = character.currentX + character.width >= figure.offsetX;
+                if (!reachRightEdge) {
+                    return false;
+                }
+
+                return this.rectangleOnWayX(figure);
             }
 
-            const isWallPassed = figure.offsetX + figure.width <= character.currentX + character.width;
-            if (isWallPassed) {
-                return false;
-            }
+            if (figure.type === FigureType.path) {
+                const figureRightX = Math.max(...figure.path.map((item) => item.x));
+                const isWallPassed = figureRightX < character.currentX;
+                if (isWallPassed) {
+                    return false;
+                }
 
-            const reachRightEdge = character.currentX + character.width >= figure.offsetX;
-            if (!reachRightEdge) {
-                return false;
-            }
+                const reachLeftEdge = character.currentX + character.width >= figure.offsetX;
+                if (!reachLeftEdge) {
+                    return false;
+                }
 
-            return this.rectangleOnWayX(figure);
+                if (!this.pathOnWayX(figure)) {
+                    return false;
+                }
+
+                const characterRightX = character.currentX + character.width;
+                const stuck = this.getVerticalLines(figure, false).some((line) => {
+                    const linePassed = characterRightX > line.x;
+                    if (linePassed) {
+                        return false;
+                    }
+                    const topCornerOnWayX = character.currentY + character.height > line.end;
+                    const bottomCornerOnWayX = character.currentY < line.start;
+                    const lineOnWay = topCornerOnWayX && bottomCornerOnWayX;
+                    const lineReached = characterRightX >= line.x;
+                    return lineReached && lineOnWay;
+                });
+                return stuck;
+            }
         });
     }
 
     stuckLeft(): boolean {
         return backgroundLayer.figures.some((figure) => {
-            if (figure.type !== FigureType.rectangle) {
-                return false;
+            if (figure.type === FigureType.rectangle) {
+                const isWallPassed = figure.offsetX >= character.currentX + character.width;
+                if (isWallPassed) {
+                    return false;
+                }
+
+                const reachLeftEdge = character.currentX <= figure.offsetX + figure.width;
+                if (!reachLeftEdge) {
+                    return false;
+                }
+
+                return this.rectangleOnWayX(figure);
             }
 
-            const isWallPassed = figure.offsetX >= character.currentX + character.width;
-            if (isWallPassed) {
-                return false;
-            }
+            if (figure.type === FigureType.path) {
+                const figureLeftX = Math.min(...figure.path.map((item) => item.x));
+                const isWallPassed = figureLeftX > character.currentX;
+                if (isWallPassed) {
+                    return false;
+                }
 
-            const reachLeftEdge = character.currentX <= figure.offsetX + figure.width;
-            if (!reachLeftEdge) {
-                return false;
-            }
+                const reachRightEdge = character.currentX <= Math.max(...figure.path.map((item) => item.x));
+                if (!reachRightEdge) {
+                    return false;
+                }
 
-            return this.rectangleOnWayX(figure);
+                if (!this.pathOnWayX(figure)) {
+                    return false;
+                }
+
+                const characterLeftX = character.currentX;
+                const stuck = this.getVerticalLines(figure, true).some((line) => {
+                    const linePassed = characterLeftX > line.x;
+                    if (linePassed) {
+                        return false;
+                    }
+                    const topCornerOnWayX = character.currentY + character.height > line.start;
+                    const bottomCornerOnWayX = character.currentY < line.end;
+                    const lineOnWay = topCornerOnWayX && bottomCornerOnWayX;
+                    const lineReached = characterLeftX >= line.x;
+                    return lineReached && lineOnWay;
+                });
+                return stuck;
+            }
         });
     }
 
@@ -77,17 +141,12 @@ export class WallCollision {
                     return false;
                 }
 
-                const leftFigureCornerX = Math.min(...figure.path.map((item) => item.x));
-                const leftCornerOnWayX = character.currentX < Math.max(...figure.path.map((item) => item.x));
-                const rightCornerOnWayX = character.currentX + character.width > leftFigureCornerX;
-                const figureOnWayY = leftCornerOnWayX && rightCornerOnWayX;
-
-                if (!figureOnWayY) {
+                if (!this.pathOnWayY(figure)) {
                     return false;
                 }
 
                 const characterBottomY = character.currentY + character.height;
-                const stuck = this.getHorizontalLines(figure.path, figure, true).some((line) => {
+                const stuck = this.getHorizontalLines(figure, true).some((line) => {
                     const linePassed = characterBottomY > line.y;
                     if (linePassed) {
                         return false;
@@ -131,17 +190,12 @@ export class WallCollision {
                     return false;
                 }
 
-                const leftFigureCornerX = Math.min(...figure.path.map((item) => item.x));
-                const leftCornerOnWayX = character.currentX < Math.max(...figure.path.map((item) => item.x));
-                const rightCornerOnWayX = character.currentX + character.width > leftFigureCornerX;
-                const figureOnWayY = leftCornerOnWayX && rightCornerOnWayX;
-
-                if (!figureOnWayY) {
+                if (!this.pathOnWayY(figure)) {
                     return false;
                 }
 
                 const characterTopY = character.currentY;
-                const stuck = this.getHorizontalLines(figure.path, figure, false).some((line) => {
+                const stuck = this.getHorizontalLines(figure, false).some((line) => {
                     const linePassed = characterTopY < line.y;
                     if (linePassed) {
                         return false;
@@ -169,21 +223,30 @@ export class WallCollision {
         return leftCornerOnWayX && rightCornerOnWayX;
     }
 
-    private getHorizontalLines(points: Point[], figure: Figure, startToEnd: boolean): HorizontalLine[] {
-        return points
+    private pathOnWayY(figure: Figure): boolean {
+        const leftFigureCornerX = Math.min(...figure.path.map((item) => item.x));
+        const leftCornerOnWayX = character.currentX < Math.max(...figure.path.map((item) => item.x));
+        const rightCornerOnWayX = character.currentX + character.width > leftFigureCornerX;
+        return leftCornerOnWayX && rightCornerOnWayX;
+    }
+
+    private pathOnWayX(figure: Figure): boolean {
+        const topFigureCornerY = Math.min(...figure.path.map((item) => item.y));
+        const bottomCornerOnWayY = character.currentY + character.height > topFigureCornerY;
+        const topCornerOnWayY = character.currentY < Math.max(...figure.path.map((item) => item.y));
+        return bottomCornerOnWayY && topCornerOnWayY;
+    }
+
+    private getHorizontalLines(figure: Figure, bottomLines: boolean): HorizontalLine[] {
+        return figure.path
             .map((point, index) => {
                 if (index === 0) {
-                    const horizontalLine = figure.offsetY === point.y;
-                    if (horizontalLine) {
-                        return {
-                            start: figure.offsetX,
-                            end: point.x,
-                            y: point.y
-                        };
-                    }
-                    return null;
+                    return {
+                        start: figure.offsetX,
+                        end: point.x,
+                        y: point.y
+                    };
                 }
-
                 if (figure.path[index + 1]) {
                     const horizontalLine = point.y === figure.path[index + 1].y;
                     if (horizontalLine) {
@@ -198,12 +261,38 @@ export class WallCollision {
             })
             .filter((line) => {
                 if (line) {
-                    if (startToEnd) {
+                    if (bottomLines) {
                         return line.start < line.end;
                     }
                     return line.start > line.end;
                 }
+                return null;
+            });
+    }
 
+    private getVerticalLines(figure: Figure, rightLines: boolean): VerticalLine[] {
+        return figure.path
+            .map((point, index) => {
+                const next = figure.path[index + 1];
+                if (next) {
+                    const verticalLine = point.x === next.x;
+                    if (verticalLine) {
+                        return {
+                            start: point.y,
+                            end: next.y,
+                            x: point.x
+                        };
+                    }
+                }
+                return null;
+            })
+            .filter((line) => {
+                if (line) {
+                    if (rightLines) {
+                        return line.start < line.end;
+                    }
+                    return line.start > line.end;
+                }
                 return null;
             });
     }
