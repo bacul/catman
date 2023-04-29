@@ -21,7 +21,7 @@ export class FigureCollision {
     }
 
     stuckLeft(): boolean {
-        return character.currentX < 0 || this.stuckLeftPath() || this.stuckLeftRectangle();
+        return character.currentX <= 0 || this.stuckLeftPath() || this.stuckLeftRectangle();
     }
 
     stuckBottom(): boolean {

@@ -1,8 +1,8 @@
 import {MoveDirectionType, character, direction, gameSize} from '../game';
 
 import {CharacterMovement} from './character';
-import {GameLayerContext} from './game-layer-context';
 import {FigureCollision} from './wall-collision';
+import {GameLayerContext} from './game-layer-context';
 
 export class GameLayer {
     private readonly figureCollision: FigureCollision;
@@ -13,11 +13,7 @@ export class GameLayer {
         this.characterMovement = new CharacterMovement();
     }
 
-    draw() {
-        GameLayerContext.context.clearRect(0, 0, gameSize.width, gameSize.height);
-        GameLayerContext.context.fillRect(character.currentX, character.currentY, character.width, character.height);
-        GameLayerContext.context.fillStyle = '#0095DD';
-
+    move(): void {
         const needChangeMovement =
             this.characterMovement.keyPressed && direction.moveDirection !== direction.changeToDirection;
         let canChangeMovement: boolean;
@@ -63,5 +59,11 @@ export class GameLayer {
                 }
                 break;
         }
+    }
+
+    draw(): void {
+        GameLayerContext.context.clearRect(0, 0, gameSize.width, gameSize.height);
+        GameLayerContext.context.fillRect(character.currentX, character.currentY, character.width, character.height);
+        GameLayerContext.context.fillStyle = '#0095DD';
     }
 }

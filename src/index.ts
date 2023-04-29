@@ -3,17 +3,29 @@ import {character, gameSize} from './game/game';
 import {BackgroundLayer} from './game/background-layer/background-layer';
 import {GameLayer} from './game/game-layer/game-layer';
 
-let animationFrameId: number;
-const gameLayer = new GameLayer();
 class Application {
+    private animationFrameId: number;
     private readonly backgroundLayer = new BackgroundLayer();
+    private readonly gameLayer = new GameLayer();
 
     constructor() {
         this.setGameSize();
         this.setDebugMode();
-
         this.backgroundLayer.draw();
-        main();
+        this.main();
+        this.setCharacterPosition();
+    }
+
+    private setCharacterPosition(): void {
+        setTimeout(() => {
+            this.gameLayer.move();
+            this.setCharacterPosition();
+        }, 10);
+    }
+
+    private main() {
+        this.animationFrameId = window.requestAnimationFrame(this.main.bind(this));
+        this.gameLayer.draw();
     }
 
     private setGameSize(): void {
@@ -37,17 +49,12 @@ class Application {
         if (isKeyboardEvent) {
             if (event.key === 'Space') {
                 character.stepSize = 0;
-                window.cancelAnimationFrame(animationFrameId);
+                window.cancelAnimationFrame(this.animationFrameId);
             }
         } else {
             character.stepSize = 0;
-            window.cancelAnimationFrame(animationFrameId);
+            window.cancelAnimationFrame(this.animationFrameId);
         }
     }
 }
 new Application();
-
-function main() {
-    animationFrameId = window.requestAnimationFrame(main);
-    gameLayer.draw();
-}
