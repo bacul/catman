@@ -1,12 +1,8 @@
 import {background} from '../game';
 
 interface IBackgroundLayer {
-    figures: Figure[];
-}
-
-export enum FigureType {
-    rectangle,
-    path
+    rectangles: Rectangle[];
+    paths: Path[];
 }
 
 export interface Point {
@@ -14,82 +10,101 @@ export interface Point {
     y: number;
 }
 
-export interface Figure {
-    type: FigureType;
-    offsetX: number;
-    offsetY: number;
-    /** Ширина прямоугольника */
-    width?: number;
-    /** Высота прямоугольника */
-    height?: number;
-    /** Коллекция точек фигуры */
-    path?: Point[];
+export interface Rectangle {
+    topLeftX: number;
+    topLeftY: number;
+    width: number;
+    height: number;
+}
+
+interface PathCoordinates {
+    topLeftX: number;
+    topLeftY: number;
+    points: Point[];
+}
+
+export interface Path extends PathCoordinates {
+    minX: number;
+    maxX: number;
+    minY: number;
+    maxY: number;
+}
+
+const pathCoordinates: PathCoordinates[] = [
+    {
+        topLeftX: 120,
+        topLeftY: 90,
+        points: [
+            {x: 130, y: 90},
+            {x: 130, y: 120},
+            {x: 160, y: 120},
+            {x: 160, y: 130},
+            {x: 130, y: 130},
+            {x: 130, y: 160},
+            {x: 120, y: 160},
+            {x: 120, y: 90}
+        ]
+    }
+];
+
+function convertCoordinatesToPath(pathCoordinates: PathCoordinates[]): Path[] {
+    return pathCoordinates.map((coordinates) => {
+        const path: Path = {
+            ...coordinates,
+            maxX: Math.max(...coordinates.points.map((point) => point.x)),
+            minX: Math.min(...coordinates.points.map((point) => point.x)),
+            maxY: Math.max(...coordinates.points.map((point) => point.y)),
+            minY: Math.min(...coordinates.points.map((point) => point.y))
+        };
+
+        return path;
+    });
 }
 
 export const backgroundLayer: IBackgroundLayer = {
-    figures: [
+    paths: convertCoordinatesToPath(pathCoordinates),
+    rectangles: [
         /**
-         * верхний ряд стен слева направо
+         * верхний ряд слева направо
          */
-        // {
-        //     offsetX: 30,
-        //     offsetY: 30,
-        //     width: 60,
-        //     height: 30,
-        //     type: FigureType.rectangle
-        // },
-        // {
-        //     offsetX: 120,
-        //     offsetY: 30,
-        //     width: 80,
-        //     height: 30,
-        //     type: FigureType.rectangle
-        // },
-        // {
-        //     offsetX: 230,
-        //     offsetY: -5,
-        //     width: 20,
-        //     height: 65,
-        //     type: FigureType.rectangle
-        // },
-        // {
-        //     offsetX: 280,
-        //     offsetY: 30,
-        //     width: 80,
-        //     height: 30,
-        //     type: FigureType.rectangle
-        // },
-        // {
-        //     offsetX: 390,
-        //     offsetY: 30,
-        //     width: 60,
-        //     height: 30,
-        //     type: FigureType.rectangle
-        // },
-        // /**
-        //  * второй сверху ряд стен слева направо
-        //  */
-        // {
-        //     offsetX: 30,
-        //     offsetY: 90,
-        //     width: 60,
-        //     height: 20,
-        //     type: FigureType.rectangle
-        // },
         {
-            offsetX: 120,
-            offsetY: 90,
-            type: FigureType.path,
-            path: [
-                {x: 130, y: 90},
-                {x: 130, y: 120},
-                {x: 160, y: 120},
-                {x: 160, y: 130},
-                {x: 130, y: 130},
-                {x: 130, y: 160},
-                {x: 120, y: 160},
-                {x: 120, y: 90}
-            ]
+            topLeftX: 30,
+            topLeftY: 30,
+            width: 60,
+            height: 30
+        },
+        {
+            topLeftX: 120,
+            topLeftY: 30,
+            width: 80,
+            height: 30
+        },
+        {
+            topLeftX: 230,
+            topLeftY: -5,
+            width: 20,
+            height: 65
+        },
+        {
+            topLeftX: 280,
+            topLeftY: 30,
+            width: 80,
+            height: 30
+        },
+        {
+            topLeftX: 390,
+            topLeftY: 30,
+            width: 60,
+            height: 30
+        },
+        /**
+         * второй сверху ряд слева направо
+         */
+        {
+            topLeftX: 30,
+            topLeftY: 90,
+            width: 60,
+            height: 20
         }
     ]
 };
@@ -114,57 +129,50 @@ export class BackgroundLayer {
         this.context.closePath();
     }
 
-    drawFigures(): void {
-        backgroundLayer.figures.forEach((figures) => {
-            switch (figures.type) {
-                case FigureType.rectangle:
-                    this.context.beginPath();
-                    this.context.lineWidth = 2;
-                    this.context.roundRect(
-                        figures.offsetX,
-                        figures.offsetY,
-                        figures.width,
-                        figures.height,
+    drawPaths(): void {
+        backgroundLayer.paths.forEach((path) => {
+            this.context.beginPath();
+            this.context.moveTo(path.topLeftX + background.borderRadius, path.topLeftY);
+            path.points.forEach((line, index) => {
+                if (index === 0) {
+                    this.context.arcTo(
+                        line.x,
+                        line.y,
+                        path.points[index + 1].x,
+                        path.points[index + 1].y,
                         background.borderRadius
                     );
-                    this.context.strokeStyle = background.borderColor;
-                    this.context.stroke();
-                    this.context.closePath();
-                    break;
-                case FigureType.path:
-                    this.context.beginPath();
-                    this.context.moveTo(figures.offsetX + background.borderRadius, figures.offsetY);
-                    figures.path.forEach((line, index) => {
-                        if (index === 0) {
-                            this.context.arcTo(
-                                line.x,
-                                line.y,
-                                figures.path[index + 1].x,
-                                figures.path[index + 1].y,
-                                background.borderRadius
-                            );
-                        } else if (index === figures.path.length - 1) {
-                            this.context.arcTo(
-                                line.x,
-                                line.y,
-                                figures.path[0].x,
-                                figures.path[0].y,
-                                background.borderRadius
-                            );
-                        } else {
-                            this.context.arcTo(
-                                line.x,
-                                line.y,
-                                figures.path[index + 1].x,
-                                figures.path[index + 1].y,
-                                background.borderRadius
-                            );
-                        }
-                    });
-                    this.context.stroke();
-                    this.context.closePath();
-                    break;
-            }
+                } else if (index === path.points.length - 1) {
+                    this.context.arcTo(line.x, line.y, path.points[0].x, path.points[0].y, background.borderRadius);
+                } else {
+                    this.context.arcTo(
+                        line.x,
+                        line.y,
+                        path.points[index + 1].x,
+                        path.points[index + 1].y,
+                        background.borderRadius
+                    );
+                }
+            });
+            this.context.stroke();
+            this.context.closePath();
+        });
+    }
+
+    drawRectangles(): void {
+        backgroundLayer.rectangles.forEach((rectangle) => {
+            this.context.beginPath();
+            this.context.lineWidth = 2;
+            this.context.roundRect(
+                rectangle.topLeftX,
+                rectangle.topLeftY,
+                rectangle.width,
+                rectangle.height,
+                background.borderRadius
+            );
+            this.context.strokeStyle = background.borderColor;
+            this.context.stroke();
+            this.context.closePath();
         });
     }
 }

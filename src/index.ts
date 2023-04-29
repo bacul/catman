@@ -13,7 +13,8 @@ class Application {
         this.initDebug();
 
         this.backgroundLayer.initBackgroundStyle();
-        this.backgroundLayer.drawFigures();
+        this.backgroundLayer.drawPaths();
+        this.backgroundLayer.drawRectangles();
 
         main();
     }
