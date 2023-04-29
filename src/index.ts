@@ -9,17 +9,14 @@ class Application {
     private readonly backgroundLayer = new BackgroundLayer();
 
     constructor() {
-        this.initConfig();
-        this.initDebug();
+        this.setGameSize();
+        this.setDebugMode();
 
-        this.backgroundLayer.initBackgroundStyle();
-        this.backgroundLayer.drawPaths();
-        this.backgroundLayer.drawRectangles();
-
+        this.backgroundLayer.draw();
         main();
     }
 
-    private initConfig(): void {
+    private setGameSize(): void {
         document.querySelectorAll('.game-field').forEach((element) => {
             if (element.nodeName === 'CANVAS') {
                 element.setAttribute('width', `${gameSize.width}px`);
@@ -30,7 +27,7 @@ class Application {
         });
     }
 
-    private initDebug(): void {
+    private setDebugMode(): void {
         window.document.querySelector('#stop').addEventListener('click', this.stop);
         window.document.addEventListener('keydown', this.stop);
     }

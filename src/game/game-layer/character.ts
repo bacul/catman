@@ -1,4 +1,4 @@
-import {direction} from '../game';
+import {MoveDirectionType, direction} from '../game';
 
 enum ControlKey {
     arrowUp = 'ArrowUp',
@@ -12,43 +12,68 @@ enum ControlKey {
 }
 
 export class CharacterMovement {
+    private _keyPressed: boolean;
+
+    constructor() {
+        document.addEventListener('keydown', this.onKeyPressed.bind(this), false);
+        document.addEventListener('keyup', () => (this._keyPressed = false), false);
+    }
+
     setLeftView(): void {
-        this.setView(50, 48);
+        // this.setView(50, 48);
     }
 
     setRightView(): void {
-        this.setView(50, 96);
+        // this.setView(50, 96);
     }
 
     setDownView(): void {
-        this.setView(50, 2);
+        // this.setView(50, 2);
     }
 
     setUpView(): void {
-        this.setView(50, 142);
+        // this.setView(50, 142);
     }
 
-    changeDirectionHandler(event: KeyboardEvent): void {
-        direction.up = false;
-        direction.down = false;
-        direction.left = false;
-        direction.right = false;
+    get keyPressed(): boolean {
+        return this._keyPressed;
+    }
 
-        if (event.code === ControlKey.w || event.code === ControlKey.arrowUp) {
-            direction.up = true;
-        }
+    private onKeyPressed(event: KeyboardEvent): void {
+        this._keyPressed = true;
+        if (!event.repeat) {
+            if (event.code === ControlKey.w || event.code === ControlKey.arrowUp) {
+                if (direction.changeToDirection !== MoveDirectionType.up) {
+                    this.setMoveDirection(MoveDirectionType.up);
+                }
+                return;
+            }
 
-        if (event.code === ControlKey.s || event.code === ControlKey.arrowDown) {
-            direction.down = true;
-        }
+            if (event.code === ControlKey.s || event.code === ControlKey.arrowDown) {
+                if (direction.changeToDirection !== MoveDirectionType.down) {
+                    this.setMoveDirection(MoveDirectionType.down);
+                }
+                return;
+            }
 
-        if (event.code === ControlKey.a || event.code === ControlKey.arrowLeft) {
-            direction.left = true;
-        }
+            if (event.code === ControlKey.a || event.code === ControlKey.arrowLeft) {
+                if (direction.changeToDirection !== MoveDirectionType.left) {
+                    this.setMoveDirection(MoveDirectionType.left);
+                }
+                return;
+            }
 
-        if (event.code === ControlKey.d || event.code === ControlKey.arrowRight) {
-            direction.right = true;
+            if (event.code === ControlKey.d || event.code === ControlKey.arrowRight) {
+                if (direction.changeToDirection !== MoveDirectionType.right) {
+                    this.setMoveDirection(MoveDirectionType.right);
+                }
+                return;
+            }
         }
+    }
+
+    private setMoveDirection(type: MoveDirectionType): void {
+        direction.changeToDirection = type;
     }
 
     private setView(spritePositionX: number, spritePositionY: number) {

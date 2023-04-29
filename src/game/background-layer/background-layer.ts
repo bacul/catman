@@ -1,113 +1,5 @@
 import {background} from '../game';
-
-interface IBackgroundLayer {
-    rectangles: Rectangle[];
-    paths: Path[];
-}
-
-export interface Point {
-    x: number;
-    y: number;
-}
-
-export interface Rectangle {
-    topLeftX: number;
-    topLeftY: number;
-    width: number;
-    height: number;
-}
-
-interface PathCoordinates {
-    topLeftX: number;
-    topLeftY: number;
-    points: Point[];
-}
-
-export interface Path extends PathCoordinates {
-    minX: number;
-    maxX: number;
-    minY: number;
-    maxY: number;
-}
-
-const pathCoordinates: PathCoordinates[] = [
-    {
-        topLeftX: 120,
-        topLeftY: 90,
-        points: [
-            {x: 130, y: 90},
-            {x: 130, y: 120},
-            {x: 160, y: 120},
-            {x: 160, y: 130},
-            {x: 130, y: 130},
-            {x: 130, y: 160},
-            {x: 120, y: 160},
-            {x: 120, y: 90}
-        ]
-    }
-];
-
-function convertCoordinatesToPath(pathCoordinates: PathCoordinates[]): Path[] {
-    return pathCoordinates.map((coordinates) => {
-        const path: Path = {
-            ...coordinates,
-            maxX: Math.max(...coordinates.points.map((point) => point.x)),
-            minX: Math.min(...coordinates.points.map((point) => point.x)),
-            maxY: Math.max(...coordinates.points.map((point) => point.y)),
-            minY: Math.min(...coordinates.points.map((point) => point.y))
-        };
-
-        return path;
-    });
-}
-
-export const backgroundLayer: IBackgroundLayer = {
-    paths: convertCoordinatesToPath(pathCoordinates),
-    rectangles: [
-        /**
-         * верхний ряд слева направо
-         */
-        {
-            topLeftX: 30,
-            topLeftY: 30,
-            width: 60,
-            height: 30
-        },
-        {
-            topLeftX: 120,
-            topLeftY: 30,
-            width: 80,
-            height: 30
-        },
-        {
-            topLeftX: 230,
-            topLeftY: -5,
-            width: 20,
-            height: 65
-        },
-        {
-            topLeftX: 280,
-            topLeftY: 30,
-            width: 80,
-            height: 30
-        },
-        {
-            topLeftX: 390,
-            topLeftY: 30,
-            width: 60,
-            height: 30
-        },
-        /**
-         * второй сверху ряд слева направо
-         */
-        {
-            topLeftX: 30,
-            topLeftY: 90,
-            width: 60,
-            height: 20
-        }
-    ]
-};
+import {Figure} from './figure';
 
 export class BackgroundLayer {
     private readonly context: CanvasRenderingContext2D;
@@ -117,7 +9,13 @@ export class BackgroundLayer {
         this.context = this.canvas.getContext('2d', {alpha: false});
     }
 
-    initBackgroundStyle(): void {
+    draw(): void {
+        this.drawBackground();
+        this.drawRectangles();
+        this.drawPaths();
+    }
+
+    private drawBackground(): void {
         this.context.fillStyle = '#fff';
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -129,8 +27,8 @@ export class BackgroundLayer {
         this.context.closePath();
     }
 
-    drawPaths(): void {
-        backgroundLayer.paths.forEach((path) => {
+    private drawPaths(): void {
+        Figure.paths.forEach((path) => {
             this.context.beginPath();
             this.context.moveTo(path.topLeftX + background.borderRadius, path.topLeftY);
             path.points.forEach((line, index) => {
@@ -159,8 +57,8 @@ export class BackgroundLayer {
         });
     }
 
-    drawRectangles(): void {
-        backgroundLayer.rectangles.forEach((rectangle) => {
+    private drawRectangles(): void {
+        Figure.rectangles.forEach((rectangle) => {
             this.context.beginPath();
             this.context.lineWidth = 2;
             this.context.roundRect(

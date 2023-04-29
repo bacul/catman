@@ -1,6 +1,5 @@
-import {Path, Rectangle, backgroundLayer} from '../background-layer/background-layer';
-
-import {character} from '../game';
+import {Figure, Path, Rectangle} from '../background-layer/figure';
+import {character, gameSize} from '../game';
 
 interface HorizontalLine {
     start: number;
@@ -16,23 +15,29 @@ interface VerticalLine {
 
 export class FigureCollision {
     stuckRight(): boolean {
-        return this.stuckRightPath() || this.stuckRightRectangle();
+        return (
+            character.currentX > gameSize.width - character.width || this.stuckRightPath() || this.stuckRightRectangle()
+        );
     }
 
     stuckLeft(): boolean {
-        return this.stuckLeftPath() || this.stuckLeftRectangle();
+        return character.currentX < 0 || this.stuckLeftPath() || this.stuckLeftRectangle();
     }
 
     stuckBottom(): boolean {
-        return this.stuckBottomRectangle() || this.stuckBottomPath();
+        return (
+            character.currentY + character.height > gameSize.height ||
+            this.stuckBottomRectangle() ||
+            this.stuckBottomPath()
+        );
     }
 
     stuckTop(): boolean {
-        return this.stuckTopPath() || this.stuckTopRectangle();
+        return character.currentY <= 0 || this.stuckTopPath() || this.stuckTopRectangle();
     }
 
     private stuckRightRectangle(): boolean {
-        return backgroundLayer.rectangles.some((rectangle) => {
+        return Figure.rectangles.some((rectangle) => {
             const isWallPassed = rectangle.topLeftX + rectangle.width <= character.currentX + character.width;
             if (isWallPassed) {
                 return false;
@@ -48,7 +53,7 @@ export class FigureCollision {
     }
 
     private stuckRightPath(): boolean {
-        return backgroundLayer.paths.some((path) => {
+        return Figure.paths.some((path) => {
             const isWallPassed = path.maxX < character.currentX;
             if (isWallPassed) {
                 return false;
@@ -80,7 +85,7 @@ export class FigureCollision {
     }
 
     private stuckLeftRectangle(): boolean {
-        return backgroundLayer.rectangles.some((rectangle) => {
+        return Figure.rectangles.some((rectangle) => {
             const isWallPassed = rectangle.topLeftX >= character.currentX + character.width;
             if (isWallPassed) {
                 return false;
@@ -96,7 +101,7 @@ export class FigureCollision {
     }
 
     private stuckLeftPath(): boolean {
-        return backgroundLayer.paths.some((path) => {
+        return Figure.paths.some((path) => {
             const isWallPassed = path.minX > character.currentX;
             if (isWallPassed) {
                 return false;
@@ -128,7 +133,7 @@ export class FigureCollision {
     }
 
     private stuckBottomRectangle(): boolean {
-        return backgroundLayer.rectangles.some((rectangle) => {
+        return Figure.rectangles.some((rectangle) => {
             const isWallPassed = rectangle.topLeftY < character.currentY + character.height;
             if (isWallPassed) {
                 return false;
@@ -144,7 +149,7 @@ export class FigureCollision {
     }
 
     private stuckBottomPath(): boolean {
-        return backgroundLayer.paths.some((path) => {
+        return Figure.paths.some((path) => {
             const isWallPassed = path.maxY < character.currentY + character.height;
             if (isWallPassed) {
                 return false;
@@ -176,7 +181,7 @@ export class FigureCollision {
     }
 
     private stuckTopRectangle(): boolean {
-        return backgroundLayer.rectangles.some((rectangle) => {
+        return Figure.rectangles.some((rectangle) => {
             const isWallPassed = rectangle.topLeftY + rectangle.height > character.currentY;
             if (isWallPassed) {
                 return false;
@@ -192,7 +197,7 @@ export class FigureCollision {
     }
 
     private stuckTopPath(): boolean {
-        return backgroundLayer.paths.some((path) => {
+        return Figure.paths.some((path) => {
             const isWallPassed = path.minY > character.currentY + character.height;
             if (isWallPassed) {
                 return false;

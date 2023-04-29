@@ -1,8 +1,12 @@
-interface MoveDirection {
-    up: boolean;
-    down: boolean;
-    left: boolean;
-    right: boolean;
+export enum MoveDirectionType {
+    up = 1,
+    down = 2,
+    left = 3,
+    right = 4
+}
+export interface MoveDirection {
+    moveDirection: MoveDirectionType;
+    changeToDirection: MoveDirectionType;
 }
 
 interface Character {
@@ -11,6 +15,7 @@ interface Character {
     currentX: number;
     currentY: number;
     stepSize: number;
+    direction: MoveDirection;
 }
 
 interface Background {
@@ -26,7 +31,6 @@ interface GameSize {
 interface Game {
     gameSize: GameSize;
     character: Character;
-    direction: MoveDirection;
     background: Background;
 }
 
@@ -38,15 +42,13 @@ const game: Game = {
     character: {
         width: 30,
         height: 30,
-        currentX: 80,
-        currentY: 60,
-        stepSize: 1
-    },
-    direction: {
-        up: false,
-        down: false,
-        left: false,
-        right: false
+        currentX: 0,
+        currentY: 0,
+        stepSize: 1,
+        direction: {
+            moveDirection: null,
+            changeToDirection: null
+        }
     },
     background: {
         borderColor: '#009511',
@@ -55,6 +57,6 @@ const game: Game = {
 };
 
 export const character: Character = game.character;
-export const direction: MoveDirection = game.direction;
+export const direction: MoveDirection = game.character.direction;
 export const background: Background = game.background;
 export const gameSize: GameSize = game.gameSize;

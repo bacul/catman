@@ -1,4 +1,4 @@
-import {character, direction, gameSize} from '../game';
+import {MoveDirectionType, character, direction, gameSize} from '../game';
 
 import {CharacterMovement} from './character';
 import {GameLayerContext} from './game-layer-context';
@@ -11,7 +11,6 @@ export class GameLayer {
     constructor() {
         this.figureCollision = new FigureCollision();
         this.characterMovement = new CharacterMovement();
-        document.addEventListener('keydown', this.characterMovement.changeDirectionHandler, false);
     }
 
     draw() {
@@ -19,34 +18,50 @@ export class GameLayer {
         GameLayerContext.context.fillRect(character.currentX, character.currentY, character.width, character.height);
         GameLayerContext.context.fillStyle = '#0095DD';
 
-        if (direction.up) {
-            if (character.currentY > 0) {
-                if (!this.figureCollision.stuckTop()) {
+        const needChangeMovement =
+            this.characterMovement.keyPressed && direction.moveDirection !== direction.changeToDirection;
+        let canChangeMovement: boolean;
+        if (needChangeMovement) {
+            switch (direction.changeToDirection) {
+                case MoveDirectionType.up:
+                    canChangeMovement = !this.figureCollision.stuckTop();
+                    break;
+                case MoveDirectionType.down:
+                    canChangeMovement = !this.figureCollision.stuckBottom();
+                    break;
+                case MoveDirectionType.left:
+                    canChangeMovement = !this.figureCollision.stuckLeft();
+                    break;
+                case MoveDirectionType.right:
+                    canChangeMovement = !this.figureCollision.stuckRight();
+                    break;
+            }
+            if (canChangeMovement) {
+                direction.moveDirection = direction.changeToDirection;
+            }
+        }
+
+        switch (direction.moveDirection) {
+            case MoveDirectionType.up:
+                if (canChangeMovement || !this.figureCollision.stuckTop()) {
                     character.currentY -= character.stepSize;
                 }
-            }
-            this.characterMovement.setUpView();
-        } else if (direction.down) {
-            if (character.currentY < gameSize.height - character.height) {
-                if (!this.figureCollision.stuckBottom()) {
+                break;
+            case MoveDirectionType.down:
+                if (canChangeMovement || !this.figureCollision.stuckBottom()) {
                     character.currentY += character.stepSize;
                 }
-            }
-            this.characterMovement.setDownView();
-        } else if (direction.left) {
-            if (character.currentX > 0) {
-                if (!this.figureCollision.stuckLeft()) {
+                break;
+            case MoveDirectionType.left:
+                if (canChangeMovement || !this.figureCollision.stuckLeft()) {
                     character.currentX -= character.stepSize;
                 }
-            }
-            this.characterMovement.setLeftView();
-        } else if (direction.right) {
-            if (character.currentX < gameSize.width - character.width) {
-                if (!this.figureCollision.stuckRight()) {
+                break;
+            case MoveDirectionType.right:
+                if (canChangeMovement || !this.figureCollision.stuckRight()) {
                     character.currentX += character.stepSize;
                 }
-            }
-            this.characterMovement.setRightView();
+                break;
         }
     }
 }
