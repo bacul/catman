@@ -1,12 +1,12 @@
 import {character, gameSize} from './game/game';
 
 import {BackgroundLayer} from './game/background-layer/background-layer';
-import {GameLayer} from './game/game-layer/game-layer';
+import {CharacterLayer} from './game/character-layer/character-layer';
 
 class Application {
     private animationFrameId: number;
     private readonly backgroundLayer = new BackgroundLayer();
-    private readonly gameLayer = new GameLayer();
+    private readonly characterLayer = new CharacterLayer();
 
     constructor() {
         this.setGameSize();
@@ -18,14 +18,14 @@ class Application {
 
     private setCharacterPosition(): void {
         setTimeout(() => {
-            this.gameLayer.move();
+            this.characterLayer.move();
             this.setCharacterPosition();
         }, 10);
     }
 
     private main() {
         this.animationFrameId = window.requestAnimationFrame(this.main.bind(this));
-        this.gameLayer.draw();
+        this.characterLayer.draw();
     }
 
     private setGameSize(): void {

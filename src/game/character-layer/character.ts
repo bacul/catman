@@ -78,8 +78,8 @@ export class CharacterMovement {
 
     private setView(spritePositionX: number, spritePositionY: number) {
         // TODO найти квадратные спрайты
-        // GameLayerContext.context.drawImage(
-        //     GameLayerContext.characterImage,
+        // CharacterLayerContext.context.drawImage(
+        //     CharacterLayerContext.characterImage,
         //     spritePositionX,
         //     spritePositionY,
         //     50,

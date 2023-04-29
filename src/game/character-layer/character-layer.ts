@@ -1,10 +1,10 @@
 import {MoveDirectionType, character, direction, gameSize} from '../game';
 
+import {CharacterLayerContext} from './character-layer-context';
 import {CharacterMovement} from './character';
 import {FigureCollision} from './wall-collision';
-import {GameLayerContext} from './game-layer-context';
 
-export class GameLayer {
+export class CharacterLayer {
     private readonly figureCollision: FigureCollision;
     private readonly characterMovement: CharacterMovement;
 
@@ -62,8 +62,13 @@ export class GameLayer {
     }
 
     draw(): void {
-        GameLayerContext.context.clearRect(0, 0, gameSize.width, gameSize.height);
-        GameLayerContext.context.fillRect(character.currentX, character.currentY, character.width, character.height);
-        GameLayerContext.context.fillStyle = '#0095DD';
+        CharacterLayerContext.context.clearRect(0, 0, gameSize.width, gameSize.height);
+        CharacterLayerContext.context.fillRect(
+            character.currentX,
+            character.currentY,
+            character.width,
+            character.height
+        );
+        CharacterLayerContext.context.fillStyle = '#0095DD';
     }
 }
