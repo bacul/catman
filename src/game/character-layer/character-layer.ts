@@ -1,15 +1,18 @@
 import {MoveDirectionType, character, direction, gameSize} from '../game';
 
-import {CharacterLayerContext} from './character-layer-context';
+import {CollectibleCollision} from '../mission-layer/collectible-collision';
 import {CharacterMovement} from './character';
+import {CharacterLayerContext} from './character-layer-context';
 import {FigureCollision} from './wall-collision';
 
 export class CharacterLayer {
     private readonly figureCollision: FigureCollision;
+    private readonly collectibleCollision: CollectibleCollision;
     private readonly characterMovement: CharacterMovement;
 
     constructor() {
         this.figureCollision = new FigureCollision();
+        this.collectibleCollision = new CollectibleCollision();
         this.characterMovement = new CharacterMovement();
     }
 
@@ -41,21 +44,25 @@ export class CharacterLayer {
             case MoveDirectionType.up:
                 if (canChangeMovement || !this.figureCollision.stuckTop()) {
                     character.currentY -= character.stepSize;
+                    this.collectibleCollision.collectTop();
                 }
                 break;
             case MoveDirectionType.down:
                 if (canChangeMovement || !this.figureCollision.stuckBottom()) {
                     character.currentY += character.stepSize;
+                    this.collectibleCollision.collectBottom();
                 }
                 break;
             case MoveDirectionType.left:
                 if (canChangeMovement || !this.figureCollision.stuckLeft()) {
                     character.currentX -= character.stepSize;
+                    this.collectibleCollision.collectLeft();
                 }
                 break;
             case MoveDirectionType.right:
                 if (canChangeMovement || !this.figureCollision.stuckRight()) {
                     character.currentX += character.stepSize;
+                    this.collectibleCollision.collectRight();
                 }
                 break;
         }

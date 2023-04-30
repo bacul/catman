@@ -16,7 +16,9 @@ interface VerticalLine {
 export class FigureCollision {
     stuckRight(): boolean {
         return (
-            character.currentX > gameSize.width - character.width || this.stuckRightPath() || this.stuckRightRectangle()
+            character.currentX >= gameSize.width - character.width ||
+            this.stuckRightPath() ||
+            this.stuckRightRectangle()
         );
     }
 
@@ -26,7 +28,7 @@ export class FigureCollision {
 
     stuckBottom(): boolean {
         return (
-            character.currentY + character.height > gameSize.height ||
+            character.currentY + character.height >= gameSize.height ||
             this.stuckBottomRectangle() ||
             this.stuckBottomPath()
         );

@@ -2,16 +2,19 @@ import {character, gameSize} from './game/game';
 
 import {BackgroundLayer} from './game/background-layer/background-layer';
 import {CharacterLayer} from './game/character-layer/character-layer';
+import {MissionLayer} from './game/mission-layer/mission-layer';
 
 class Application {
     private animationFrameId: number;
     private readonly backgroundLayer = new BackgroundLayer();
     private readonly characterLayer = new CharacterLayer();
+    private readonly missionLayer = new MissionLayer();
 
     constructor() {
         this.setGameSize();
         this.setDebugMode();
         this.backgroundLayer.draw();
+        this.missionLayer.drawCollectibles();
         this.main();
         this.setCharacterPosition();
     }
@@ -20,7 +23,7 @@ class Application {
         setTimeout(() => {
             this.characterLayer.move();
             this.setCharacterPosition();
-        }, 10);
+        }, 12);
     }
 
     private main() {
