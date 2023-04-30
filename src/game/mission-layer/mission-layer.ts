@@ -26,4 +26,9 @@ export class MissionLayer {
         const collectibleSize = collectibles.radius * 2;
         this.context.clearRect(startX, startY, collectibleSize, collectibleSize);
     }
+
+    setMissionComplete(): void {
+        // TODO
+        console.log('you win!');
+    }
 }

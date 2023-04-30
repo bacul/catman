@@ -89,6 +89,9 @@ export class CollectibleCollision {
             return collected.centerX === coordinate.centerX && collected.centerY === coordinate.centerY;
         });
         collectibles.coordinates.splice(collectedIndex, 1);
+        if (collectibles.coordinates.length === 0) {
+            this.missionLayer.setMissionComplete();
+        }
     }
 
     private getCollectibleOnWayX(): CollectibleCoordinate[] {

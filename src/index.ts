@@ -2,6 +2,7 @@ import {character, gameSize} from './game/game';
 
 import {BackgroundLayer} from './game/background-layer/background-layer';
 import {CharacterLayer} from './game/character-layer/character-layer';
+import {EnemyLayer} from './game/enemy-layer/enemy-layer';
 import {MissionLayer} from './game/mission-layer/mission-layer';
 
 class Application {
@@ -9,6 +10,8 @@ class Application {
     private readonly backgroundLayer = new BackgroundLayer();
     private readonly characterLayer = new CharacterLayer();
     private readonly missionLayer = new MissionLayer();
+    private readonly enemyLayer = new EnemyLayer();
+    private readonly applicationTickMs = 14;
 
     constructor() {
         this.setGameSize();
@@ -16,19 +19,21 @@ class Application {
         this.backgroundLayer.draw();
         this.missionLayer.drawCollectibles();
         this.main();
-        this.setCharacterPosition();
+        this.setMovablePosition();
     }
 
-    private setCharacterPosition(): void {
+    private setMovablePosition(): void {
         setTimeout(() => {
             this.characterLayer.move();
-            this.setCharacterPosition();
-        }, 12);
+            this.enemyLayer.move();
+            this.setMovablePosition();
+        }, this.applicationTickMs);
     }
 
     private main() {
         this.animationFrameId = window.requestAnimationFrame(this.main.bind(this));
         this.characterLayer.draw();
+        this.enemyLayer.draw();
     }
 
     private setGameSize(): void {

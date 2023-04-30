@@ -1,4 +1,4 @@
-import {MoveDirectionType, character, direction, gameSize} from '../game';
+import {MoveDirectionType, character, characterDirection, gameSize} from '../game';
 
 import {CollectibleCollision} from '../mission-layer/collectible-collision';
 import {CharacterMovement} from './character';
@@ -18,49 +18,50 @@ export class CharacterLayer {
 
     move(): void {
         const needChangeMovement =
-            this.characterMovement.keyPressed && direction.moveDirection !== direction.changeToDirection;
+            this.characterMovement.keyPressed &&
+            characterDirection.moveDirection !== characterDirection.changeToDirection;
         let canChangeMovement: boolean;
         if (needChangeMovement) {
-            switch (direction.changeToDirection) {
+            switch (characterDirection.changeToDirection) {
                 case MoveDirectionType.up:
-                    canChangeMovement = !this.figureCollision.stuckTop();
+                    canChangeMovement = !this.figureCollision.stuckTop(character);
                     break;
                 case MoveDirectionType.down:
-                    canChangeMovement = !this.figureCollision.stuckBottom();
+                    canChangeMovement = !this.figureCollision.stuckBottom(character);
                     break;
                 case MoveDirectionType.left:
-                    canChangeMovement = !this.figureCollision.stuckLeft();
+                    canChangeMovement = !this.figureCollision.stuckLeft(character);
                     break;
                 case MoveDirectionType.right:
-                    canChangeMovement = !this.figureCollision.stuckRight();
+                    canChangeMovement = !this.figureCollision.stuckRight(character);
                     break;
             }
             if (canChangeMovement) {
-                direction.moveDirection = direction.changeToDirection;
+                characterDirection.moveDirection = characterDirection.changeToDirection;
             }
         }
 
-        switch (direction.moveDirection) {
+        switch (characterDirection.moveDirection) {
             case MoveDirectionType.up:
-                if (canChangeMovement || !this.figureCollision.stuckTop()) {
+                if (canChangeMovement || !this.figureCollision.stuckTop(character)) {
                     character.currentY -= character.stepSize;
                     this.collectibleCollision.collectTop();
                 }
                 break;
             case MoveDirectionType.down:
-                if (canChangeMovement || !this.figureCollision.stuckBottom()) {
+                if (canChangeMovement || !this.figureCollision.stuckBottom(character)) {
                     character.currentY += character.stepSize;
                     this.collectibleCollision.collectBottom();
                 }
                 break;
             case MoveDirectionType.left:
-                if (canChangeMovement || !this.figureCollision.stuckLeft()) {
+                if (canChangeMovement || !this.figureCollision.stuckLeft(character)) {
                     character.currentX -= character.stepSize;
                     this.collectibleCollision.collectLeft();
                 }
                 break;
             case MoveDirectionType.right:
-                if (canChangeMovement || !this.figureCollision.stuckRight()) {
+                if (canChangeMovement || !this.figureCollision.stuckRight(character)) {
                     character.currentX += character.stepSize;
                     this.collectibleCollision.collectRight();
                 }
@@ -76,6 +77,6 @@ export class CharacterLayer {
             character.width,
             character.height
         );
-        CharacterLayerContext.context.fillStyle = '#0095DD';
+        CharacterLayerContext.context.fillStyle = character.color;
     }
 }

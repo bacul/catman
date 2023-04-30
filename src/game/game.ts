@@ -5,17 +5,22 @@ export enum MoveDirectionType {
     right = 4
 }
 export interface MoveDirection {
-    moveDirection: MoveDirectionType;
     changeToDirection: MoveDirectionType;
+    moveDirection: MoveDirectionType;
 }
 
-interface Character {
+export interface MovableEntity {
     width: number;
     height: number;
     currentX: number;
     currentY: number;
     stepSize: number;
     direction: MoveDirection;
+    color: string;
+}
+
+export interface Enemy extends MovableEntity {
+    stuck: boolean;
 }
 
 interface Background {
@@ -30,14 +35,19 @@ interface GameSize {
 
 interface Game {
     gameSize: GameSize;
-    character: Character;
+    character: MovableEntity;
     background: Background;
+    enemies: Enemy[];
 }
 
 const game: Game = {
     gameSize: {
         width: 480,
         height: 600
+    },
+    background: {
+        borderColor: '#009511',
+        borderRadius: 5
     },
     character: {
         width: 30,
@@ -48,15 +58,28 @@ const game: Game = {
         direction: {
             moveDirection: null,
             changeToDirection: null
-        }
+        },
+        color: '#0095DD'
     },
-    background: {
-        borderColor: '#009511',
-        borderRadius: 5
-    }
+    enemies: [
+        {
+            width: 30,
+            height: 30,
+            currentX: 200,
+            currentY: 200,
+            stepSize: 1,
+            direction: {
+                moveDirection: null,
+                changeToDirection: null
+            },
+            stuck: false,
+            color: '#9500DD'
+        }
+    ]
 };
 
-export const character: Character = game.character;
-export const direction: MoveDirection = game.character.direction;
+export const character: MovableEntity = game.character;
+export const enemies: Enemy[] = game.enemies;
+export const characterDirection: MoveDirection = game.character.direction;
 export const background: Background = game.background;
 export const gameSize: GameSize = game.gameSize;

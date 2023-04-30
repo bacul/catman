@@ -1,4 +1,4 @@
-import {MoveDirectionType, direction} from '../game';
+import {MoveDirectionType, characterDirection} from '../game';
 
 enum ControlKey {
     arrowUp = 'ArrowUp',
@@ -43,37 +43,37 @@ export class CharacterMovement {
         this._keyPressed = true;
         if (!event.repeat) {
             if (event.code === ControlKey.w || event.code === ControlKey.arrowUp) {
-                if (direction.changeToDirection !== MoveDirectionType.up) {
-                    this.setMoveDirection(MoveDirectionType.up);
+                if (characterDirection.changeToDirection !== MoveDirectionType.up) {
+                    this.setChangeDirection(MoveDirectionType.up);
                 }
                 return;
             }
 
             if (event.code === ControlKey.s || event.code === ControlKey.arrowDown) {
-                if (direction.changeToDirection !== MoveDirectionType.down) {
-                    this.setMoveDirection(MoveDirectionType.down);
+                if (characterDirection.changeToDirection !== MoveDirectionType.down) {
+                    this.setChangeDirection(MoveDirectionType.down);
                 }
                 return;
             }
 
             if (event.code === ControlKey.a || event.code === ControlKey.arrowLeft) {
-                if (direction.changeToDirection !== MoveDirectionType.left) {
-                    this.setMoveDirection(MoveDirectionType.left);
+                if (characterDirection.changeToDirection !== MoveDirectionType.left) {
+                    this.setChangeDirection(MoveDirectionType.left);
                 }
                 return;
             }
 
             if (event.code === ControlKey.d || event.code === ControlKey.arrowRight) {
-                if (direction.changeToDirection !== MoveDirectionType.right) {
-                    this.setMoveDirection(MoveDirectionType.right);
+                if (characterDirection.changeToDirection !== MoveDirectionType.right) {
+                    this.setChangeDirection(MoveDirectionType.right);
                 }
                 return;
             }
         }
     }
 
-    private setMoveDirection(type: MoveDirectionType): void {
-        direction.changeToDirection = type;
+    private setChangeDirection(type: MoveDirectionType): void {
+        characterDirection.changeToDirection = type;
     }
 
     private setView(spritePositionX: number, spritePositionY: number) {
