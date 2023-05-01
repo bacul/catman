@@ -21,6 +21,7 @@ export interface MovableEntity {
 
 export interface Enemy extends MovableEntity {
     blockDirections: Set<MoveDirectionType>;
+    extrimeDirection: MoveDirectionType;
 }
 
 interface Background {
@@ -73,6 +74,7 @@ const game: Game = {
                 // TODO delete?
                 changeToDirection: null
             },
+            extrimeDirection: null,
             blockDirections: new Set(),
             color: '#9500DD'
         }

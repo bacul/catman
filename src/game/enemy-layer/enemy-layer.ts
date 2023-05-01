@@ -42,21 +42,29 @@ export class EnemyLayer {
         if (onXStart) {
             enemy.blockDirections.add(MoveDirectionType.left);
             extrimeState = true;
+            enemy.extrimeDirection = MoveDirectionType.left;
         }
         const onXEnd = enemy.currentX + enemy.width === gameSize.width;
         if (onXEnd) {
             enemy.blockDirections.add(MoveDirectionType.right);
             extrimeState = true;
+            enemy.extrimeDirection = MoveDirectionType.right;
         }
         const onYStart = enemy.currentY === 0;
         if (onYStart) {
             enemy.blockDirections.add(MoveDirectionType.up);
             extrimeState = true;
+            enemy.extrimeDirection = MoveDirectionType.up;
         }
         const onYEnd = enemy.currentY + enemy.height === gameSize.height;
         if (onYEnd) {
             enemy.blockDirections.add(MoveDirectionType.down);
             extrimeState = true;
+            enemy.extrimeDirection = MoveDirectionType.down;
+        }
+
+        if (!extrimeState) {
+            enemy.extrimeDirection = null;
         }
 
         if (enemy.blockDirections.size === 2) {
@@ -73,6 +81,11 @@ export class EnemyLayer {
         }
 
         if (enemy.blockDirections.size === 1) {
+            if (extrimeState) {
+                const iterator = enemy.blockDirections.values();
+                enemy.blockDirections.add(this.getCounterMoveDirection(iterator.next().value));
+                return this.getDirectionWhenTwoBlocked(enemy);
+            }
             return this.getDirectionWhenOneBlocked(enemy, closestDirection);
         }
 
@@ -114,9 +127,25 @@ export class EnemyLayer {
     }
 
     private getDirectionWhenTwoBlocked(enemy: Enemy): MoveDirectionType {
-        const blockedDirectionsValues = enemy.blockDirections.values();
-        let wayToMove: MoveDirectionType = this.getCounterMoveDirection(blockedDirectionsValues.next().value);
-        let exit: MoveDirectionType = blockedDirectionsValues.next().value;
+        let wayToMove: MoveDirectionType;
+        let exit: MoveDirectionType;
+
+        const yBlocked =
+            enemy.blockDirections.has(MoveDirectionType.up) && enemy.blockDirections.has(MoveDirectionType.down);
+        const xBlocked =
+            enemy.blockDirections.has(MoveDirectionType.left) && enemy.blockDirections.has(MoveDirectionType.right);
+        if (yBlocked) {
+            wayToMove = MoveDirectionType.left;
+            exit = enemy.extrimeDirection === MoveDirectionType.up ? MoveDirectionType.down : MoveDirectionType.up;
+        }
+        if (xBlocked) {
+            wayToMove = MoveDirectionType.up;
+            exit = enemy.extrimeDirection === MoveDirectionType.left ? MoveDirectionType.right : MoveDirectionType.left;
+        } else {
+            const blockedDirectionsValues = enemy.blockDirections.values();
+            wayToMove = this.getCounterMoveDirection(blockedDirectionsValues.next().value);
+            exit = blockedDirectionsValues.next().value;
+        }
 
         const canGoExit = this.canMove(enemy, exit);
         if (canGoExit) {
