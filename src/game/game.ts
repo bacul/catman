@@ -20,7 +20,7 @@ export interface MovableEntity {
 }
 
 export interface Enemy extends MovableEntity {
-    stuck: boolean;
+    blockDirections: MoveDirectionType[];
 }
 
 interface Background {
@@ -52,7 +52,7 @@ const game: Game = {
     character: {
         width: 30,
         height: 30,
-        currentX: 0,
+        currentX: 250,
         currentY: 0,
         stepSize: 1,
         direction: {
@@ -66,13 +66,13 @@ const game: Game = {
             width: 30,
             height: 30,
             currentX: 200,
-            currentY: 200,
+            currentY: 0,
             stepSize: 1,
             direction: {
                 moveDirection: null,
                 changeToDirection: null
             },
-            stuck: false,
+            blockDirections: [],
             color: '#9500DD'
         }
     ]
