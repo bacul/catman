@@ -6,7 +6,7 @@ export class EnemyLayer {
     private readonly canvas: HTMLCanvasElement = document.querySelector('#enemy-layer');
     private readonly context: CanvasRenderingContext2D;
     private readonly figureCollision = new FigureCollision();
-    private readonly enemyHandicapTick: number = 2;
+    private readonly enemyHandicapTick: number = 1;
     private enemyHandicap: number = 0;
 
     constructor() {
@@ -33,127 +33,87 @@ export class EnemyLayer {
         }
     }
 
-    private getMoveDirection(enemy: Enemy): MoveDirectionType {
+    private setMoveDirection(enemy: Enemy): void {
         let closestDirection = this.getClosestToMove(enemy);
+        if (enemy.blockDirections.length === 2) {
+            this.setDirectionWhenTwoBlocked(enemy);
+            return;
+        }
+
+        if (enemy.blockDirections.length === 1) {
+            this.setDirectionWhenOneBlocked(enemy);
+            return;
+        }
+
         let blockedDirections = enemy.blockDirections;
-        let extrimeState: boolean;
-
-        const onXStart = enemy.currentX === 0;
-        if (onXStart) {
-            enemy.blockDirections.add(MoveDirectionType.left);
-            extrimeState = true;
-            enemy.extrimeDirection = MoveDirectionType.left;
-        }
-        const onXEnd = enemy.currentX + enemy.width === gameSize.width;
-        if (onXEnd) {
-            enemy.blockDirections.add(MoveDirectionType.right);
-            extrimeState = true;
-            enemy.extrimeDirection = MoveDirectionType.right;
-        }
-        const onYStart = enemy.currentY === 0;
-        if (onYStart) {
-            enemy.blockDirections.add(MoveDirectionType.up);
-            extrimeState = true;
-            enemy.extrimeDirection = MoveDirectionType.up;
-        }
-        const onYEnd = enemy.currentY + enemy.height === gameSize.height;
-        if (onYEnd) {
-            enemy.blockDirections.add(MoveDirectionType.down);
-            extrimeState = true;
-            enemy.extrimeDirection = MoveDirectionType.down;
-        }
-
-        if (!extrimeState) {
-            enemy.extrimeDirection = null;
-        }
-
-        if (enemy.blockDirections.size === 2) {
-            if (extrimeState) {
-                const closedDestination = this.getClosestToMove(enemy);
-                if (this.canMove(enemy, closedDestination)) {
-                    enemy.blockDirections.clear();
-                    return closedDestination;
-                } else {
-                    return this.getClosestToMove(enemy, closedDestination);
-                }
-            }
-            return this.getDirectionWhenTwoBlocked(enemy);
-        }
-
-        if (enemy.blockDirections.size === 1) {
-            if (extrimeState) {
-                const iterator = enemy.blockDirections.values();
-                enemy.blockDirections.add(this.getCounterMoveDirection(iterator.next().value));
-                return this.getDirectionWhenTwoBlocked(enemy);
-            }
-            return this.getDirectionWhenOneBlocked(enemy, closestDirection);
-        }
-
         const canChangeOnClosest = this.canMove(enemy, closestDirection);
         if (canChangeOnClosest) {
-            blockedDirections.clear();
-            return closestDirection;
+            blockedDirections = [];
+            enemy.direction.moveDirection = closestDirection;
+            return;
         }
 
-        blockedDirections.add(closestDirection);
+        enemy.direction.changeToDirection = closestDirection;
+        blockedDirections.push(closestDirection);
+
         const secondClosest = this.getClosestToMove(enemy, closestDirection);
         const secondClosestAvailable = this.canMove(enemy, secondClosest);
         if (secondClosestAvailable) {
-            return this.getDirectionWhenOneBlocked(enemy, closestDirection);
+            this.setDirectionWhenOneBlocked(enemy);
+            return;
         } else {
-            enemy.blockDirections.add(secondClosest);
+            enemy.blockDirections.push(secondClosest);
+            this.setDirectionWhenTwoBlocked(enemy);
         }
     }
 
-    private getDirectionWhenOneBlocked(enemy: Enemy, closestDirection: MoveDirectionType): MoveDirectionType {
-        if (!enemy.blockDirections.has(closestDirection)) {
-            enemy.blockDirections.add(closestDirection);
-            return this.getDirectionWhenTwoBlocked(enemy);
+    private setDirectionWhenOneBlocked(enemy: Enemy): void {
+        const canMoveOnNext = this.canMove(enemy, enemy.direction.changeToDirection);
+        if (canMoveOnNext) {
+            enemy.direction.moveDirection = enemy.direction.changeToDirection;
+            enemy.direction.changeToDirection = null;
+            enemy.blockDirections = [];
+            return;
         }
-        const canChangeOnClosest = this.canMove(enemy, closestDirection);
-        if (canChangeOnClosest) {
-            enemy.blockDirections.clear();
-            return closestDirection;
+
+        const canMoveOnCurrent = this.canMove(enemy, enemy.direction.moveDirection);
+        if (canMoveOnCurrent) {
+            if (canMoveOnNext) {
+                enemy.direction.moveDirection = enemy.direction.changeToDirection;
+                enemy.direction.changeToDirection = null;
+                enemy.blockDirections = [];
+                return;
+            }
         } else {
-            const secondClosest = this.getClosestToMove(enemy, closestDirection);
-            const canMoveSecondClosest = this.canMove(enemy, secondClosest);
-            if (canMoveSecondClosest) {
-                return secondClosest;
+            const extrimeState = this.getExtrimeState(enemy);
+            if (extrimeState) {
+                enemy.blockDirections.push(extrimeState);
+                this.setDirectionWhenTwoBlocked(enemy);
             } else {
-                enemy.blockDirections.add(secondClosest);
-                return this.getDirectionWhenTwoBlocked(enemy);
+                enemy.direction.moveDirection = this.getClosestToMove(enemy, enemy.direction.moveDirection);
             }
         }
     }
 
-    private getDirectionWhenTwoBlocked(enemy: Enemy): MoveDirectionType {
-        let wayToMove: MoveDirectionType;
-        let exit: MoveDirectionType;
-
-        const yBlocked =
-            enemy.blockDirections.has(MoveDirectionType.up) && enemy.blockDirections.has(MoveDirectionType.down);
-        const xBlocked =
-            enemy.blockDirections.has(MoveDirectionType.left) && enemy.blockDirections.has(MoveDirectionType.right);
-        if (yBlocked) {
-            wayToMove = MoveDirectionType.left;
-            exit = enemy.extrimeDirection === MoveDirectionType.up ? MoveDirectionType.down : MoveDirectionType.up;
+    private setDirectionWhenTwoBlocked(enemy: Enemy): void {
+        const canMoveOnCurrent = this.canMove(enemy, enemy.direction.moveDirection);
+        const canMoveOnNext = this.canMove(enemy, enemy.direction.changeToDirection);
+        if (canMoveOnCurrent) {
+            if (canMoveOnNext) {
+                enemy.direction.moveDirection = enemy.direction.changeToDirection;
+                enemy.blockDirections = [];
+            }
+            return;
         }
-        if (xBlocked) {
-            wayToMove = MoveDirectionType.up;
-            exit = enemy.extrimeDirection === MoveDirectionType.left ? MoveDirectionType.right : MoveDirectionType.left;
-        } else {
-            const blockedDirectionsValues = enemy.blockDirections.values();
-            wayToMove = this.getCounterMoveDirection(blockedDirectionsValues.next().value);
-            exit = blockedDirectionsValues.next().value;
+        if (canMoveOnNext) {
+            enemy.direction.moveDirection = enemy.direction.changeToDirection;
+            enemy.direction.changeToDirection = null;
+            enemy.blockDirections = [];
+            return;
         }
 
-        const canGoExit = this.canMove(enemy, exit);
-        if (canGoExit) {
-            enemy.blockDirections.clear();
-            return exit;
-        } else {
-            return wayToMove;
-        }
+        let blocked = [...enemy.blockDirections].filter((block) => block !== enemy.direction.moveDirection);
+        enemy.direction.moveDirection = this.getCounterMoveDirection(blocked[0]);
     }
 
     private getClosestToMove(enemy: Enemy, exclude?: MoveDirectionType): MoveDirectionType {
@@ -198,7 +158,7 @@ export class EnemyLayer {
 
     private moveAction(): void {
         enemies.forEach((enemy) => {
-            enemy.direction.moveDirection = this.getMoveDirection(enemy);
+            this.setMoveDirection(enemy);
             switch (enemy.direction.moveDirection) {
                 case MoveDirectionType.up:
                     if (!this.figureCollision.stuckTop(enemy)) {
@@ -248,6 +208,27 @@ export class EnemyLayer {
             case MoveDirectionType.right:
                 return MoveDirectionType.left;
         }
+    }
+
+    private getExtrimeState(enemy: Enemy): MoveDirectionType {
+        const onXStart = enemy.currentX === 0;
+        if (onXStart) {
+            return MoveDirectionType.left;
+        }
+        const onXEnd = enemy.currentX + enemy.width === gameSize.width;
+        if (onXEnd) {
+            return MoveDirectionType.right;
+        }
+        const onYStart = enemy.currentY === 0;
+        if (onYStart) {
+            return MoveDirectionType.up;
+        }
+        const onYEnd = enemy.currentY + enemy.height === gameSize.height;
+        if (onYEnd) {
+            return MoveDirectionType.down;
+        }
+
+        return null;
     }
 
     private getClosestYToMove(distanceToCharacterY: number): MoveDirectionType {
