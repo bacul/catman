@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     entry: ['./src/index.ts', './src/style.scss'],
@@ -35,6 +36,9 @@ module.exports = {
         new HtmlWebpackPlugin({
             title: 'bacman',
             template: 'src/index.html'
+        }),
+        new CopyPlugin({
+            patterns: [{from: 'src/assets/', to: 'assets'}]
         })
     ]
 };

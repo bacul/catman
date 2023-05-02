@@ -19,22 +19,6 @@ export class CharacterMovement {
         document.addEventListener('keyup', () => (this._keyPressed = false), false);
     }
 
-    setLeftView(): void {
-        // this.setView(50, 48);
-    }
-
-    setRightView(): void {
-        // this.setView(50, 96);
-    }
-
-    setDownView(): void {
-        // this.setView(50, 2);
-    }
-
-    setUpView(): void {
-        // this.setView(50, 142);
-    }
-
     get keyPressed(): boolean {
         return this._keyPressed;
     }
@@ -74,20 +58,5 @@ export class CharacterMovement {
 
     private setChangeDirection(type: MoveDirectionType): void {
         characterDirection.changeToDirection = type;
-    }
-
-    private setView(spritePositionX: number, spritePositionY: number) {
-        // TODO найти квадратные спрайты
-        // CharacterLayerContext.context.drawImage(
-        //     CharacterLayerContext.characterImage,
-        //     spritePositionX,
-        //     spritePositionY,
-        //     50,
-        //     50,
-        //     character.currentX - 6,
-        //     character.currentY - 7,
-        //     50,
-        //     50
-        // );
     }
 }

@@ -6,8 +6,8 @@ export class EnemyLayer {
     private readonly canvas: HTMLCanvasElement = document.querySelector('#enemy-layer');
     private readonly context: CanvasRenderingContext2D;
     private readonly figureCollision = new FigureCollision();
-    private readonly enemyHandicapTick: number = 1;
-    private enemyHandicap: number = 0;
+    private readonly enemiesHandicapTick: number = 1;
+    private enemiesHandicap: number = 0;
 
     constructor() {
         this.context = this.canvas.getContext('2d');
@@ -25,11 +25,11 @@ export class EnemyLayer {
     }
 
     move(): void {
-        if (this.enemyHandicap !== this.enemyHandicapTick) {
-            this.enemyHandicap++;
+        if (this.enemiesHandicap !== this.enemiesHandicapTick) {
+            this.enemiesHandicap++;
             this.moveAction();
         } else {
-            this.enemyHandicap = 0;
+            this.enemiesHandicap = 0;
         }
     }
 
@@ -60,7 +60,6 @@ export class EnemyLayer {
         const secondClosestAvailable = this.canMove(enemy, secondClosest);
         if (secondClosestAvailable) {
             this.setDirectionWhenOneBlocked(enemy);
-            return;
         } else {
             enemy.blockDirections.push(secondClosest);
             this.setDirectionWhenTwoBlocked(enemy);
@@ -82,7 +81,6 @@ export class EnemyLayer {
                 enemy.direction.moveDirection = enemy.direction.changeToDirection;
                 enemy.direction.changeToDirection = null;
                 enemy.blockDirections = [];
-                return;
             }
         } else {
             const extrimeState = this.getExtrimeState(enemy);

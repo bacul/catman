@@ -52,7 +52,7 @@ const game: Game = {
     character: {
         width: 30,
         height: 30,
-        currentX: 250,
+        currentX: 0,
         currentY: 0,
         stepSize: 1,
         direction: {

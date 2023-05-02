@@ -5,7 +5,7 @@ export class CharacterLayerContext {
     constructor() {
         const characterLayerCanvas: HTMLCanvasElement = document.querySelector('#character-layer');
         CharacterLayerContext._context = characterLayerCanvas.getContext('2d');
-        CharacterLayerContext._characterImage = document.getElementById('mainCharacter') as CanvasImageSource;
+        CharacterLayerContext._characterImage = document.getElementById('character') as CanvasImageSource;
     }
 
     static get context(): CanvasRenderingContext2D {
