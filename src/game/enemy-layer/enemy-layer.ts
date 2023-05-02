@@ -9,6 +9,7 @@ export class EnemyLayer {
     private readonly enemyTexture = new EnemyTexture();
     private readonly enemiesHandicapTick: number = 1;
     private enemiesHandicap: number = 0;
+    private gameOver: boolean;
 
     constructor() {
         enemies.forEach((enemy) => {
@@ -26,11 +27,20 @@ export class EnemyLayer {
     }
 
     move(): void {
-        if (this.enemiesHandicap !== this.enemiesHandicapTick) {
-            this.enemiesHandicap++;
-            this.moveAction();
-        } else {
-            this.enemiesHandicap = 0;
+        if (!this.gameOver) {
+            if (this.enemiesHandicap !== this.enemiesHandicapTick) {
+                this.enemiesHandicap++;
+                this.moveAction();
+            } else {
+                this.enemiesHandicap = 0;
+            }
+        }
+    }
+
+    private setGameOver(gameOver: boolean): void {
+        if (gameOver) {
+            this.gameOver = true;
+            console.log('game over');
         }
     }
 
@@ -82,6 +92,16 @@ export class EnemyLayer {
                 enemy.direction.moveDirection = enemy.direction.changeToDirection;
                 enemy.direction.changeToDirection = null;
                 enemy.blockDirections = [];
+            } else {
+                const secondClosest = this.getClosestToMove(enemy, enemy.direction.moveDirection);
+                const canMoveOnSecondClosest = this.canMove(enemy, secondClosest);
+                if (canMoveOnSecondClosest) {
+                    enemy.direction.changeToDirection = enemy.direction.moveDirection;
+                    enemy.direction.moveDirection = secondClosest;
+                } else {
+                    enemy.blockDirections.push(secondClosest);
+                    this.setDirectionWhenTwoBlocked(enemy);
+                }
             }
         } else {
             const extrimeState = this.getExtrimeState(enemy);
@@ -163,24 +183,28 @@ export class EnemyLayer {
                     if (!this.figureCollision.stuckTop(enemy)) {
                         enemy.currentY -= enemy.stepSize;
                         this.enemyTexture.setUpView();
+                        this.setGameOver(this.isGameOver(enemy, MoveDirectionType.up));
                     }
                     break;
                 case MoveDirectionType.down:
                     if (!this.figureCollision.stuckBottom(enemy)) {
                         enemy.currentY += enemy.stepSize;
                         this.enemyTexture.setDownView();
+                        this.setGameOver(this.isGameOver(enemy, MoveDirectionType.down));
                     }
                     break;
                 case MoveDirectionType.left:
                     if (!this.figureCollision.stuckLeft(enemy)) {
                         enemy.currentX -= enemy.stepSize;
                         this.enemyTexture.setLeftView();
+                        this.setGameOver(this.isGameOver(enemy, MoveDirectionType.left));
                     }
                     break;
                 case MoveDirectionType.right:
                     if (!this.figureCollision.stuckRight(enemy)) {
                         enemy.currentX += enemy.stepSize;
                         this.enemyTexture.setRightView();
+                        this.setGameOver(this.isGameOver(enemy, MoveDirectionType.right));
                     }
                     break;
             }
@@ -247,6 +271,43 @@ export class EnemyLayer {
             return MoveDirectionType.left;
         } else {
             return MoveDirectionType.right;
+        }
+    }
+
+    private isGameOver(enemy: Enemy, direction: MoveDirectionType): boolean {
+        switch (direction) {
+            case MoveDirectionType.up:
+                const differenceTopY = enemy.currentY - character.currentY + character.height;
+                const characterTopCaptured =
+                    enemy.currentX === character.currentX &&
+                    (differenceTopY === 0 ||
+                        (differenceTopY < 0 && differenceTopY >= -character.height) ||
+                        (differenceTopY > 0 && differenceTopY <= -character.height));
+                return characterTopCaptured;
+            case MoveDirectionType.down:
+                const differenceBottomY = enemy.currentY + enemy.height - character.currentY;
+                const characterBottomCaptured =
+                    enemy.currentX === character.currentX &&
+                    (differenceBottomY === 0 ||
+                        (differenceBottomY < 0 && differenceBottomY >= character.height) ||
+                        (differenceBottomY > 0 && differenceBottomY <= character.height));
+                return characterBottomCaptured;
+            case MoveDirectionType.left:
+                const differenceLeftX = enemy.currentX - character.currentX - character.width;
+                const characterLeftCaptured =
+                    enemy.currentY === character.currentY &&
+                    (differenceLeftX === 0 ||
+                        (differenceLeftX < 0 && differenceLeftX >= -character.width) ||
+                        (differenceLeftX > 0 && differenceLeftX <= -character.width));
+                return characterLeftCaptured;
+            case MoveDirectionType.right:
+                const differenceRightX = enemy.currentX - character.currentX;
+                const characterRightCaptured =
+                    enemy.currentY === character.currentY &&
+                    (differenceRightX === 0 ||
+                        (differenceRightX < 0 && differenceRightX >= -character.width) ||
+                        (differenceRightX > 0 && differenceRightX <= -character.width));
+                return characterRightCaptured;
         }
     }
 }

@@ -36,10 +36,6 @@ export abstract class Texture {
         };
     }
 
-    protected abstract setUpDirection(): void;
-    protected abstract setDownDirection(): void;
-    protected abstract setLeftDirection(): void;
-    protected abstract setRightDirection(): void;
     protected abstract draw(entityX: number, entityY: number): void;
 
     setLeftView(): void {
@@ -62,12 +58,12 @@ export abstract class Texture {
         this.setView();
     }
 
-    protected setView() {
+    private setView() {
         this.setAnimationStateType();
         this.setTextureByDirection();
     }
 
-    protected setAnimationStateType(): void {
+    private setAnimationStateType(): void {
         if (this.animationChangeEveryTick !== this.animationTick) {
             this.animationTick++;
         } else {
@@ -85,7 +81,7 @@ export abstract class Texture {
         }
     }
 
-    protected setTextureByDirection(): void {
+    private setTextureByDirection(): void {
         switch (this.texture.direction) {
             case MoveDirectionType.up:
                 this.setUpDirection();
@@ -98,6 +94,74 @@ export abstract class Texture {
                 break;
             case MoveDirectionType.right:
                 this.setRightDirection();
+                break;
+        }
+    }
+
+    private setUpDirection(): void {
+        switch (this.texture.state) {
+            case AnimationStateType.default:
+                this.texture.spriteCoordinate.x = 16;
+                this.texture.spriteCoordinate.y = 0;
+                break;
+            case AnimationStateType.start:
+                this.texture.spriteCoordinate.x = 16;
+                this.texture.spriteCoordinate.y = 16;
+                break;
+            case AnimationStateType.end:
+                this.texture.spriteCoordinate.x = 16;
+                this.texture.spriteCoordinate.y = 32;
+                break;
+        }
+    }
+
+    private setDownDirection(): void {
+        switch (this.texture.state) {
+            case AnimationStateType.default:
+                this.texture.spriteCoordinate.x = 0;
+                this.texture.spriteCoordinate.y = 0;
+                break;
+            case AnimationStateType.start:
+                this.texture.spriteCoordinate.x = 0;
+                this.texture.spriteCoordinate.y = 16;
+                break;
+            case AnimationStateType.end:
+                this.texture.spriteCoordinate.x = 0;
+                this.texture.spriteCoordinate.y = 32;
+                break;
+        }
+    }
+
+    private setRightDirection(): void {
+        switch (this.texture.state) {
+            case AnimationStateType.default:
+                this.texture.spriteCoordinate.x = 32;
+                this.texture.spriteCoordinate.y = 0;
+                break;
+            case AnimationStateType.start:
+                this.texture.spriteCoordinate.x = 32;
+                this.texture.spriteCoordinate.y = 16;
+                break;
+            case AnimationStateType.end:
+                this.texture.spriteCoordinate.x = 32;
+                this.texture.spriteCoordinate.y = 32;
+                break;
+        }
+    }
+
+    private setLeftDirection(): void {
+        switch (this.texture.state) {
+            case AnimationStateType.default:
+                this.texture.spriteCoordinate.x = 48;
+                this.texture.spriteCoordinate.y = 0;
+                break;
+            case AnimationStateType.start:
+                this.texture.spriteCoordinate.x = 48;
+                this.texture.spriteCoordinate.y = 16;
+                break;
+            case AnimationStateType.end:
+                this.texture.spriteCoordinate.x = 48;
+                this.texture.spriteCoordinate.y = 32;
                 break;
         }
     }
