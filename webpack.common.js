@@ -34,7 +34,7 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            title: 'bacman',
+            title: 'catman',
             template: 'src/index.html'
         }),
         new CopyPlugin({

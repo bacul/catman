@@ -1,25 +1,24 @@
 import {AnimationStateType, Texture} from '../texture/texture';
 
-import {character} from '../game';
-import {CharacterLayerContext} from './character-layer-context';
+import {EnemyLayerContext} from './enemy-layer-context';
 
-export class CharacterTexture extends Texture {
+export class EnemyTexture extends Texture {
     private readonly image: CanvasImageSource;
 
     constructor() {
         super();
-        this.image = CharacterLayerContext.image;
+        this.image = EnemyLayerContext.image;
     }
 
-    draw(): void {
-        CharacterLayerContext.context.drawImage(
+    draw(x: number, y: number): void {
+        EnemyLayerContext.context.drawImage(
             this.image,
             this.texture.spriteCoordinate.x,
             this.texture.spriteCoordinate.y,
             this.texture.size,
             this.texture.size,
-            character.currentX,
-            character.currentY,
+            x,
+            y,
             30,
             30
         );

@@ -1,16 +1,16 @@
 import {Enemy, MoveDirectionType, character, enemies, gameSize} from '../game';
 
 import {FigureCollision} from '../character-layer/wall-collision';
+import {EnemyLayerContext} from './enemy-layer-context';
+import {EnemyTexture} from './enemy-texture';
 
 export class EnemyLayer {
-    private readonly canvas: HTMLCanvasElement = document.querySelector('#enemy-layer');
-    private readonly context: CanvasRenderingContext2D;
     private readonly figureCollision = new FigureCollision();
+    private readonly enemyTexture = new EnemyTexture();
     private readonly enemiesHandicapTick: number = 1;
     private enemiesHandicap: number = 0;
 
     constructor() {
-        this.context = this.canvas.getContext('2d');
         enemies.forEach((enemy) => {
             enemy.direction.moveDirection = this.getClosestToMove(enemy);
         });
@@ -18,9 +18,10 @@ export class EnemyLayer {
 
     draw(): void {
         enemies.forEach((enemy) => {
-            this.context.clearRect(0, 0, gameSize.width, gameSize.height);
-            this.context.fillRect(enemy.currentX, enemy.currentY, enemy.width, enemy.height);
-            this.context.fillStyle = enemy.color;
+            EnemyLayerContext.context.clearRect(0, 0, gameSize.width, gameSize.height);
+            EnemyLayerContext.context.fillRect(enemy.currentX, enemy.currentY, enemy.width, enemy.height);
+            EnemyLayerContext.context.fillStyle = enemy.color;
+            this.enemyTexture.draw(enemy.currentX, enemy.currentY);
         });
     }
 
@@ -161,21 +162,25 @@ export class EnemyLayer {
                 case MoveDirectionType.up:
                     if (!this.figureCollision.stuckTop(enemy)) {
                         enemy.currentY -= enemy.stepSize;
+                        this.enemyTexture.setUpView();
                     }
                     break;
                 case MoveDirectionType.down:
                     if (!this.figureCollision.stuckBottom(enemy)) {
                         enemy.currentY += enemy.stepSize;
+                        this.enemyTexture.setDownView();
                     }
                     break;
                 case MoveDirectionType.left:
                     if (!this.figureCollision.stuckLeft(enemy)) {
                         enemy.currentX -= enemy.stepSize;
+                        this.enemyTexture.setLeftView();
                     }
                     break;
                 case MoveDirectionType.right:
                     if (!this.figureCollision.stuckRight(enemy)) {
                         enemy.currentX += enemy.stepSize;
+                        this.enemyTexture.setRightView();
                     }
                     break;
             }

@@ -73,7 +73,7 @@ const game: Game = {
                 changeToDirection: null
             },
             blockDirections: [],
-            color: '#9500DD'
+            color: '#999'
         }
     ]
 };
