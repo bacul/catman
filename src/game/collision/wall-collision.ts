@@ -63,7 +63,7 @@ export class FigureCollision {
                 return false;
             }
 
-            const reachLeftEdge = movableEntity.currentX + movableEntity.width >= path.topLeftX;
+            const reachLeftEdge = movableEntity.currentX + movableEntity.width >= path.minX;
             if (!reachLeftEdge) {
                 return false;
             }
@@ -159,7 +159,7 @@ export class FigureCollision {
                 return false;
             }
 
-            const reachTopEdge = movableEntity.currentY + movableEntity.height >= path.topLeftY;
+            const reachTopEdge = movableEntity.currentY + movableEntity.height >= path.minY;
             if (!reachTopEdge) {
                 return false;
             }
