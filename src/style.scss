@@ -5,9 +5,11 @@
 }
 
 body {
-    background-color: whitesmoke;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    background-color: #222;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    font-family: 'Play', Arial, Helvetica,sans-serif;
+    color: #fff;
 }
 
 img {
@@ -25,4 +27,22 @@ img {
     margin-left: auto;
     margin-right: auto;
     position: absolute;
+    border-radius: 5px;
+}
+
+.ui-layer {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.score {
+    display: flex;
+    font-size: 22px;
+    margin-bottom: 20px;
+}
+
+.score-header {
+    margin-right: 5px;
 }

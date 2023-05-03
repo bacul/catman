@@ -46,7 +46,7 @@ const game: Game = {
         height: 600
     },
     background: {
-        borderColor: '#009511',
+        borderColor: '#007300',
         borderRadius: 5
     },
     character: {

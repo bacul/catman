@@ -1,10 +1,10 @@
 import {MoveDirectionType, character, characterDirection, gameSize} from '../game';
 
+import {FigureCollision} from '../collision/wall-collision';
 import {CollectibleCollision} from '../mission-layer/collectible-collision';
 import {CharacterMovement} from './character';
 import {CharacterLayerContext} from './character-layer-context';
 import {CharacterTexture} from './character-texture';
-import {FigureCollision} from './wall-collision';
 
 export class CharacterLayer {
     private readonly figureCollision: FigureCollision;
@@ -79,13 +79,13 @@ export class CharacterLayer {
 
     draw(): void {
         CharacterLayerContext.context.clearRect(0, 0, gameSize.width, gameSize.height);
-        CharacterLayerContext.context.fillRect(
-            character.currentX,
-            character.currentY,
-            character.width,
-            character.height
-        );
-        CharacterLayerContext.context.fillStyle = character.color;
+        // CharacterLayerContext.context.fillRect(
+        //     character.currentX,
+        //     character.currentY,
+        //     character.width,
+        //     character.height
+        // );
+        // CharacterLayerContext.context.fillStyle = character.color;
         this.characterTexture.draw();
     }
 }

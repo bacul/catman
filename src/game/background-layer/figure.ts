@@ -24,17 +24,34 @@ export interface Path extends PathCoordinates {
 }
 
 const pathCoordinates: PathCoordinates[] = [
+    /**
+     * верхний ряд слева направо
+     */
     {
         topLeftX: 120,
         topLeftY: 90,
         points: [
-            {x: 130, y: 90},
-            {x: 130, y: 120},
-            {x: 160, y: 120},
-            {x: 160, y: 130},
-            {x: 130, y: 130},
-            {x: 130, y: 160},
-            {x: 120, y: 160},
+            {x: 140, y: 90},
+            {x: 140, y: 140},
+            {x: 200, y: 140},
+            {x: 200, y: 160},
+            {x: 140, y: 160},
+            {x: 140, y: 210},
+            {x: 120, y: 210},
+            {x: 120, y: 90}
+        ]
+    },
+    {
+        topLeftX: 120,
+        topLeftY: 90,
+        points: [
+            {x: 140, y: 90},
+            {x: 140, y: 140},
+            {x: 200, y: 140},
+            {x: 200, y: 160},
+            {x: 140, y: 160},
+            {x: 140, y: 210},
+            {x: 120, y: 210},
             {x: 120, y: 90}
         ]
     }

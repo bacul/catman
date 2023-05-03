@@ -15,7 +15,7 @@ class Application {
 
     constructor() {
         this.setGameSize();
-        this.setDebugMode();
+        // this.setDebugMode();
         this.backgroundLayer.draw();
         this.missionLayer.drawCollectibles();
         this.main();
@@ -45,6 +45,7 @@ class Application {
                 element.setAttribute('style', `width: ${gameSize.width}px ;height: ${gameSize.height}px`);
             }
         });
+        document.querySelector('.ui-layer').setAttribute('style', `width: ${gameSize.width}px`);
     }
 
     private setDebugMode(): void {

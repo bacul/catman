@@ -16,12 +16,12 @@ export class BackgroundLayer {
     }
 
     private drawBackground(): void {
-        this.context.fillStyle = '#fff';
+        this.context.fillStyle = '#000';
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
         this.context.beginPath();
-        this.context.lineWidth = 2;
         this.context.roundRect(0, 0, this.canvas.width, this.canvas.height, background.borderRadius);
+        this.context.lineWidth = 4;
         this.context.strokeStyle = background.borderColor;
         this.context.stroke();
         this.context.closePath();

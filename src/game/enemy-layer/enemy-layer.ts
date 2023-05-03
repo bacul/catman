@@ -1,6 +1,6 @@
 import {Enemy, MoveDirectionType, character, enemies, gameSize} from '../game';
 
-import {FigureCollision} from '../character-layer/wall-collision';
+import {FigureCollision} from '../collision/wall-collision';
 import {EnemyLayerContext} from './enemy-layer-context';
 import {EnemyTexture} from './enemy-texture';
 
@@ -20,8 +20,8 @@ export class EnemyLayer {
     draw(): void {
         enemies.forEach((enemy) => {
             EnemyLayerContext.context.clearRect(0, 0, gameSize.width, gameSize.height);
-            EnemyLayerContext.context.fillRect(enemy.currentX, enemy.currentY, enemy.width, enemy.height);
-            EnemyLayerContext.context.fillStyle = enemy.color;
+            // EnemyLayerContext.context.fillRect(enemy.currentX, enemy.currentY, enemy.width, enemy.height);
+            // EnemyLayerContext.context.fillStyle = enemy.color;
             this.enemyTexture.draw(enemy.currentX, enemy.currentY);
         });
     }
