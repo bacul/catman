@@ -17,7 +17,7 @@ export class CharacterLayer {
         this.collectibleCollision = new CollectibleCollision();
         this.characterMovement = new CharacterMovement();
         this.characterTexture = new CharacterTexture();
-        this.characterTexture.setLeftView();
+        this.characterTexture.setDownView();
     }
 
     move(): void {
