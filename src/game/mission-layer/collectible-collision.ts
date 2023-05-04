@@ -1,6 +1,6 @@
+import {character, collectible} from '../game';
 import {CollectibleCoordinate, collectibles} from './collectibles';
 
-import {character} from '../game';
 import {MissionLayer} from './mission-layer';
 
 export class CollectibleCollision {
@@ -11,12 +11,12 @@ export class CollectibleCollision {
         if (collectibleOnWayX.length) {
             const characterRightEdge = character.currentX + character.width;
             const collected = collectibleOnWayX.find((coordinate) => {
-                const passCollectible = coordinate.centerX - collectibles.radius < character.currentX;
+                const passCollectible = coordinate.centerX - collectible.radius < character.currentX;
                 if (passCollectible) {
                     return null;
                 }
 
-                const reachCollectible = coordinate.centerX - collectibles.radius <= characterRightEdge;
+                const reachCollectible = coordinate.centerX - collectible.radius <= characterRightEdge;
                 return reachCollectible;
             });
 
@@ -31,12 +31,12 @@ export class CollectibleCollision {
         if (collectibleOnWayX.length) {
             const characterRightEdge = character.currentX + character.width;
             const collected = collectibleOnWayX.find((coordinate) => {
-                const passCollectible = coordinate.centerX + collectibles.radius > characterRightEdge;
+                const passCollectible = coordinate.centerX + collectible.radius > characterRightEdge;
                 if (passCollectible) {
                     return null;
                 }
 
-                const reachCollectible = coordinate.centerX + collectibles.radius >= character.currentX;
+                const reachCollectible = coordinate.centerX + collectible.radius >= character.currentX;
                 return reachCollectible;
             });
             if (collected) {
@@ -50,12 +50,12 @@ export class CollectibleCollision {
         if (collectibleOnWayY.length) {
             const characterBottomEdge = character.currentY + character.height;
             const collected = collectibleOnWayY.find((coordinate) => {
-                const passCollectible = coordinate.centerY + collectibles.radius < character.currentY;
+                const passCollectible = coordinate.centerY + collectible.radius < character.currentY;
                 if (passCollectible) {
                     return null;
                 }
 
-                const reachCollectible = coordinate.centerY - collectibles.radius <= characterBottomEdge;
+                const reachCollectible = coordinate.centerY - collectible.radius <= characterBottomEdge;
                 return reachCollectible;
             });
             if (collected) {
@@ -69,12 +69,12 @@ export class CollectibleCollision {
         if (collectibleOnWayY.length) {
             const characterBottomEdge = character.currentY + character.height;
             const collected = collectibleOnWayY.find((coordinate) => {
-                const passCollectible = coordinate.centerY - collectibles.radius > characterBottomEdge;
+                const passCollectible = coordinate.centerY - collectible.radius > characterBottomEdge;
                 if (passCollectible) {
                     return null;
                 }
 
-                const reachCollectible = coordinate.centerY + collectibles.radius >= character.currentY;
+                const reachCollectible = coordinate.centerY + collectible.radius >= character.currentY;
                 return reachCollectible;
             });
             if (collected) {
@@ -85,23 +85,23 @@ export class CollectibleCollision {
 
     private removeCollected(collected: CollectibleCoordinate): void {
         this.missionLayer.eraseCollectible(collected);
-        const collectedIndex = collectibles.coordinates.findIndex((coordinate) => {
+        const collectedIndex = collectibles.findIndex((coordinate) => {
             return collected.centerX === coordinate.centerX && collected.centerY === coordinate.centerY;
         });
-        collectibles.coordinates.splice(collectedIndex, 1);
-        if (collectibles.coordinates.length === 0) {
+        collectibles.splice(collectedIndex, 1);
+        if (collectibles.length === 0) {
             this.missionLayer.setMissionComplete();
         }
     }
 
     private getCollectibleOnWayX(): CollectibleCoordinate[] {
-        return collectibles.coordinates.filter((coordinate) => {
+        return collectibles.filter((coordinate) => {
             return coordinate.centerY === character.height / 2 + character.currentY;
         });
     }
 
     private getCollectibleOnWayY(): CollectibleCoordinate[] {
-        return collectibles.coordinates.filter((coordinate) => {
+        return collectibles.filter((coordinate) => {
             return coordinate.centerX === character.width / 2 + character.currentX;
         });
     }

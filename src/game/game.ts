@@ -34,11 +34,17 @@ interface GameSize {
     shiftXY: number;
 }
 
+interface Collectible {
+    radius: number;
+    сolor: string;
+}
+
 interface Game {
     gameSize: GameSize;
     character: MovableEntity;
     background: Background;
     enemies: Enemy[];
+    collectible: Collectible;
 }
 
 const game: Game = {
@@ -77,7 +83,11 @@ const game: Game = {
             blockDirections: [],
             color: '#999'
         }
-    ]
+    ],
+    collectible: {
+        radius: 3,
+        сolor: '#ffb04b'
+    }
 };
 
 export const character: MovableEntity = game.character;
@@ -85,3 +95,4 @@ export const enemies: Enemy[] = game.enemies;
 export const characterDirection: MoveDirection = game.character.direction;
 export const background: Background = game.background;
 export const gameSize: GameSize = game.gameSize;
+export const collectible: Collectible = game.collectible;
