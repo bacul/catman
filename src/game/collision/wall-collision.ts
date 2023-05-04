@@ -16,7 +16,7 @@ interface VerticalLine {
 export class FigureCollision {
     stuckRight(movableEntity: MovableEntity): boolean {
         return (
-            movableEntity.currentX >= gameSize.width - movableEntity.width ||
+            movableEntity.currentX >= gameSize.width - movableEntity.width - gameSize.shiftXY ||
             this.stuckRightPath(movableEntity) ||
             this.stuckRightRectangle(movableEntity)
         );
@@ -24,20 +24,26 @@ export class FigureCollision {
 
     stuckLeft(movableEntity: MovableEntity): boolean {
         return (
-            movableEntity.currentX <= 0 || this.stuckLeftPath(movableEntity) || this.stuckLeftRectangle(movableEntity)
+            movableEntity.currentX <= gameSize.shiftXY ||
+            this.stuckLeftPath(movableEntity) ||
+            this.stuckLeftRectangle(movableEntity)
         );
     }
 
     stuckBottom(movableEntity: MovableEntity): boolean {
         return (
-            movableEntity.currentY + movableEntity.height >= gameSize.height ||
+            movableEntity.currentY + movableEntity.height >= gameSize.height - gameSize.shiftXY ||
             this.stuckBottomRectangle(movableEntity) ||
             this.stuckBottomPath(movableEntity)
         );
     }
 
     stuckTop(movableEntity: MovableEntity): boolean {
-        return movableEntity.currentY <= 0 || this.stuckTopPath(movableEntity) || this.stuckTopRectangle(movableEntity);
+        return (
+            movableEntity.currentY <= gameSize.shiftXY ||
+            this.stuckTopPath(movableEntity) ||
+            this.stuckTopRectangle(movableEntity)
+        );
     }
 
     private stuckRightRectangle(movableEntity: MovableEntity): boolean {

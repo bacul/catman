@@ -37,15 +37,20 @@ class Application {
     }
 
     private setGameSize(): void {
+        const outterBorderSizeAndPadding = 12;
+        const gameFieldShiftXY = gameSize.shiftXY * 2 - outterBorderSizeAndPadding;
         document.querySelectorAll('.game-field').forEach((element) => {
             if (element.nodeName === 'CANVAS') {
                 element.setAttribute('width', `${gameSize.width}px`);
                 element.setAttribute('height', `${gameSize.height}px`);
             } else {
-                element.setAttribute('style', `width: ${gameSize.width}px ;height: ${gameSize.height}px`);
+                element.setAttribute(
+                    'style',
+                    `width: ${gameSize.width - gameFieldShiftXY}px ;height: ${gameSize.height - gameFieldShiftXY}px`
+                );
             }
         });
-        document.querySelector('.ui-layer').setAttribute('style', `width: ${gameSize.width}px`);
+        document.querySelector('.ui-layer').setAttribute('style', `width: ${gameSize.width - gameFieldShiftXY}px`);
     }
 
     private setDebugMode(): void {

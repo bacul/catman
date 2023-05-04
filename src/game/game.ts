@@ -31,6 +31,7 @@ interface Background {
 interface GameSize {
     width: number;
     height: number;
+    shiftXY: number;
 }
 
 interface Game {
@@ -42,8 +43,9 @@ interface Game {
 
 const game: Game = {
     gameSize: {
-        width: 405,
-        height: 450
+        width: 605,
+        height: 650,
+        shiftXY: 100
     },
     background: {
         borderColor: '#007300',
@@ -52,8 +54,8 @@ const game: Game = {
     character: {
         width: 30,
         height: 30,
-        currentX: 188,
-        currentY: 330,
+        currentX: 288,
+        currentY: 430,
         stepSize: 1,
         direction: {
             moveDirection: null,
@@ -65,8 +67,8 @@ const game: Game = {
         {
             width: 30,
             height: 30,
-            currentX: 188,
-            currentY: 150,
+            currentX: 288,
+            currentY: 250,
             stepSize: 1,
             direction: {
                 moveDirection: null,

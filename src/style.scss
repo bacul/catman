@@ -20,6 +20,11 @@ img {
     position: relative;
     margin-left: auto;
     margin-right: auto;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
 }
 
 .canvas {

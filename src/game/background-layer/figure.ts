@@ -8,9 +8,10 @@ export interface Rectangle {
     topLeftY: number;
     width: number;
     height: number;
+    invisible?: boolean;
 }
 
-interface PathCoordinates {
+export interface PathCoordinates {
     topLeftX: number;
     topLeftY: number;
     points: Point[];
@@ -26,130 +27,130 @@ export interface Path extends PathCoordinates {
 const pathCoordinates: PathCoordinates[] = [
     /** start second row */
     {
-        topLeftX: 105,
-        topLeftY: 90,
+        topLeftX: 205,
+        topLeftY: 190,
         points: [
-            {x: 120, y: 90},
-            {x: 120, y: 135},
-            {x: 165, y: 135},
-            {x: 165, y: 150},
-            {x: 120, y: 150},
-            {x: 120, y: 195},
-            {x: 105, y: 195},
-            {x: 105, y: 90}
+            {x: 220, y: 190},
+            {x: 220, y: 235},
+            {x: 265, y: 235},
+            {x: 265, y: 250},
+            {x: 220, y: 250},
+            {x: 220, y: 295},
+            {x: 205, y: 295},
+            {x: 205, y: 190}
         ]
     },
     {
-        topLeftX: 150,
-        topLeftY: 90,
+        topLeftX: 250,
+        topLeftY: 190,
         points: [
-            {x: 255, y: 90},
-            {x: 255, y: 105},
-            {x: 210, y: 105},
-            {x: 210, y: 150},
-            {x: 195, y: 150},
-            {x: 195, y: 105},
-            {x: 150, y: 105},
-            {x: 150, y: 90}
+            {x: 355, y: 190},
+            {x: 355, y: 205},
+            {x: 310, y: 205},
+            {x: 310, y: 250},
+            {x: 295, y: 250},
+            {x: 295, y: 205},
+            {x: 250, y: 205},
+            {x: 250, y: 190}
         ]
     },
     {
-        topLeftX: 240,
-        topLeftY: 135,
+        topLeftX: 340,
+        topLeftY: 235,
         points: [
-            {x: 285, y: 135},
-            {x: 285, y: 90},
-            {x: 300, y: 90},
-            {x: 300, y: 195},
-            {x: 285, y: 195},
-            {x: 285, y: 150},
-            {x: 240, y: 150},
-            {x: 240, y: 135}
+            {x: 385, y: 235},
+            {x: 385, y: 190},
+            {x: 400, y: 190},
+            {x: 400, y: 295},
+            {x: 385, y: 295},
+            {x: 385, y: 250},
+            {x: 340, y: 250},
+            {x: 340, y: 235}
         ]
     },
     /** end second row */
     /** start fourth row */
     {
-        topLeftX: 150,
-        topLeftY: 270,
+        topLeftX: 250,
+        topLeftY: 370,
         points: [
-            {x: 255, y: 270},
-            {x: 255, y: 285},
-            {x: 210, y: 285},
-            {x: 210, y: 330},
-            {x: 195, y: 330},
-            {x: 195, y: 285},
-            {x: 150, y: 285},
-            {x: 150, y: 270}
+            {x: 355, y: 370},
+            {x: 355, y: 385},
+            {x: 310, y: 385},
+            {x: 310, y: 430},
+            {x: 295, y: 430},
+            {x: 295, y: 385},
+            {x: 250, y: 385},
+            {x: 250, y: 370}
         ]
     },
     /** end fourth row */
     /** start fifth row */
     {
-        topLeftX: 30,
-        topLeftY: 315,
+        topLeftX: 130,
+        topLeftY: 415,
         points: [
-            {x: 75, y: 315},
-            {x: 75, y: 375},
-            {x: 60, y: 375},
-            {x: 60, y: 330},
-            {x: 30, y: 330},
-            {x: 30, y: 315}
+            {x: 175, y: 415},
+            {x: 175, y: 475},
+            {x: 160, y: 475},
+            {x: 160, y: 430},
+            {x: 130, y: 430},
+            {x: 130, y: 415}
         ]
     },
     {
-        topLeftX: 330,
-        topLeftY: 315,
+        topLeftX: 430,
+        topLeftY: 415,
         points: [
-            {x: 375, y: 315},
-            {x: 375, y: 330},
-            {x: 345, y: 330},
-            {x: 345, y: 375},
-            {x: 330, y: 375},
-            {x: 330, y: 315}
+            {x: 475, y: 415},
+            {x: 475, y: 430},
+            {x: 445, y: 430},
+            {x: 445, y: 475},
+            {x: 430, y: 475},
+            {x: 430, y: 415}
         ]
     },
     /** start sixth row */
     {
-        topLeftX: 30,
-        topLeftY: 405,
+        topLeftX: 130,
+        topLeftY: 505,
         points: [
-            {x: 105, y: 405},
-            {x: 105, y: 360},
-            {x: 120, y: 360},
-            {x: 120, y: 405},
-            {x: 165, y: 405},
-            {x: 165, y: 420},
-            {x: 30, y: 420},
-            {x: 30, y: 405}
+            {x: 205, y: 505},
+            {x: 205, y: 460},
+            {x: 220, y: 460},
+            {x: 220, y: 505},
+            {x: 265, y: 505},
+            {x: 265, y: 520},
+            {x: 130, y: 520},
+            {x: 130, y: 505}
         ]
     },
     {
-        topLeftX: 150,
-        topLeftY: 360,
+        topLeftX: 250,
+        topLeftY: 460,
         points: [
-            {x: 255, y: 360},
-            {x: 255, y: 375},
-            {x: 210, y: 375},
-            {x: 210, y: 420},
-            {x: 195, y: 420},
-            {x: 195, y: 375},
-            {x: 150, y: 375},
-            {x: 150, y: 360}
+            {x: 355, y: 460},
+            {x: 355, y: 475},
+            {x: 310, y: 475},
+            {x: 310, y: 520},
+            {x: 295, y: 520},
+            {x: 295, y: 475},
+            {x: 250, y: 475},
+            {x: 250, y: 460}
         ]
     },
     {
-        topLeftX: 240,
-        topLeftY: 405,
+        topLeftX: 340,
+        topLeftY: 505,
         points: [
-            {x: 285, y: 405},
-            {x: 285, y: 360},
-            {x: 300, y: 360},
-            {x: 300, y: 405},
-            {x: 375, y: 405},
-            {x: 375, y: 420},
-            {x: 240, y: 420},
-            {x: 240, y: 405}
+            {x: 385, y: 505},
+            {x: 385, y: 460},
+            {x: 400, y: 460},
+            {x: 400, y: 505},
+            {x: 475, y: 505},
+            {x: 475, y: 520},
+            {x: 340, y: 520},
+            {x: 340, y: 505}
         ]
     }
     /** end sixth row */
@@ -158,125 +159,212 @@ const pathCoordinates: PathCoordinates[] = [
 const rectangles: Rectangle[] = [
     /** start first row */
     {
-        topLeftX: 30,
-        topLeftY: 30,
+        topLeftX: 130,
+        topLeftY: 130,
         width: 45,
         height: 30
     },
     {
-        topLeftX: 105,
-        topLeftY: 30,
+        topLeftX: 205,
+        topLeftY: 130,
         width: 60,
         height: 30
     },
     {
-        topLeftX: 195,
-        topLeftY: -5,
+        topLeftX: 295,
+        topLeftY: 100,
         width: 15,
-        height: 65
+        height: 60,
+        invisible: true
     },
     {
-        topLeftX: 240,
-        topLeftY: 30,
+        topLeftX: 340,
+        topLeftY: 130,
         width: 60,
         height: 30
     },
     {
-        topLeftX: 330,
-        topLeftY: 30,
+        topLeftX: 430,
+        topLeftY: 130,
         width: 45,
         height: 30
     },
     /** end first row */
     /** start second row */
     {
-        topLeftX: 30,
-        topLeftY: 90,
+        topLeftX: 130,
+        topLeftY: 190,
         width: 45,
         height: 15
     },
     {
-        topLeftX: 330,
-        topLeftY: 90,
+        topLeftX: 430,
+        topLeftY: 190,
         width: 45,
         height: 15
     },
     /** end second row */
     /** start third row */
-    /** TODO must be invisible */
     {
-        topLeftX: 0,
-        topLeftY: 135,
+        topLeftX: 100,
+        topLeftY: 235,
         width: 75,
-        height: 60
-    },
-    /** TODO must be invisible */
-    {
-        topLeftX: 330,
-        topLeftY: 140,
-        width: 75,
-        height: 60
+        height: 60,
+        invisible: true
     },
     {
-        topLeftX: 150,
-        topLeftY: 180,
+        topLeftX: 430,
+        topLeftY: 235,
+        width: 75,
+        height: 60,
+        invisible: true
+    },
+    {
+        topLeftX: 250,
+        topLeftY: 280,
         width: 105,
         height: 60
     },
     /** end third row */
     /** start fourth row */
-    /** TODO must be invisible */
     {
-        topLeftX: 0,
-        topLeftY: 225,
+        topLeftX: 100,
+        topLeftY: 325,
         width: 75,
-        height: 60
-    },
-    /** TODO must be invisible */
-    {
-        topLeftX: 330,
-        topLeftY: 225,
-        width: 75,
-        height: 60
+        height: 60,
+        invisible: true
     },
     {
-        topLeftX: 105,
-        topLeftY: 225,
+        topLeftX: 430,
+        topLeftY: 325,
+        width: 75,
+        height: 60,
+        invisible: true
+    },
+    {
+        topLeftX: 205,
+        topLeftY: 325,
         width: 15,
         height: 60
     },
     {
-        topLeftX: 285,
-        topLeftY: 225,
+        topLeftX: 385,
+        topLeftY: 325,
         width: 15,
         height: 60
     },
     /** end fourth */
     /** start fifth */
     {
-        topLeftX: 105,
-        topLeftY: 315,
+        topLeftX: 205,
+        topLeftY: 415,
         width: 60,
         height: 15
     },
     {
-        topLeftX: 240,
-        topLeftY: 315,
+        topLeftX: 340,
+        topLeftY: 415,
         width: 60,
         height: 15
     },
     /** start sixth */
     {
-        topLeftX: 0,
-        topLeftY: 360,
+        topLeftX: 100,
+        topLeftY: 460,
         width: 30,
-        height: 15
+        height: 15,
+        invisible: true
     },
     {
-        topLeftX: 375,
-        topLeftY: 360,
+        topLeftX: 475,
+        topLeftY: 460,
         width: 30,
-        height: 15
+        height: 15,
+        invisible: true
+    }
+];
+
+export const pathBackgroundCoordinates: PathCoordinates[] = [
+    /** upper inner */
+    {
+        topLeftX: 90,
+        topLeftY: 295,
+        points: [
+            {x: 90, y: 295},
+            {x: 175, y: 295},
+            {x: 175, y: 235},
+            {x: 100, y: 235},
+            {x: 100, y: 100},
+            {x: 295, y: 100},
+            {x: 295, y: 160},
+            {x: 310, y: 160},
+            {x: 310, y: 100},
+            {x: 505, y: 100},
+            {x: 505, y: 235},
+            {x: 430, y: 235},
+            {x: 430, y: 295},
+            {x: 505, y: 295},
+            {x: 515, y: 295}
+        ]
+    },
+    /** upper outer */
+    {
+        topLeftX: 90,
+        topLeftY: 290,
+        points: [
+            {x: 90, y: 290},
+            {x: 170, y: 290},
+            {x: 170, y: 240},
+            {x: 95, y: 240},
+            {x: 95, y: 95},
+            {x: 510, y: 95},
+            {x: 510, y: 240},
+            {x: 435, y: 240},
+            {x: 435, y: 290},
+            {x: 515, y: 290}
+        ]
+    },
+    /** lower inner */
+    {
+        topLeftX: 90,
+        topLeftY: 325,
+        points: [
+            {x: 90, y: 325},
+            {x: 175, y: 325},
+            {x: 175, y: 385},
+            {x: 100, y: 385},
+            {x: 100, y: 460},
+            {x: 130, y: 460},
+            {x: 130, y: 475},
+            {x: 100, y: 475},
+            {x: 100, y: 550},
+            {x: 505, y: 550},
+            {x: 505, y: 475},
+            {x: 475, y: 475},
+            {x: 475, y: 460},
+            {x: 505, y: 460},
+            {x: 505, y: 385},
+            {x: 430, y: 385},
+            {x: 430, y: 325},
+            {x: 515, y: 325}
+        ]
+    },
+    /** lower outer */
+    {
+        topLeftX: 90,
+        topLeftY: 330,
+        points: [
+            {x: 90, y: 330},
+            {x: 170, y: 330},
+            {x: 170, y: 380},
+            {x: 95, y: 380},
+            {x: 95, y: 555},
+            {x: 510, y: 555},
+            {x: 510, y: 380},
+            {x: 435, y: 380},
+            {x: 435, y: 330},
+            {x: 515, y: 330}
+        ]
     }
 ];
 
