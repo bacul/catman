@@ -24,256 +24,259 @@ export interface Path extends PathCoordinates {
 }
 
 const pathCoordinates: PathCoordinates[] = [
-    /**
-     * второй ряд слева направо
-     */
+    /** start second row */
     {
-        topLeftX: 120,
+        topLeftX: 105,
         topLeftY: 90,
         points: [
-            {x: 140, y: 90},
-            {x: 140, y: 140},
-            {x: 200, y: 140},
-            {x: 200, y: 160},
-            {x: 140, y: 160},
-            {x: 140, y: 210},
-            {x: 120, y: 210},
-            {x: 120, y: 90}
+            {x: 120, y: 90},
+            {x: 120, y: 135},
+            {x: 165, y: 135},
+            {x: 165, y: 150},
+            {x: 120, y: 150},
+            {x: 120, y: 195},
+            {x: 105, y: 195},
+            {x: 105, y: 90}
         ]
     },
     {
-        topLeftX: 170,
+        topLeftX: 150,
         topLeftY: 90,
         points: [
-            {x: 310, y: 90},
-            {x: 310, y: 110},
-            {x: 250, y: 110},
-            {x: 250, y: 160},
-            {x: 230, y: 160},
-            {x: 230, y: 110},
-            {x: 170, y: 110},
-            {x: 170, y: 90}
+            {x: 255, y: 90},
+            {x: 255, y: 105},
+            {x: 210, y: 105},
+            {x: 210, y: 150},
+            {x: 195, y: 150},
+            {x: 195, y: 105},
+            {x: 150, y: 105},
+            {x: 150, y: 90}
         ]
     },
     {
-        topLeftX: 280,
-        topLeftY: 140,
+        topLeftX: 240,
+        topLeftY: 135,
         points: [
-            {x: 340, y: 140},
-            {x: 340, y: 90},
-            {x: 360, y: 90},
-            {x: 360, y: 210},
-            {x: 340, y: 210},
-            {x: 340, y: 160},
-            {x: 280, y: 160},
-            {x: 280, y: 140}
+            {x: 285, y: 135},
+            {x: 285, y: 90},
+            {x: 300, y: 90},
+            {x: 300, y: 195},
+            {x: 285, y: 195},
+            {x: 285, y: 150},
+            {x: 240, y: 150},
+            {x: 240, y: 135}
         ]
     },
-    /**
-     * четвертый ряд слева направо
-     */
+    /** end second row */
+    /** start fourth row */
     {
-        topLeftX: 170,
-        topLeftY: 290,
+        topLeftX: 150,
+        topLeftY: 270,
         points: [
-            {x: 310, y: 290},
-            {x: 310, y: 310},
-            {x: 250, y: 310},
-            {x: 250, y: 360},
-            {x: 230, y: 360},
-            {x: 230, y: 310},
-            {x: 170, y: 310},
-            {x: 170, y: 290}
+            {x: 255, y: 270},
+            {x: 255, y: 285},
+            {x: 210, y: 285},
+            {x: 210, y: 330},
+            {x: 195, y: 330},
+            {x: 195, y: 285},
+            {x: 150, y: 285},
+            {x: 150, y: 270}
         ]
     },
-    /**
-     * пятый ряд
-     */
+    /** end fourth row */
+    /** start fifth row */
     {
         topLeftX: 30,
-        topLeftY: 340,
+        topLeftY: 315,
         points: [
-            {x: 90, y: 340},
-            {x: 90, y: 410},
-            {x: 70, y: 410},
-            {x: 70, y: 360},
-            {x: 30, y: 360},
-            {x: 30, y: 340}
+            {x: 75, y: 315},
+            {x: 75, y: 375},
+            {x: 60, y: 375},
+            {x: 60, y: 330},
+            {x: 30, y: 330},
+            {x: 30, y: 315}
         ]
     },
     {
-        topLeftX: 390,
-        topLeftY: 340,
+        topLeftX: 330,
+        topLeftY: 315,
         points: [
-            {x: 450, y: 340},
-            {x: 450, y: 360},
-            {x: 410, y: 360},
-            {x: 410, y: 410},
-            {x: 390, y: 410},
-            {x: 390, y: 340}
+            {x: 375, y: 315},
+            {x: 375, y: 330},
+            {x: 345, y: 330},
+            {x: 345, y: 375},
+            {x: 330, y: 375},
+            {x: 330, y: 315}
         ]
     },
-    /**
-     * шестой ряд
-     */
+    /** start sixth row */
     {
         topLeftX: 30,
-        topLeftY: 440,
+        topLeftY: 405,
         points: [
-            {x: 120, y: 440},
-            {x: 120, y: 390},
-            {x: 140, y: 390},
-            {x: 140, y: 440},
-            {x: 200, y: 440},
-            {x: 200, y: 460},
-            {x: 30, y: 460},
-            {x: 30, y: 440}
+            {x: 105, y: 405},
+            {x: 105, y: 360},
+            {x: 120, y: 360},
+            {x: 120, y: 405},
+            {x: 165, y: 405},
+            {x: 165, y: 420},
+            {x: 30, y: 420},
+            {x: 30, y: 405}
         ]
     },
     {
-        topLeftX: 170,
-        topLeftY: 390,
+        topLeftX: 150,
+        topLeftY: 360,
         points: [
-            {x: 310, y: 390},
-            {x: 310, y: 410},
-            {x: 250, y: 410},
-            {x: 250, y: 460},
-            {x: 230, y: 460},
-            {x: 230, y: 410},
-            {x: 170, y: 410},
-            {x: 170, y: 390}
+            {x: 255, y: 360},
+            {x: 255, y: 375},
+            {x: 210, y: 375},
+            {x: 210, y: 420},
+            {x: 195, y: 420},
+            {x: 195, y: 375},
+            {x: 150, y: 375},
+            {x: 150, y: 360}
         ]
     },
     {
-        topLeftX: 280,
-        topLeftY: 440,
+        topLeftX: 240,
+        topLeftY: 405,
         points: [
-            {x: 340, y: 440},
-            {x: 340, y: 390},
-            {x: 360, y: 390},
-            {x: 360, y: 440},
-            {x: 450, y: 440},
-            {x: 450, y: 460},
-            {x: 280, y: 460},
-            {x: 280, y: 440}
+            {x: 285, y: 405},
+            {x: 285, y: 360},
+            {x: 300, y: 360},
+            {x: 300, y: 405},
+            {x: 375, y: 405},
+            {x: 375, y: 420},
+            {x: 240, y: 420},
+            {x: 240, y: 405}
         ]
     }
+    /** end sixth row */
 ];
 
 const rectangles: Rectangle[] = [
-    /**
-     * верхний ряд
-     */
+    /** start first row */
     {
         topLeftX: 30,
+        topLeftY: 30,
+        width: 45,
+        height: 30
+    },
+    {
+        topLeftX: 105,
         topLeftY: 30,
         width: 60,
         height: 30
     },
     {
-        topLeftX: 120,
-        topLeftY: 30,
-        width: 80,
-        height: 30
-    },
-    {
-        topLeftX: 230,
+        topLeftX: 195,
         topLeftY: -5,
-        width: 20,
+        width: 15,
         height: 65
     },
     {
-        topLeftX: 280,
-        topLeftY: 30,
-        width: 80,
-        height: 30
-    },
-    {
-        topLeftX: 390,
+        topLeftX: 240,
         topLeftY: 30,
         width: 60,
         height: 30
     },
-    /**
-     * второй ряд
-     */
+    {
+        topLeftX: 330,
+        topLeftY: 30,
+        width: 45,
+        height: 30
+    },
+    /** end first row */
+    /** start second row */
     {
         topLeftX: 30,
         topLeftY: 90,
-        width: 60,
-        height: 20
+        width: 45,
+        height: 15
     },
     {
-        topLeftX: 390,
+        topLeftX: 330,
         topLeftY: 90,
+        width: 45,
+        height: 15
+    },
+    /** end second row */
+    /** start third row */
+    /** TODO must be invisible */
+    {
+        topLeftX: 0,
+        topLeftY: 135,
+        width: 75,
+        height: 60
+    },
+    /** TODO must be invisible */
+    {
+        topLeftX: 330,
+        topLeftY: 140,
+        width: 75,
+        height: 60
+    },
+    {
+        topLeftX: 150,
+        topLeftY: 180,
+        width: 105,
+        height: 60
+    },
+    /** end third row */
+    /** start fourth row */
+    /** TODO must be invisible */
+    {
+        topLeftX: 0,
+        topLeftY: 225,
+        width: 75,
+        height: 60
+    },
+    /** TODO must be invisible */
+    {
+        topLeftX: 330,
+        topLeftY: 225,
+        width: 75,
+        height: 60
+    },
+    {
+        topLeftX: 105,
+        topLeftY: 225,
+        width: 15,
+        height: 60
+    },
+    {
+        topLeftX: 285,
+        topLeftY: 225,
+        width: 15,
+        height: 60
+    },
+    /** end fourth */
+    /** start fifth */
+    {
+        topLeftX: 105,
+        topLeftY: 315,
         width: 60,
-        height: 20
-    },
-    /**
-     * третий ряд
-     */
-    {
-        topLeftX: -5,
-        topLeftY: 140,
-        width: 95,
-        height: 170
+        height: 15
     },
     {
-        topLeftX: 390,
-        topLeftY: 140,
-        width: 95,
-        height: 170
+        topLeftX: 240,
+        topLeftY: 315,
+        width: 60,
+        height: 15
+    },
+    /** start sixth */
+    {
+        topLeftX: 0,
+        topLeftY: 360,
+        width: 30,
+        height: 15
     },
     {
-        topLeftX: 170,
-        topLeftY: 190,
-        width: 140,
-        height: 70
-    },
-    /**
-     * четвертый ряд
-     */
-    {
-        topLeftX: 120,
-        topLeftY: 240,
-        width: 20,
-        height: 70
-    },
-    {
-        topLeftX: 340,
-        topLeftY: 240,
-        width: 20,
-        height: 70
-    },
-    /**
-     * пятый ряд
-     */
-    {
-        topLeftX: 120,
-        topLeftY: 340,
-        width: 80,
-        height: 20
-    },
-    {
-        topLeftX: 280,
-        topLeftY: 340,
-        width: 80,
-        height: 20
-    },
-    /**
-     * шестой ряд
-     */
-    {
-        topLeftX: -5,
-        topLeftY: 390,
-        width: 45,
-        height: 20
-    },
-    {
-        topLeftX: 445,
-        topLeftY: 390,
-        width: 45,
-        height: 20
+        topLeftX: 375,
+        topLeftY: 360,
+        width: 30,
+        height: 15
     }
 ];
 
