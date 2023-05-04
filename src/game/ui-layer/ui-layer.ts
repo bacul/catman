@@ -1,10 +1,14 @@
-import {Language, defaultLanguage} from './language/language';
+import {Language, defaultLanguage, russianLanguage} from './language/language';
 
 export class UILayer {
     private readonly language: Language;
 
     constructor() {
-        this.language = defaultLanguage;
+        if (navigator.language === 'ru') {
+            this.language = russianLanguage;
+        } else {
+            this.language = defaultLanguage;
+        }
     }
 
     setLanguage(): void {
