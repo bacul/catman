@@ -15,19 +15,11 @@ interface VerticalLine {
 
 export class FigureCollision {
     stuckRight(movableEntity: MovableEntity): boolean {
-        return (
-            movableEntity.currentX >= gameSize.width - movableEntity.width - gameSize.shiftXY ||
-            this.stuckRightPath(movableEntity) ||
-            this.stuckRightRectangle(movableEntity)
-        );
+        return this.stuckRightPath(movableEntity) || this.stuckRightRectangle(movableEntity);
     }
 
     stuckLeft(movableEntity: MovableEntity): boolean {
-        return (
-            movableEntity.currentX <= gameSize.shiftXY ||
-            this.stuckLeftPath(movableEntity) ||
-            this.stuckLeftRectangle(movableEntity)
-        );
+        return this.stuckLeftPath(movableEntity) || this.stuckLeftRectangle(movableEntity);
     }
 
     stuckBottom(movableEntity: MovableEntity): boolean {
@@ -44,6 +36,24 @@ export class FigureCollision {
             this.stuckTopPath(movableEntity) ||
             this.stuckTopRectangle(movableEntity)
         );
+    }
+
+    isInLeftTunnel(movableEntity: MovableEntity): boolean {
+        const inTunnelLeft = movableEntity.currentY === 295 && movableEntity.currentX < 70;
+        return inTunnelLeft;
+    }
+
+    setWalkThroughLeftTunnel(movableEntity: MovableEntity): void {
+        movableEntity.currentX = 505;
+    }
+
+    isInRightTunnel(movableEntity: MovableEntity): boolean {
+        const inTunnelRight = movableEntity.currentY === 295 && movableEntity.currentX > 505;
+        return inTunnelRight;
+    }
+
+    setWalkThroughRightTunnel(movableEntity: MovableEntity): void {
+        movableEntity.currentX = 70;
     }
 
     private stuckRightRectangle(movableEntity: MovableEntity): boolean {

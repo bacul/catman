@@ -9,7 +9,7 @@ export class EnemyLayer {
     private readonly enemyTexture = new EnemyTexture();
     private readonly enemiesHandicapTick: number = 1;
     private enemiesHandicap: number = 0;
-    private gameOver: boolean;
+    private gameOver: boolean = true;
 
     constructor() {
         enemies.forEach((enemy) => {
@@ -198,6 +198,9 @@ export class EnemyLayer {
                         enemy.currentX -= enemy.stepSize;
                         this.enemyTexture.setLeftView();
                         this.setGameOver(this.isGameOver(enemy, MoveDirectionType.left));
+                        if (this.figureCollision.isInLeftTunnel(enemy)) {
+                            this.figureCollision.setWalkThroughLeftTunnel(enemy);
+                        }
                     }
                     break;
                 case MoveDirectionType.right:
@@ -205,6 +208,9 @@ export class EnemyLayer {
                         enemy.currentX += enemy.stepSize;
                         this.enemyTexture.setRightView();
                         this.setGameOver(this.isGameOver(enemy, MoveDirectionType.right));
+                        if (this.figureCollision.isInRightTunnel(enemy)) {
+                            this.figureCollision.setWalkThroughRightTunnel(enemy);
+                        }
                     }
                     break;
             }

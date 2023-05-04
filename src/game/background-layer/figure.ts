@@ -281,7 +281,40 @@ const rectangles: Rectangle[] = [
         width: 30,
         height: 15,
         invisible: true
+    },
+    /** end sixth */
+    /** start left round edge */
+    {
+        topLeftX: 95,
+        topLeftY: 95,
+        width: 5,
+        height: 135,
+        invisible: true
+    },
+    {
+        topLeftX: 95,
+        topLeftY: 385,
+        width: 5,
+        height: 165,
+        invisible: true
+    },
+    /** end left round edge */
+    /** start right round edge */
+    {
+        topLeftX: 505,
+        topLeftY: 95,
+        width: 5,
+        height: 135,
+        invisible: true
+    },
+    {
+        topLeftX: 505,
+        topLeftY: 385,
+        width: 5,
+        height: 165,
+        invisible: true
     }
+    /** end right round edge */
 ];
 
 export const pathBackgroundCoordinates: PathCoordinates[] = [

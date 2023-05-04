@@ -65,6 +65,9 @@ export class CharacterLayer {
                     character.currentX -= character.stepSize;
                     this.characterTexture.setLeftView();
                     this.collectibleCollision.collectLeft();
+                    if (this.figureCollision.isInLeftTunnel(character)) {
+                        this.figureCollision.setWalkThroughLeftTunnel(character);
+                    }
                 }
                 break;
             case MoveDirectionType.right:
@@ -72,6 +75,9 @@ export class CharacterLayer {
                     character.currentX += character.stepSize;
                     this.characterTexture.setRightView();
                     this.collectibleCollision.collectRight();
+                    if (this.figureCollision.isInRightTunnel(character)) {
+                        this.figureCollision.setWalkThroughRightTunnel(character);
+                    }
                 }
                 break;
         }

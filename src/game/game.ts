@@ -16,7 +16,6 @@ export interface MovableEntity {
     currentY: number;
     stepSize: number;
     direction: MoveDirection;
-    color: string;
 }
 
 export interface Enemy extends MovableEntity {
@@ -66,8 +65,7 @@ const game: Game = {
         direction: {
             moveDirection: null,
             changeToDirection: null
-        },
-        color: '#0095DD'
+        }
     },
     enemies: [
         {
@@ -80,8 +78,7 @@ const game: Game = {
                 moveDirection: null,
                 changeToDirection: null
             },
-            blockDirections: [],
-            color: '#999'
+            blockDirections: []
         }
     ],
     collectible: {
