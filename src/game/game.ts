@@ -16,6 +16,8 @@ export interface MovableEntity {
     currentY: number;
     stepSize: number;
     direction: MoveDirection;
+    startPositionX: number;
+    startPositionY: number;
 }
 
 export interface Enemy extends MovableEntity {
@@ -62,6 +64,8 @@ const game: Game = {
         height: 30,
         currentX: 288,
         currentY: 430,
+        startPositionX: 288,
+        startPositionY: 430,
         stepSize: 1,
         direction: {
             moveDirection: null,
@@ -74,6 +78,8 @@ const game: Game = {
             height: 30,
             currentX: 288,
             currentY: 250,
+            startPositionX: 288,
+            startPositionY: 250,
             stepSize: 1,
             direction: {
                 moveDirection: null,

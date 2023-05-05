@@ -1,4 +1,4 @@
-import {character, gameSize} from './game/game';
+import {character, enemies, gameSize} from './game/game';
 
 import {BackgroundLayer} from './game/background-layer/background-layer';
 import {CharacterLayer} from './game/character-layer/character-layer';
@@ -7,13 +7,13 @@ import {MissionLayer} from './game/mission-layer/mission-layer';
 import {UILayer} from './game/ui-layer/ui-layer';
 
 class Application {
-    private animationFrameId: number;
     private readonly backgroundLayer = new BackgroundLayer();
     private readonly characterLayer = new CharacterLayer();
     private readonly missionLayer = new MissionLayer();
     private readonly enemyLayer = new EnemyLayer();
     private readonly uiLayer = new UILayer();
     private readonly applicationTickMs = 14;
+    private gameOver: boolean;
 
     constructor() {
         this.uiLayer.setLanguage();
@@ -25,19 +25,37 @@ class Application {
         this.main();
         this.uiLayer.setGameLoaded();
 
-        this.uiLayer.startSequencePromise$().then(() => this.setMovablePosition());
+        document.addEventListener(EnemyLayer.gameOverEventName, () => (this.gameOver = true));
+        document.addEventListener(UILayer.gameStartEventName, () => this.setMovablePosition());
     }
 
     private setMovablePosition(): void {
-        setTimeout(() => {
-            this.characterLayer.move();
-            this.enemyLayer.move();
-            this.setMovablePosition();
-        }, this.applicationTickMs);
+        if (!this.gameOver) {
+            setTimeout(() => {
+                this.characterLayer.move();
+                this.enemyLayer.move();
+                this.setMovablePosition();
+            }, this.applicationTickMs);
+        }
+    }
+
+    private restart(): void {
+        character.currentX = character.startPositionX;
+        character.currentY = character.startPositionY;
+        enemies.forEach((enemy) => {
+            enemy.currentX = enemy.startPositionX;
+            enemy.currentY = enemy.startPositionY;
+        });
+        this.missionLayer.drawCollectibles();
+        this.missionLayer.drawPowerUps();
+        this.setMovablePosition();
+        this.uiLayer.restart();
+        this.uiLayer.setGameLoaded();
+        this.gameOver = false;
     }
 
     private main() {
-        this.animationFrameId = window.requestAnimationFrame(this.main.bind(this));
+        window.requestAnimationFrame(this.main.bind(this));
         this.characterLayer.draw();
         this.enemyLayer.draw();
     }
@@ -63,21 +81,7 @@ class Application {
     }
 
     private setDebugMode(): void {
-        window.document.querySelector('#stop').addEventListener('click', this.stop);
-        window.document.addEventListener('keydown', this.stop);
-    }
-
-    private stop(event: Event): void {
-        const isKeyboardEvent = event instanceof KeyboardEvent;
-        if (isKeyboardEvent) {
-            if (event.key === 'Space') {
-                character.stepSize = 0;
-                window.cancelAnimationFrame(this.animationFrameId);
-            }
-        } else {
-            character.stepSize = 0;
-            window.cancelAnimationFrame(this.animationFrameId);
-        }
+        window.document.querySelector('#stop').addEventListener('click', this.restart.bind(this));
     }
 }
 new Application();

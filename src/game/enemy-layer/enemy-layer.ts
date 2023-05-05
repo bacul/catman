@@ -1,15 +1,17 @@
 import {Enemy, MoveDirectionType, character, enemies, gameSize} from '../game';
 
 import {FigureCollision} from '../collision/wall-collision';
+import {UILayer} from '../ui-layer/ui-layer';
 import {EnemyLayerContext} from './enemy-layer-context';
 import {EnemyTexture} from './enemy-texture';
 
 export class EnemyLayer {
     private readonly figureCollision = new FigureCollision();
     private readonly enemyTexture = new EnemyTexture();
+    private readonly uiLayer = new UILayer();
     private readonly enemiesHandicapTick: number = 1;
     private enemiesHandicap: number = 0;
-    private gameOver: boolean;
+    static gameOverEventName = 'game-over';
 
     constructor() {
         enemies.forEach((enemy) => {
@@ -25,20 +27,18 @@ export class EnemyLayer {
     }
 
     move(): void {
-        if (!this.gameOver) {
-            if (this.enemiesHandicap !== this.enemiesHandicapTick) {
-                this.enemiesHandicap++;
-                this.moveAction();
-            } else {
-                this.enemiesHandicap = 0;
-            }
+        if (this.enemiesHandicap !== this.enemiesHandicapTick) {
+            this.enemiesHandicap++;
+            this.moveAction();
+        } else {
+            this.enemiesHandicap = 0;
         }
     }
 
     private setGameOver(gameOver: boolean): void {
         if (gameOver) {
-            this.gameOver = true;
-            console.log('game over');
+            document.dispatchEvent(new CustomEvent(EnemyLayer.gameOverEventName));
+            this.uiLayer.setGameDefeat();
         }
     }
 

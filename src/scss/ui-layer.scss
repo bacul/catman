@@ -13,6 +13,7 @@
     height: 462px;
     top: 100%;
     background-color: rgba(0,0,0,0.5);
+    border-radius: 5px;
 
     transition: opacity 0.2s ease-in;
     opacity: 0;
@@ -28,7 +29,7 @@
     left: 0;
 }
 
-.state-how-to-start {
+.state-text-wrapper {
     position: absolute;
     z-index: 1;
     top: 214px;
@@ -39,7 +40,7 @@
     justify-content: center;
 }
 
-.state-how-to-start-text {
+.state-text {
     color: #fff;
     font-size: 22px;
     background-color: #14720a;
@@ -47,10 +48,6 @@
     border-radius: 5px;
     border: 2px solid white;
     box-shadow: 0 0 20px 0 #fffef2;
-    // animation-name: radiance;
-    // animation-duration: 2s;
-    // animation-iteration-count: infinite;
-    // animation-direction: alternate;
 
     transition: opacity 0.2s ease-in;
     opacity: 0;
@@ -59,6 +56,17 @@
         transition: none;
         opacity: 1;
     }
+}
+
+.win-text {
+    animation-name: radiance;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+.defeat-text {
+    background-color: #720a0a;
 }
 
 .score {
@@ -73,7 +81,7 @@
 
 @keyframes radiance {
     from {
-        box-shadow: 0 0 20px -3px #fffef2;
+        box-shadow: 0 0 20px -4px #fffef2;
     }
     40% {
         box-shadow: 0 0 20px -2px #fffef2;
@@ -82,9 +90,9 @@
         box-shadow: 0 0 20px -1px #fffef2;
     }
     90%{
-        box-shadow: 0 0 20px 1px #fffef2;
+        box-shadow: 0 0 20px 2px #fffef2;
     }
     to {
-        box-shadow: 0 0 20px 1px #fffef2;
+        box-shadow: 0 0 20px 3px #fffef2;
     }
   }

@@ -2,14 +2,16 @@ import {Language, defaultLanguage, russianLanguage} from './language/language';
 
 enum UIElements {
     score = 'score-header',
-    howToStart = 'state-how-to-start-text',
+    howToStart = 'how-to-start',
+    win = 'win-text',
+    defeat = 'defeat-text',
     overlay = 'ui-layer-overlay',
-
     activeClass = 'active'
 }
 
 export class UILayer {
     private readonly language: Language;
+    static gameStartEventName = 'game-start';
 
     constructor() {
         if (navigator.language === 'ru') {
@@ -17,22 +19,14 @@ export class UILayer {
         } else {
             this.language = defaultLanguage;
         }
-    }
-
-    startSequencePromise$(): Promise<void> {
-        return new Promise((resolve) => {
-            const onKeyDownHandler = () => {
-                this.setGameStart();
-                resolve();
-                document.removeEventListener('keydown', onKeyDownHandler, false);
-            };
-            document.addEventListener('keydown', onKeyDownHandler, false);
-        });
+        document.addEventListener('keydown', UILayer.onKeyDownHandler, false);
     }
 
     setLanguage(): void {
         document.querySelector(`.${UIElements.score}`).innerHTML = this.language.score;
         document.querySelector(`.${UIElements.howToStart}`).innerHTML = this.language.howToStart;
+        document.querySelector(`.${UIElements.win}`).innerHTML = this.language.win;
+        document.querySelector(`.${UIElements.defeat}`).innerHTML = this.language.defeat;
     }
 
     setGameLoaded(): void {
@@ -40,10 +34,29 @@ export class UILayer {
         document.querySelector(`.${UIElements.overlay}`).classList.add(UIElements.activeClass);
     }
 
-    setGameStart(): void {
+    setGameWin(): void {
+        document.querySelector(`.${UIElements.overlay}`).classList.add(UIElements.activeClass);
+        document.querySelector(`.${UIElements.win}`).classList.add(UIElements.activeClass);
+    }
+
+    setGameDefeat(): void {
+        document.querySelector(`.${UIElements.overlay}`).classList.add(UIElements.activeClass);
+        document.querySelector(`.${UIElements.defeat}`).classList.add(UIElements.activeClass);
+    }
+
+    restart(): void {
+        document.querySelector(`.${UIElements.defeat}`).classList.remove(UIElements.activeClass);
+        document.addEventListener('keydown', UILayer.onKeyDownHandler, false);
+    }
+
+    private static onKeyDownHandler() {
+        UILayer.setGameStart();
+        document.removeEventListener('keydown', UILayer.onKeyDownHandler, false);
+        document.dispatchEvent(new CustomEvent(UILayer.gameStartEventName));
+    }
+
+    private static setGameStart(): void {
         document.querySelector(`.${UIElements.howToStart}`).classList.remove(UIElements.activeClass);
         document.querySelector(`.${UIElements.overlay}`).classList.remove(UIElements.activeClass);
     }
-
-    private setStartSequence(): void {}
 }
