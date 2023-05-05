@@ -3,18 +3,21 @@ export interface Language {
     howToStart: string;
     win: string;
     defeat: string;
+    restart: string;
 }
 
 export const defaultLanguage: Language = {
     score: 'Score:',
     howToStart: 'Press Any Key',
     win: 'You Win!',
-    defeat: 'Defeat'
+    defeat: 'Defeat',
+    restart: 'restart'
 };
 
 export const russianLanguage: Language = {
     score: 'Счет:',
     howToStart: 'Нажмите Любую Клавишу',
     win: 'Победа!',
-    defeat: 'Поражение'
+    defeat: 'Поражение',
+    restart: 'перезапуск'
 };

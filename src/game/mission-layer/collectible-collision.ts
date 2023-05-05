@@ -1,6 +1,6 @@
 import {Collectible, character, collectible, powerUp} from '../game';
-import {CollectibleCoordinate, collectibles, powerUps} from './collectibles';
 
+import {CollectibleCoordinate} from './collectibles';
 import {MissionLayer} from './mission-layer';
 import {PowerUp} from './power-up';
 
@@ -9,23 +9,23 @@ export class CollectibleCollision {
     private readonly powerUp = new PowerUp();
 
     collectRight(): void {
-        this.collectRightAction(collectibles, collectible);
-        this.collectRightAction(powerUps, powerUp);
+        this.collectRightAction(this.missionLayer.collectibles, collectible);
+        this.collectRightAction(this.missionLayer.powerUps, powerUp);
     }
 
     collectLeft(): void {
-        this.collectLeftAction(collectibles, collectible);
-        this.collectLeftAction(powerUps, powerUp);
+        this.collectLeftAction(this.missionLayer.collectibles, collectible);
+        this.collectLeftAction(this.missionLayer.powerUps, powerUp);
     }
 
     collectBottom(): void {
-        this.collectBottomAction(collectibles, collectible);
-        this.collectBottomAction(powerUps, powerUp);
+        this.collectBottomAction(this.missionLayer.collectibles, collectible);
+        this.collectBottomAction(this.missionLayer.powerUps, powerUp);
     }
 
     collectTop(): void {
-        this.collectTopAction(collectibles, collectible);
-        this.collectTopAction(powerUps, powerUp);
+        this.collectTopAction(this.missionLayer.collectibles, collectible);
+        this.collectTopAction(this.missionLayer.powerUps, powerUp);
     }
 
     getCollectibleOnWayX(coordinates: CollectibleCoordinate[]): CollectibleCoordinate[] {
@@ -42,12 +42,12 @@ export class CollectibleCollision {
 
     removeCollected(coordinates: CollectibleCoordinate[], collected: CollectibleCoordinate, radius: number): void {
         this.missionLayer.eraseCollectible(collected, radius);
-        if (this.missionLayer.getIsMissionCollectible(radius)) {
+        if (this.missionLayer.isMissionCollectible(radius)) {
             const collectedIndex = coordinates.findIndex((coordinate) => {
                 return collected.centerX === coordinate.centerX && collected.centerY === coordinate.centerY;
             });
-            collectibles.splice(collectedIndex, 1);
-            if (collectibles.length === 0) {
+            coordinates.splice(collectedIndex, 1);
+            if (coordinates.length === 0) {
                 this.missionLayer.setMissionComplete();
             }
         } else {

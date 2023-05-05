@@ -1,12 +1,17 @@
 import {Language, defaultLanguage, russianLanguage} from './language/language';
 
-enum UIElements {
-    score = 'score-header',
-    howToStart = 'how-to-start',
-    win = 'win-text',
-    defeat = 'defeat-text',
-    overlay = 'ui-layer-overlay',
-    activeClass = 'active'
+export enum UIElements {
+    score = '.score-header',
+    howToStart = '.how-to-start',
+    win = '.win-text',
+    defeat = '.defeat-text',
+    overlay = '.ui-layer-overlay',
+    restart = '.restart-button'
+}
+
+enum StateClass {
+    active = 'active',
+    disabled = 'disabled'
 }
 
 export class UILayer {
@@ -23,29 +28,35 @@ export class UILayer {
     }
 
     setLanguage(): void {
-        document.querySelector(`.${UIElements.score}`).innerHTML = this.language.score;
-        document.querySelector(`.${UIElements.howToStart}`).innerHTML = this.language.howToStart;
-        document.querySelector(`.${UIElements.win}`).innerHTML = this.language.win;
-        document.querySelector(`.${UIElements.defeat}`).innerHTML = this.language.defeat;
+        document.querySelector(UIElements.score).innerHTML = this.language.score;
+        document.querySelector(UIElements.howToStart).innerHTML = this.language.howToStart;
+        document.querySelector(UIElements.win).innerHTML = this.language.win;
+        document.querySelector(UIElements.defeat).innerHTML = this.language.defeat;
+        document.querySelector(UIElements.restart).innerHTML = this.language.restart;
     }
 
     setGameLoaded(): void {
-        document.querySelector(`.${UIElements.howToStart}`).classList.add(UIElements.activeClass);
-        document.querySelector(`.${UIElements.overlay}`).classList.add(UIElements.activeClass);
+        document.querySelector(UIElements.howToStart).classList.add(StateClass.active);
+        document.querySelector(UIElements.overlay).classList.add(StateClass.active);
     }
 
     setGameWin(): void {
-        document.querySelector(`.${UIElements.overlay}`).classList.add(UIElements.activeClass);
-        document.querySelector(`.${UIElements.win}`).classList.add(UIElements.activeClass);
+        document.querySelector(UIElements.overlay).classList.add(StateClass.active);
+        document.querySelector(UIElements.win).classList.add(StateClass.active);
+        document.querySelector(UIElements.restart).classList.add(StateClass.active);
     }
 
     setGameDefeat(): void {
-        document.querySelector(`.${UIElements.overlay}`).classList.add(UIElements.activeClass);
-        document.querySelector(`.${UIElements.defeat}`).classList.add(UIElements.activeClass);
+        document.querySelector(UIElements.overlay).classList.add(StateClass.active);
+        document.querySelector(UIElements.defeat).classList.add(StateClass.active);
+        document.querySelector(UIElements.restart).classList.add(StateClass.active);
     }
 
     restart(): void {
-        document.querySelector(`.${UIElements.defeat}`).classList.remove(UIElements.activeClass);
+        document.querySelector(UIElements.restart).setAttribute(StateClass.disabled, 'true');
+        document.querySelector(UIElements.defeat).classList.remove(StateClass.active);
+        document.querySelector(UIElements.win).classList.remove(StateClass.active);
+        document.querySelector(UIElements.restart).classList.remove(StateClass.active);
         document.addEventListener('keydown', UILayer.onKeyDownHandler, false);
     }
 
@@ -53,10 +64,11 @@ export class UILayer {
         UILayer.setGameStart();
         document.removeEventListener('keydown', UILayer.onKeyDownHandler, false);
         document.dispatchEvent(new CustomEvent(UILayer.gameStartEventName));
+        document.querySelector(UIElements.restart).removeAttribute(StateClass.disabled);
     }
 
     private static setGameStart(): void {
-        document.querySelector(`.${UIElements.howToStart}`).classList.remove(UIElements.activeClass);
-        document.querySelector(`.${UIElements.overlay}`).classList.remove(UIElements.activeClass);
+        document.querySelector(UIElements.howToStart).classList.remove(StateClass.active);
+        document.querySelector(UIElements.overlay).classList.remove(StateClass.active);
     }
 }

@@ -32,7 +32,7 @@
 .state-text-wrapper {
     position: absolute;
     z-index: 1;
-    top: 214px;
+    top: 174px;
     left: auto;
     width: 417px;
     text-align: center;
@@ -47,7 +47,7 @@
     padding: 10px 20px;
     border-radius: 5px;
     border: 2px solid white;
-    box-shadow: 0 0 20px 0 #fffef2;
+    box-shadow: 0 0 5px 0 #fffef2;
 
     transition: opacity 0.2s ease-in;
     opacity: 0;
@@ -63,10 +63,12 @@
     animation-duration: 2s;
     animation-iteration-count: infinite;
     animation-direction: alternate;
+    box-shadow: 0 0 20px 0 #18f900;
 }
 
 .defeat-text {
     background-color: #720a0a;
+    box-shadow: 0 0 5px 0 #f90000;
 }
 
 .score {
@@ -77,6 +79,47 @@
 
 .score-header {
     margin-right: 5px;
+}
+
+.actions {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.options-button,
+.about-button {
+    // TODO
+    display: none;
+}
+
+.restart-button {
+    position: absolute;
+    top: 273px;
+    z-index: 1;
+    padding: 5px 10px;
+    font-size: 20px;
+    border-radius: 5px;
+    border: 2px solid white;
+    background-color: green;
+    color: white;
+    box-shadow: 0 0 20px 0 #fffef2;
+    cursor: pointer;
+
+    transition: opacity 0.2s ease-in;
+    opacity: 0;
+    z-index: -1;
+
+    &.active {
+        transition: none;
+        opacity: 1;
+        z-index: 1;
+    }
+
+    &.disabled {
+        background-color: gray;
+    }
 }
 
 @keyframes radiance {

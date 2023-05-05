@@ -1,10 +1,10 @@
 import {character, enemies, gameSize} from './game/game';
+import {UIElements, UILayer} from './game/ui-layer/ui-layer';
 
 import {BackgroundLayer} from './game/background-layer/background-layer';
 import {CharacterLayer} from './game/character-layer/character-layer';
 import {EnemyLayer} from './game/enemy-layer/enemy-layer';
 import {MissionLayer} from './game/mission-layer/mission-layer';
-import {UILayer} from './game/ui-layer/ui-layer';
 
 class Application {
     private readonly backgroundLayer = new BackgroundLayer();
@@ -18,7 +18,6 @@ class Application {
     constructor() {
         this.uiLayer.setLanguage();
         this.setGameSize();
-        // this.setDebugMode();
         this.backgroundLayer.draw();
         this.missionLayer.drawCollectibles();
         this.missionLayer.drawPowerUps();
@@ -27,6 +26,7 @@ class Application {
 
         document.addEventListener(EnemyLayer.gameOverEventName, () => (this.gameOver = true));
         document.addEventListener(UILayer.gameStartEventName, () => this.setMovablePosition());
+        document.querySelector(UIElements.restart).addEventListener('click', this.restart.bind(this));
     }
 
     private setMovablePosition(): void {
@@ -40,6 +40,7 @@ class Application {
     }
 
     private restart(): void {
+        this.uiLayer.restart();
         character.currentX = character.startPositionX;
         character.currentY = character.startPositionY;
         enemies.forEach((enemy) => {
@@ -48,8 +49,9 @@ class Application {
         });
         this.missionLayer.drawCollectibles();
         this.missionLayer.drawPowerUps();
+        this.missionLayer.setScore(0);
         this.setMovablePosition();
-        this.uiLayer.restart();
+
         this.uiLayer.setGameLoaded();
         this.gameOver = false;
     }
@@ -78,10 +80,6 @@ class Application {
         document
             .querySelector('.ui-layer-overlay')
             .setAttribute('style', `height: ${gameSize.height - gameFieldShiftXY}px`);
-    }
-
-    private setDebugMode(): void {
-        window.document.querySelector('#stop').addEventListener('click', this.restart.bind(this));
     }
 }
 new Application();
