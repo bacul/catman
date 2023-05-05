@@ -21,8 +21,11 @@ class Application {
         // this.setDebugMode();
         this.backgroundLayer.draw();
         this.missionLayer.drawCollectibles();
+        this.missionLayer.drawPowerUps();
         this.main();
-        this.setMovablePosition();
+        this.uiLayer.setGameLoaded();
+
+        this.uiLayer.startSequencePromise$().then(() => this.setMovablePosition());
     }
 
     private setMovablePosition(): void {
@@ -54,6 +57,9 @@ class Application {
             }
         });
         document.querySelector('.ui-layer').setAttribute('style', `width: ${gameSize.width - gameFieldShiftXY}px`);
+        document
+            .querySelector('.ui-layer-overlay')
+            .setAttribute('style', `height: ${gameSize.height - gameFieldShiftXY}px`);
     }
 
     private setDebugMode(): void {

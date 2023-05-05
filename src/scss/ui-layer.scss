@@ -1,0 +1,90 @@
+.ui-layer {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.ui-layer-overlay {
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    height: 462px;
+    top: 100%;
+    background-color: rgba(0,0,0,0.5);
+
+    transition: opacity 0.2s ease-in;
+    opacity: 0;
+
+    &.active {
+        transition: none;
+        opacity: 1;
+    }
+}
+
+.state {
+    position: absolute;
+    left: 0;
+}
+
+.state-how-to-start {
+    position: absolute;
+    z-index: 1;
+    top: 214px;
+    left: auto;
+    width: 417px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+.state-how-to-start-text {
+    color: #fff;
+    font-size: 22px;
+    background-color: #14720a;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: 2px solid white;
+    box-shadow: 0 0 20px 0 #fffef2;
+    // animation-name: radiance;
+    // animation-duration: 2s;
+    // animation-iteration-count: infinite;
+    // animation-direction: alternate;
+
+    transition: opacity 0.2s ease-in;
+    opacity: 0;
+
+    &.active {
+        transition: none;
+        opacity: 1;
+    }
+}
+
+.score {
+    display: flex;
+    font-size: 22px;
+    margin-bottom: 20px;
+}
+
+.score-header {
+    margin-right: 5px;
+}
+
+@keyframes radiance {
+    from {
+        box-shadow: 0 0 20px -3px #fffef2;
+    }
+    40% {
+        box-shadow: 0 0 20px -2px #fffef2;
+    }
+    60% {
+        box-shadow: 0 0 20px -1px #fffef2;
+    }
+    90%{
+        box-shadow: 0 0 20px 1px #fffef2;
+    }
+    to {
+        box-shadow: 0 0 20px 1px #fffef2;
+    }
+  }

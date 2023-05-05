@@ -1,3 +1,5 @@
+@import 'ui-layer';
+
 * {
     padding: 0;
     margin: 0;
@@ -33,21 +35,4 @@ img {
     margin-right: auto;
     position: absolute;
     border-radius: 5px;
-}
-
-.ui-layer {
-    display: flex;
-    align-items: center;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.score {
-    display: flex;
-    font-size: 22px;
-    margin-bottom: 20px;
-}
-
-.score-header {
-    margin-right: 5px;
 }
