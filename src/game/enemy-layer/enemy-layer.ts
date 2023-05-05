@@ -9,7 +9,7 @@ export class EnemyLayer {
     private readonly enemyTexture = new EnemyTexture();
     private readonly enemiesHandicapTick: number = 1;
     private enemiesHandicap: number = 0;
-    private gameOver: boolean = true;
+    private gameOver: boolean;
 
     constructor() {
         enemies.forEach((enemy) => {
@@ -20,8 +20,6 @@ export class EnemyLayer {
     draw(): void {
         enemies.forEach((enemy) => {
             EnemyLayerContext.context.clearRect(0, 0, gameSize.width, gameSize.height);
-            // EnemyLayerContext.context.fillRect(enemy.currentX, enemy.currentY, enemy.width, enemy.height);
-            // EnemyLayerContext.context.fillStyle = enemy.color;
             this.enemyTexture.draw(enemy.currentX, enemy.currentY);
         });
     }
@@ -283,7 +281,7 @@ export class EnemyLayer {
     private isGameOver(enemy: Enemy, direction: MoveDirectionType): boolean {
         switch (direction) {
             case MoveDirectionType.up:
-                const differenceTopY = enemy.currentY - character.currentY + character.height;
+                const differenceTopY = enemy.currentY - character.currentY - character.height;
                 const characterTopCaptured =
                     enemy.currentX === character.currentX &&
                     (differenceTopY === 0 ||
