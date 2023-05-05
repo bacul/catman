@@ -7,16 +7,12 @@ import {CharacterLayerContext} from './character-layer-context';
 import {CharacterTexture} from './character-texture';
 
 export class CharacterLayer {
-    private readonly figureCollision: FigureCollision;
-    private readonly collectibleCollision: CollectibleCollision;
-    private readonly characterMovement: CharacterMovement;
-    private readonly characterTexture: CharacterTexture;
+    private readonly figureCollision = new FigureCollision();
+    private readonly collectibleCollision = new CollectibleCollision();
+    private readonly characterMovement = new CharacterMovement();
+    private readonly characterTexture = new CharacterTexture();
 
     constructor() {
-        this.figureCollision = new FigureCollision();
-        this.collectibleCollision = new CollectibleCollision();
-        this.characterMovement = new CharacterMovement();
-        this.characterTexture = new CharacterTexture();
         this.characterTexture.setDownView();
     }
 

@@ -1,11 +1,5 @@
 import {gameSize} from '../game';
 
-export interface Collectible {
-    radius: number;
-    сolor: string;
-    coordinates: CollectibleCoordinate[];
-}
-
 export interface CollectibleCoordinate {
     centerX: number;
     centerY: number;
@@ -44,12 +38,10 @@ export const collectibles: CollectibleCoordinate[] = [
     getCoordinates(2, 21),
     getCoordinates(2, 26),
 
-    getCoordinates(3, 1),
     getCoordinates(3, 6),
     getCoordinates(3, 12),
     getCoordinates(3, 15),
     getCoordinates(3, 21),
-    getCoordinates(3, 26),
 
     getCoordinates(4, 1),
     getCoordinates(4, 6),
@@ -192,7 +184,6 @@ export const collectibles: CollectibleCoordinate[] = [
     getCoordinates(22, 21),
     getCoordinates(22, 26),
 
-    getCoordinates(23, 1),
     getCoordinates(23, 2),
     getCoordinates(23, 3),
     getCoordinates(23, 6),
@@ -211,7 +202,6 @@ export const collectibles: CollectibleCoordinate[] = [
     getCoordinates(23, 21),
     getCoordinates(23, 24),
     getCoordinates(23, 25),
-    getCoordinates(23, 26),
 
     getCoordinates(24, 3),
     getCoordinates(24, 6),
@@ -284,6 +274,13 @@ export const collectibles: CollectibleCoordinate[] = [
     getCoordinates(29, 24),
     getCoordinates(29, 25),
     getCoordinates(29, 26)
+];
+
+export const powerUps: CollectibleCoordinate[] = [
+    getCoordinates(3, 1),
+    getCoordinates(3, 26),
+    getCoordinates(23, 1),
+    getCoordinates(23, 26)
 ];
 
 function getCoordinates(row: number, column: number): CollectibleCoordinate {

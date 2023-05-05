@@ -33,7 +33,7 @@ interface GameSize {
     shiftXY: number;
 }
 
-interface Collectible {
+export interface Collectible {
     radius: number;
     сolor: string;
 }
@@ -44,6 +44,7 @@ interface Game {
     background: Background;
     enemies: Enemy[];
     collectible: Collectible;
+    powerUp: Collectible;
 }
 
 const game: Game = {
@@ -84,6 +85,10 @@ const game: Game = {
     collectible: {
         radius: 3,
         сolor: '#ffb04b'
+    },
+    powerUp: {
+        radius: 7,
+        сolor: '#ffe04b'
     }
 };
 
@@ -93,3 +98,4 @@ export const characterDirection: MoveDirection = game.character.direction;
 export const background: Background = game.background;
 export const gameSize: GameSize = game.gameSize;
 export const collectible: Collectible = game.collectible;
+export const powerUp: Collectible = game.powerUp;
