@@ -206,16 +206,16 @@ const rectangles: Rectangle[] = [
     /** end second row */
     /** start third row */
     {
-        topLeftX: 100,
+        topLeftX: 75,
         topLeftY: 235,
-        width: 75,
+        width: 100,
         height: 60,
         invisible: true
     },
     {
         topLeftX: 430,
         topLeftY: 235,
-        width: 75,
+        width: 100,
         height: 60,
         invisible: true
     },
@@ -228,16 +228,16 @@ const rectangles: Rectangle[] = [
     /** end third row */
     /** start fourth row */
     {
-        topLeftX: 100,
+        topLeftX: 75,
         topLeftY: 325,
-        width: 75,
+        width: 100,
         height: 60,
         invisible: true
     },
     {
         topLeftX: 430,
         topLeftY: 325,
-        width: 75,
+        width: 100,
         height: 60,
         invisible: true
     },
