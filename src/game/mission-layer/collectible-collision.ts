@@ -1,4 +1,4 @@
-import {Collectible, character, collectible, powerUp} from '../game';
+import {Collectible, character, collectible, enemies, powerUp} from '../game';
 
 import {State} from '../../application-state';
 import {CollectibleCoordinate} from './collectibles';
@@ -24,25 +24,56 @@ export class CollectibleCollision {
         this.collectTopAction(State.missionLayer.powerUps, powerUp);
     }
 
-    getCollectibleOnWayX(coordinates: CollectibleCoordinate[]): CollectibleCoordinate[] {
+    intersectWithEnemy(): void {
+        const intersectEnemyId = enemies.findIndex((enemy) => {
+            const diffirenceLeftX = character.currentX - enemy.currentX;
+            const intersectLeft = diffirenceLeftX > 0 && diffirenceLeftX <= enemy.width;
+
+            const differenceRightX = enemy.currentX - character.currentX;
+            const intersectRight = differenceRightX > 0 && differenceRightX <= enemy.width;
+
+            const differenceTopY = character.currentY - enemy.currentY;
+            const intersectTop = differenceTopY > 0 && differenceTopY <= enemy.height;
+
+            const differenceBottomY = enemy.currentY - character.currentY;
+            const intersectBottom = differenceBottomY > 0 && differenceBottomY <= enemy.height;
+
+            if (intersectLeft || intersectRight) {
+                return intersectBottom || intersectTop;
+            }
+            if (intersectBottom || intersectTop) {
+                return intersectLeft || intersectRight;
+            }
+        });
+        if (~intersectEnemyId) {
+            State.enemyLayer.defeateEnemyById(intersectEnemyId);
+        }
+    }
+
+    private getCollectibleOnWayX(coordinates: CollectibleCoordinate[]): CollectibleCoordinate[] {
         return coordinates.filter((coordinate) => {
             return coordinate.centerY === character.height / 2 + character.currentY;
         });
     }
 
-    getCollectibleOnWayY(coordinates: CollectibleCoordinate[]): CollectibleCoordinate[] {
+    private getCollectibleOnWayY(coordinates: CollectibleCoordinate[]): CollectibleCoordinate[] {
         return coordinates.filter((coordinate) => {
             return coordinate.centerX === character.width / 2 + character.currentX;
         });
     }
 
-    removeCollected(coordinates: CollectibleCoordinate[], collected: CollectibleCoordinate, radius: number): void {
+    private removeCollected(
+        coordinates: CollectibleCoordinate[],
+        collected: CollectibleCoordinate,
+        radius: number
+    ): void {
         State.missionLayer.eraseCollectible(collected, radius);
+        const collectedIndex = coordinates.findIndex((coordinate) => {
+            return collected.centerX === coordinate.centerX && collected.centerY === coordinate.centerY;
+        });
+        coordinates.splice(collectedIndex, 1);
+
         if (State.missionLayer.isMissionCollectible(radius)) {
-            const collectedIndex = coordinates.findIndex((coordinate) => {
-                return collected.centerX === coordinate.centerX && collected.centerY === coordinate.centerY;
-            });
-            coordinates.splice(collectedIndex, 1);
             if (coordinates.length === 0) {
                 State.missionLayer.setMissionComplete();
             }

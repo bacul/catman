@@ -1,17 +1,30 @@
 import {Enemy, MoveDirectionType, character, enemies, gameSize} from '../game';
 
 import {State} from '../../application-state';
+import {PowerUp} from '../mission-layer/power-up';
 import {EnemyLayerContext} from './enemy-layer-context';
 
 export class EnemyLayer {
-    private readonly enemiesHandicapTick: number = 1;
+    static readonly gameOverEventName = 'game-over';
+    private _enemiesHandicapTick: number = 1;
     private enemiesHandicap: number = 0;
-    static gameOverEventName = 'game-over';
 
     constructor() {
         enemies.forEach((enemy) => {
             enemy.direction.moveDirection = this.getClosestToMove(enemy);
         });
+        setTimeout(() => {
+            this.moveAction();
+        });
+    }
+
+    set enemiesHandicapTick(value: number) {
+        this.enemiesHandicap = 0;
+        this._enemiesHandicapTick = value;
+    }
+
+    get enemiesHandicapTick(): number {
+        return this._enemiesHandicapTick;
     }
 
     draw(): void {
@@ -22,12 +35,17 @@ export class EnemyLayer {
     }
 
     move(): void {
-        if (this.enemiesHandicap !== this.enemiesHandicapTick) {
-            this.enemiesHandicap++;
+        if (this.enemiesHandicap === this.enemiesHandicapTick) {
+            this.enemiesHandicap = 0;
             this.moveAction();
         } else {
-            this.enemiesHandicap = 0;
+            this.enemiesHandicap++;
         }
+    }
+
+    defeateEnemyById(id: number): void {
+        enemies.splice(id, 1);
+        EnemyLayerContext.context.clearRect(0, 0, gameSize.width, gameSize.height);
     }
 
     private setGameOver(gameOver: boolean): void {
@@ -37,7 +55,41 @@ export class EnemyLayer {
         }
     }
 
-    private setMoveDirection(enemy: Enemy): void {
+    private setFarestMoveDirection(enemy: Enemy): void {
+        let farestDirection = this.getFarestToMove(enemy);
+        if (enemy.blockDirections.length === 2) {
+            this.setDirectionWhenTwoBlocked(enemy);
+            return;
+        }
+
+        if (enemy.blockDirections.length === 1) {
+            this.setDirectionWhenOneBlocked(enemy, false);
+            return;
+        }
+
+        let blockedDirections = enemy.blockDirections;
+        const canChangeOnClosest = this.canMove(enemy, farestDirection);
+        if (canChangeOnClosest) {
+            blockedDirections = [];
+            enemy.direction.moveDirection = farestDirection;
+            return;
+        }
+
+        enemy.direction.changeToDirection = farestDirection;
+        blockedDirections.push(farestDirection);
+
+        const secondFarest = this.getFarestToMove(enemy, farestDirection);
+        const secondClosestAvailable = this.canMove(enemy, secondFarest);
+        if (secondClosestAvailable) {
+            enemy.direction.changeToDirection = secondFarest;
+            this.setDirectionWhenOneBlocked(enemy);
+        } else {
+            enemy.blockDirections.push(secondFarest);
+            this.setDirectionWhenTwoBlocked(enemy);
+        }
+    }
+
+    private setClosestMoveDirection(enemy: Enemy): void {
         let closestDirection = this.getClosestToMove(enemy);
         if (enemy.blockDirections.length === 2) {
             this.setDirectionWhenTwoBlocked(enemy);
@@ -70,7 +122,7 @@ export class EnemyLayer {
         }
     }
 
-    private setDirectionWhenOneBlocked(enemy: Enemy): void {
+    private setDirectionWhenOneBlocked(enemy: Enemy, closest: boolean = true): void {
         const canMoveOnNext = this.canMove(enemy, enemy.direction.changeToDirection);
         if (canMoveOnNext) {
             enemy.direction.moveDirection = enemy.direction.changeToDirection;
@@ -86,13 +138,15 @@ export class EnemyLayer {
                 enemy.direction.changeToDirection = null;
                 enemy.blockDirections = [];
             } else {
-                const secondClosest = this.getClosestToMove(enemy, enemy.direction.moveDirection);
-                const canMoveOnSecondClosest = this.canMove(enemy, secondClosest);
+                const secondDirection = closest
+                    ? this.getClosestToMove(enemy, enemy.direction.moveDirection)
+                    : this.getFarestToMove(enemy, enemy.direction.moveDirection);
+                const canMoveOnSecondClosest = this.canMove(enemy, secondDirection);
                 if (canMoveOnSecondClosest) {
                     enemy.direction.changeToDirection = enemy.direction.moveDirection;
-                    enemy.direction.moveDirection = secondClosest;
+                    enemy.direction.moveDirection = secondDirection;
                 } else {
-                    enemy.blockDirections.push(secondClosest);
+                    enemy.blockDirections.push(secondDirection);
                     this.setDirectionWhenTwoBlocked(enemy);
                 }
             }
@@ -102,7 +156,10 @@ export class EnemyLayer {
                 enemy.blockDirections.push(extrimeState);
                 this.setDirectionWhenTwoBlocked(enemy);
             } else {
-                enemy.direction.moveDirection = this.getClosestToMove(enemy, enemy.direction.moveDirection);
+                const direction = closest
+                    ? this.getClosestToMove(enemy, enemy.direction.moveDirection)
+                    : this.getFarestToMove(enemy, enemy.direction.moveDirection);
+                enemy.direction.moveDirection = direction;
             }
         }
     }
@@ -126,6 +183,46 @@ export class EnemyLayer {
 
         let blocked = [...enemy.blockDirections].filter((block) => block !== enemy.direction.moveDirection);
         enemy.direction.moveDirection = this.getCounterMoveDirection(blocked[0]);
+    }
+
+    private getFarestToMove(enemy: Enemy, exclude?: MoveDirectionType): MoveDirectionType {
+        const differenceX = enemy.currentX - character.currentX;
+        const differenceY = enemy.currentY - character.currentY;
+
+        const distanceToCharacterX = differenceX;
+        const distanceToCharacterY = differenceY;
+
+        if (exclude) {
+            let excludeX: boolean = exclude === MoveDirectionType.left || exclude === MoveDirectionType.right;
+            if (excludeX) {
+                const closestY = this.getFarestYToMove(distanceToCharacterY);
+                if (closestY === exclude) {
+                    return this.getCounterMoveDirection(closestY);
+                }
+                return closestY;
+            } else {
+                const closestX = this.getFarestXToMove(distanceToCharacterX);
+                if (closestX === exclude) {
+                    return this.getCounterMoveDirection(closestX);
+                }
+                return closestX;
+            }
+        }
+
+        const destinationXReached = differenceX === 0;
+        if (destinationXReached) {
+            return this.getFarestYToMove(distanceToCharacterY);
+        }
+        const destinationYReached = differenceY === 0;
+        if (destinationYReached) {
+            return this.getFarestXToMove(distanceToCharacterX);
+        }
+
+        if (distanceToCharacterX > distanceToCharacterY) {
+            return this.getFarestXToMove(distanceToCharacterX);
+        } else {
+            return this.getFarestYToMove(distanceToCharacterY);
+        }
     }
 
     private getClosestToMove(enemy: Enemy, exclude?: MoveDirectionType): MoveDirectionType {
@@ -170,27 +267,37 @@ export class EnemyLayer {
 
     private moveAction(): void {
         enemies.forEach((enemy) => {
-            this.setMoveDirection(enemy);
+            if (!PowerUp.active) {
+                this.setClosestMoveDirection(enemy);
+            } else {
+                this.setFarestMoveDirection(enemy);
+            }
             switch (enemy.direction.moveDirection) {
                 case MoveDirectionType.up:
                     if (!State.figureCollision.stuckTop(enemy)) {
                         enemy.currentY -= enemy.stepSize;
                         State.enemyTexture.setUpView();
-                        this.setGameOver(this.isGameOver(enemy, MoveDirectionType.up));
+                        if (!PowerUp.active) {
+                            this.setGameOver(this.isGameOver(enemy, MoveDirectionType.up));
+                        }
                     }
                     break;
                 case MoveDirectionType.down:
                     if (!State.figureCollision.stuckBottom(enemy)) {
                         enemy.currentY += enemy.stepSize;
                         State.enemyTexture.setDownView();
-                        this.setGameOver(this.isGameOver(enemy, MoveDirectionType.down));
+                        if (!PowerUp.active) {
+                            this.setGameOver(this.isGameOver(enemy, MoveDirectionType.down));
+                        }
                     }
                     break;
                 case MoveDirectionType.left:
                     if (!State.figureCollision.stuckLeft(enemy)) {
                         enemy.currentX -= enemy.stepSize;
                         State.enemyTexture.setLeftView();
-                        this.setGameOver(this.isGameOver(enemy, MoveDirectionType.left));
+                        if (!PowerUp.active) {
+                            this.setGameOver(this.isGameOver(enemy, MoveDirectionType.left));
+                        }
                         if (State.figureCollision.isInLeftTunnel(enemy)) {
                             State.figureCollision.setWalkThroughLeftTunnel(enemy);
                         }
@@ -200,7 +307,9 @@ export class EnemyLayer {
                     if (!State.figureCollision.stuckRight(enemy)) {
                         enemy.currentX += enemy.stepSize;
                         State.enemyTexture.setRightView();
-                        this.setGameOver(this.isGameOver(enemy, MoveDirectionType.right));
+                        if (!PowerUp.active) {
+                            this.setGameOver(this.isGameOver(enemy, MoveDirectionType.right));
+                        }
                         if (State.figureCollision.isInRightTunnel(enemy)) {
                             State.figureCollision.setWalkThroughRightTunnel(enemy);
                         }
@@ -236,20 +345,21 @@ export class EnemyLayer {
         }
     }
 
+    /** FIXME is this needed? */
     private getExtrimeState(enemy: Enemy): MoveDirectionType {
-        const onXStart = enemy.currentX === 0;
+        const onXStart = enemy.currentX === gameSize.shiftXY;
         if (onXStart) {
             return MoveDirectionType.left;
         }
-        const onXEnd = enemy.currentX + enemy.width === gameSize.width;
+        const onXEnd = enemy.currentX + enemy.width === gameSize.width - gameSize.shiftXY;
         if (onXEnd) {
             return MoveDirectionType.right;
         }
-        const onYStart = enemy.currentY === 0;
+        const onYStart = enemy.currentY === gameSize.shiftXY;
         if (onYStart) {
             return MoveDirectionType.up;
         }
-        const onYEnd = enemy.currentY + enemy.height === gameSize.height;
+        const onYEnd = enemy.currentY + enemy.height === gameSize.height - gameSize.shiftXY;
         if (onYEnd) {
             return MoveDirectionType.down;
         }
@@ -260,17 +370,29 @@ export class EnemyLayer {
     private getClosestYToMove(distanceToCharacterY: number): MoveDirectionType {
         if (distanceToCharacterY > 0) {
             return MoveDirectionType.up;
-        } else {
-            return MoveDirectionType.down;
         }
+        return MoveDirectionType.down;
     }
 
     private getClosestXToMove(distanceToCharacterX: number): MoveDirectionType {
         if (distanceToCharacterX > 0) {
             return MoveDirectionType.left;
-        } else {
+        }
+        return MoveDirectionType.right;
+    }
+
+    private getFarestYToMove(distanceToCharacterY: number): MoveDirectionType {
+        if (distanceToCharacterY > 0) {
+            return MoveDirectionType.down;
+        }
+        return MoveDirectionType.up;
+    }
+
+    private getFarestXToMove(distanceToCharacterX: number): MoveDirectionType {
+        if (distanceToCharacterX > 0) {
             return MoveDirectionType.right;
         }
+        return MoveDirectionType.left;
     }
 
     private isGameOver(enemy: Enemy, direction: MoveDirectionType): boolean {

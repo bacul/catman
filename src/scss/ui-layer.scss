@@ -120,6 +120,36 @@
     }
 }
 
+.power-up {
+    position: absolute;
+    bottom: 5px;
+    width: 100%;
+    height: 3px;
+    z-index: 12;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+
+    &.active {
+        opacity: 1;
+        visibility: visible;
+
+        .power-up-duration {
+            transform: translateX(-100%);
+            transition: 10s linear transform;
+        }
+    }
+}
+
+.power-up-duration {
+    background-color: yellow;
+    width: 100%;
+    height: 100%;
+    border-radius: 0 5px 5px 0;
+    transform: translateX(0);
+    transition-duration: 0;
+}
+
 @keyframes radiance {
     from {
         box-shadow: 0 0 20px -4px #fffef2;

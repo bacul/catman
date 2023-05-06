@@ -6,10 +6,11 @@ export enum UIElements {
     win = '.win-text',
     defeat = '.defeat-text',
     overlay = '.ui-layer-overlay',
-    restart = '.restart-button'
+    restart = '.restart-button',
+    powerUp = '.power-up'
 }
 
-enum StateClass {
+export enum ElementStateClass {
     active = 'active',
     disabled = 'disabled'
 }
@@ -36,27 +37,27 @@ export class UILayer {
     }
 
     setGameLoaded(): void {
-        document.querySelector(UIElements.howToStart).classList.add(StateClass.active);
-        document.querySelector(UIElements.overlay).classList.add(StateClass.active);
+        document.querySelector(UIElements.howToStart).classList.add(ElementStateClass.active);
+        document.querySelector(UIElements.overlay).classList.add(ElementStateClass.active);
     }
 
     setGameWin(): void {
-        document.querySelector(UIElements.overlay).classList.add(StateClass.active);
-        document.querySelector(UIElements.win).classList.add(StateClass.active);
-        document.querySelector(UIElements.restart).classList.add(StateClass.active);
+        document.querySelector(UIElements.overlay).classList.add(ElementStateClass.active);
+        document.querySelector(UIElements.win).classList.add(ElementStateClass.active);
+        document.querySelector(UIElements.restart).classList.add(ElementStateClass.active);
     }
 
     setGameDefeat(): void {
-        document.querySelector(UIElements.overlay).classList.add(StateClass.active);
-        document.querySelector(UIElements.defeat).classList.add(StateClass.active);
-        document.querySelector(UIElements.restart).classList.add(StateClass.active);
+        document.querySelector(UIElements.overlay).classList.add(ElementStateClass.active);
+        document.querySelector(UIElements.defeat).classList.add(ElementStateClass.active);
+        document.querySelector(UIElements.restart).classList.add(ElementStateClass.active);
     }
 
     restart(): void {
-        document.querySelector(UIElements.restart).setAttribute(StateClass.disabled, 'true');
-        document.querySelector(UIElements.defeat).classList.remove(StateClass.active);
-        document.querySelector(UIElements.win).classList.remove(StateClass.active);
-        document.querySelector(UIElements.restart).classList.remove(StateClass.active);
+        document.querySelector(UIElements.restart).setAttribute(ElementStateClass.disabled, 'true');
+        document.querySelector(UIElements.defeat).classList.remove(ElementStateClass.active);
+        document.querySelector(UIElements.win).classList.remove(ElementStateClass.active);
+        document.querySelector(UIElements.restart).classList.remove(ElementStateClass.active);
         document.addEventListener('keydown', UILayer.onKeyDownHandler, false);
     }
 
@@ -64,11 +65,11 @@ export class UILayer {
         UILayer.setGameStart();
         document.removeEventListener('keydown', UILayer.onKeyDownHandler, false);
         document.dispatchEvent(new CustomEvent(UILayer.gameStartEventName));
-        document.querySelector(UIElements.restart).removeAttribute(StateClass.disabled);
+        document.querySelector(UIElements.restart).removeAttribute(ElementStateClass.disabled);
     }
 
     private static setGameStart(): void {
-        document.querySelector(UIElements.howToStart).classList.remove(StateClass.active);
-        document.querySelector(UIElements.overlay).classList.remove(StateClass.active);
+        document.querySelector(UIElements.howToStart).classList.remove(ElementStateClass.active);
+        document.querySelector(UIElements.overlay).classList.remove(ElementStateClass.active);
     }
 }

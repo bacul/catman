@@ -1,6 +1,7 @@
 import {MoveDirectionType, character, characterDirection, gameSize} from '../game';
 
 import {State} from '../../application-state';
+import {PowerUp} from '../mission-layer/power-up';
 import {CharacterLayerContext} from './character-layer-context';
 
 export class CharacterLayer {
@@ -39,6 +40,9 @@ export class CharacterLayer {
                     character.currentY -= character.stepSize;
                     State.characterTexture.setUpView();
                     State.collectibleCollision.collectTop();
+                    if (PowerUp.active) {
+                        State.collectibleCollision.intersectWithEnemy();
+                    }
                 }
                 break;
             case MoveDirectionType.down:
@@ -46,6 +50,9 @@ export class CharacterLayer {
                     character.currentY += character.stepSize;
                     State.characterTexture.setDownView();
                     State.collectibleCollision.collectBottom();
+                    if (PowerUp.active) {
+                        State.collectibleCollision.intersectWithEnemy();
+                    }
                 }
                 break;
             case MoveDirectionType.left:
@@ -56,6 +63,9 @@ export class CharacterLayer {
                     if (State.figureCollision.isInLeftTunnel(character)) {
                         State.figureCollision.setWalkThroughLeftTunnel(character);
                     }
+                    if (PowerUp.active) {
+                        State.collectibleCollision.intersectWithEnemy();
+                    }
                 }
                 break;
             case MoveDirectionType.right:
@@ -65,6 +75,9 @@ export class CharacterLayer {
                     State.collectibleCollision.collectRight();
                     if (State.figureCollision.isInRightTunnel(character)) {
                         State.figureCollision.setWalkThroughRightTunnel(character);
+                    }
+                    if (PowerUp.active) {
+                        State.collectibleCollision.intersectWithEnemy();
                     }
                 }
                 break;
