@@ -1,14 +1,9 @@
 import {Enemy, MoveDirectionType, character, enemies, gameSize} from '../game';
 
-import {FigureCollision} from '../collision/wall-collision';
-import {UILayer} from '../ui-layer/ui-layer';
+import {State} from '../../application-state';
 import {EnemyLayerContext} from './enemy-layer-context';
-import {EnemyTexture} from './enemy-texture';
 
 export class EnemyLayer {
-    private readonly figureCollision = new FigureCollision();
-    private readonly enemyTexture = new EnemyTexture();
-    private readonly uiLayer = new UILayer();
     private readonly enemiesHandicapTick: number = 1;
     private enemiesHandicap: number = 0;
     static gameOverEventName = 'game-over';
@@ -22,7 +17,7 @@ export class EnemyLayer {
     draw(): void {
         enemies.forEach((enemy) => {
             EnemyLayerContext.context.clearRect(0, 0, gameSize.width, gameSize.height);
-            this.enemyTexture.draw(enemy.currentX, enemy.currentY);
+            State.enemyTexture.draw(enemy.currentX, enemy.currentY);
         });
     }
 
@@ -38,7 +33,7 @@ export class EnemyLayer {
     private setGameOver(gameOver: boolean): void {
         if (gameOver) {
             document.dispatchEvent(new CustomEvent(EnemyLayer.gameOverEventName));
-            this.uiLayer.setGameDefeat();
+            State.uiLayer.setGameDefeat();
         }
     }
 
@@ -178,36 +173,36 @@ export class EnemyLayer {
             this.setMoveDirection(enemy);
             switch (enemy.direction.moveDirection) {
                 case MoveDirectionType.up:
-                    if (!this.figureCollision.stuckTop(enemy)) {
+                    if (!State.figureCollision.stuckTop(enemy)) {
                         enemy.currentY -= enemy.stepSize;
-                        this.enemyTexture.setUpView();
+                        State.enemyTexture.setUpView();
                         this.setGameOver(this.isGameOver(enemy, MoveDirectionType.up));
                     }
                     break;
                 case MoveDirectionType.down:
-                    if (!this.figureCollision.stuckBottom(enemy)) {
+                    if (!State.figureCollision.stuckBottom(enemy)) {
                         enemy.currentY += enemy.stepSize;
-                        this.enemyTexture.setDownView();
+                        State.enemyTexture.setDownView();
                         this.setGameOver(this.isGameOver(enemy, MoveDirectionType.down));
                     }
                     break;
                 case MoveDirectionType.left:
-                    if (!this.figureCollision.stuckLeft(enemy)) {
+                    if (!State.figureCollision.stuckLeft(enemy)) {
                         enemy.currentX -= enemy.stepSize;
-                        this.enemyTexture.setLeftView();
+                        State.enemyTexture.setLeftView();
                         this.setGameOver(this.isGameOver(enemy, MoveDirectionType.left));
-                        if (this.figureCollision.isInLeftTunnel(enemy)) {
-                            this.figureCollision.setWalkThroughLeftTunnel(enemy);
+                        if (State.figureCollision.isInLeftTunnel(enemy)) {
+                            State.figureCollision.setWalkThroughLeftTunnel(enemy);
                         }
                     }
                     break;
                 case MoveDirectionType.right:
-                    if (!this.figureCollision.stuckRight(enemy)) {
+                    if (!State.figureCollision.stuckRight(enemy)) {
                         enemy.currentX += enemy.stepSize;
-                        this.enemyTexture.setRightView();
+                        State.enemyTexture.setRightView();
                         this.setGameOver(this.isGameOver(enemy, MoveDirectionType.right));
-                        if (this.figureCollision.isInRightTunnel(enemy)) {
-                            this.figureCollision.setWalkThroughRightTunnel(enemy);
+                        if (State.figureCollision.isInRightTunnel(enemy)) {
+                            State.figureCollision.setWalkThroughRightTunnel(enemy);
                         }
                     }
                     break;
@@ -218,13 +213,13 @@ export class EnemyLayer {
     private canMove(enemy: Enemy, direction: MoveDirectionType): boolean {
         switch (direction) {
             case MoveDirectionType.up:
-                return !this.figureCollision.stuckTop(enemy);
+                return !State.figureCollision.stuckTop(enemy);
             case MoveDirectionType.down:
-                return !this.figureCollision.stuckBottom(enemy);
+                return !State.figureCollision.stuckBottom(enemy);
             case MoveDirectionType.left:
-                return !this.figureCollision.stuckLeft(enemy);
+                return !State.figureCollision.stuckLeft(enemy);
             case MoveDirectionType.right:
-                return !this.figureCollision.stuckRight(enemy);
+                return !State.figureCollision.stuckRight(enemy);
         }
     }
 

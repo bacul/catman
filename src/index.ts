@@ -1,28 +1,22 @@
 import {character, enemies, gameSize} from './game/game';
 import {UIElements, UILayer} from './game/ui-layer/ui-layer';
 
-import {BackgroundLayer} from './game/background-layer/background-layer';
-import {CharacterLayer} from './game/character-layer/character-layer';
+import {State} from './application-state';
 import {EnemyLayer} from './game/enemy-layer/enemy-layer';
-import {MissionLayer} from './game/mission-layer/mission-layer';
 
 class Application {
-    private readonly backgroundLayer = new BackgroundLayer();
-    private readonly characterLayer = new CharacterLayer();
-    private readonly missionLayer = new MissionLayer();
-    private readonly enemyLayer = new EnemyLayer();
-    private readonly uiLayer = new UILayer();
     private readonly applicationTickMs = 14;
     private gameOver: boolean;
 
     constructor() {
-        this.uiLayer.setLanguage();
+        new State();
+        State.uiLayer.setLanguage();
         this.setGameSize();
-        this.backgroundLayer.draw();
-        this.missionLayer.drawCollectibles();
-        this.missionLayer.drawPowerUps();
+        State.backgroundLayer.draw();
+        State.missionLayer.drawCollectibles();
+        State.missionLayer.drawPowerUps();
         this.main();
-        this.uiLayer.setGameLoaded();
+        State.uiLayer.setGameLoaded();
 
         document.addEventListener(EnemyLayer.gameOverEventName, () => (this.gameOver = true));
         document.addEventListener(UILayer.gameStartEventName, () => this.setMovablePosition());
@@ -32,34 +26,34 @@ class Application {
     private setMovablePosition(): void {
         if (!this.gameOver) {
             setTimeout(() => {
-                this.characterLayer.move();
-                this.enemyLayer.move();
+                State.characterLayer.move();
+                State.enemyLayer.move();
                 this.setMovablePosition();
             }, this.applicationTickMs);
         }
     }
 
     private restart(): void {
-        this.uiLayer.restart();
+        State.uiLayer.restart();
         character.currentX = character.startPositionX;
         character.currentY = character.startPositionY;
         enemies.forEach((enemy) => {
             enemy.currentX = enemy.startPositionX;
             enemy.currentY = enemy.startPositionY;
         });
-        this.missionLayer.drawCollectibles();
-        this.missionLayer.drawPowerUps();
-        this.missionLayer.setScore(0);
+        State.missionLayer.drawCollectibles();
+        State.missionLayer.drawPowerUps();
+        State.missionLayer.setScore(0);
         this.setMovablePosition();
 
-        this.uiLayer.setGameLoaded();
+        State.uiLayer.setGameLoaded();
         this.gameOver = false;
     }
 
     private main() {
         window.requestAnimationFrame(this.main.bind(this));
-        this.characterLayer.draw();
-        this.enemyLayer.draw();
+        State.characterLayer.draw();
+        State.enemyLayer.draw();
     }
 
     private setGameSize(): void {

@@ -1,14 +1,13 @@
 import {collectible, gameSize, powerUp} from '../game';
 import {CollectibleCoordinate, collectibles, powerUps} from './collectibles';
 
+import {State} from '../../application-state';
 import {EnemyLayer} from '../enemy-layer/enemy-layer';
-import {UILayer} from '../ui-layer/ui-layer';
 
 export class MissionLayer {
     private readonly context: CanvasRenderingContext2D;
     private readonly canvas: HTMLCanvasElement = document.querySelector('#mission-layer');
     private readonly scoreElement: HTMLDivElement = document.querySelector('.score-value');
-    private readonly uiLayer = new UILayer();
     private static _collectibles: CollectibleCoordinate[];
     private static _powerUps: CollectibleCoordinate[];
     private static _score: number = 0;
@@ -60,7 +59,7 @@ export class MissionLayer {
 
     setMissionComplete(): void {
         document.dispatchEvent(new CustomEvent(EnemyLayer.gameOverEventName));
-        this.uiLayer.setGameWin();
+        State.uiLayer.setGameWin();
     }
 
     isMissionCollectible(radius: number): boolean {

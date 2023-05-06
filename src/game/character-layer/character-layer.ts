@@ -1,39 +1,31 @@
 import {MoveDirectionType, character, characterDirection, gameSize} from '../game';
 
-import {FigureCollision} from '../collision/wall-collision';
-import {CollectibleCollision} from '../mission-layer/collectible-collision';
-import {CharacterMovement} from './character';
+import {State} from '../../application-state';
 import {CharacterLayerContext} from './character-layer-context';
-import {CharacterTexture} from './character-texture';
 
 export class CharacterLayer {
-    private readonly figureCollision = new FigureCollision();
-    private readonly collectibleCollision = new CollectibleCollision();
-    private readonly characterMovement = new CharacterMovement();
-    private readonly characterTexture = new CharacterTexture();
-
     constructor() {
-        this.characterTexture.setDownView();
+        State.characterTexture.setDownView();
     }
 
     move(): void {
         const needChangeMovement =
-            this.characterMovement.keyPressed &&
+            State.characterMovement.keyPressed &&
             characterDirection.moveDirection !== characterDirection.changeToDirection;
         let canChangeMovement: boolean;
         if (needChangeMovement) {
             switch (characterDirection.changeToDirection) {
                 case MoveDirectionType.up:
-                    canChangeMovement = !this.figureCollision.stuckTop(character);
+                    canChangeMovement = !State.figureCollision.stuckTop(character);
                     break;
                 case MoveDirectionType.down:
-                    canChangeMovement = !this.figureCollision.stuckBottom(character);
+                    canChangeMovement = !State.figureCollision.stuckBottom(character);
                     break;
                 case MoveDirectionType.left:
-                    canChangeMovement = !this.figureCollision.stuckLeft(character);
+                    canChangeMovement = !State.figureCollision.stuckLeft(character);
                     break;
                 case MoveDirectionType.right:
-                    canChangeMovement = !this.figureCollision.stuckRight(character);
+                    canChangeMovement = !State.figureCollision.stuckRight(character);
                     break;
             }
             if (canChangeMovement) {
@@ -43,36 +35,36 @@ export class CharacterLayer {
 
         switch (characterDirection.moveDirection) {
             case MoveDirectionType.up:
-                if (canChangeMovement || !this.figureCollision.stuckTop(character)) {
+                if (canChangeMovement || !State.figureCollision.stuckTop(character)) {
                     character.currentY -= character.stepSize;
-                    this.characterTexture.setUpView();
-                    this.collectibleCollision.collectTop();
+                    State.characterTexture.setUpView();
+                    State.collectibleCollision.collectTop();
                 }
                 break;
             case MoveDirectionType.down:
-                if (canChangeMovement || !this.figureCollision.stuckBottom(character)) {
+                if (canChangeMovement || !State.figureCollision.stuckBottom(character)) {
                     character.currentY += character.stepSize;
-                    this.characterTexture.setDownView();
-                    this.collectibleCollision.collectBottom();
+                    State.characterTexture.setDownView();
+                    State.collectibleCollision.collectBottom();
                 }
                 break;
             case MoveDirectionType.left:
-                if (canChangeMovement || !this.figureCollision.stuckLeft(character)) {
+                if (canChangeMovement || !State.figureCollision.stuckLeft(character)) {
                     character.currentX -= character.stepSize;
-                    this.characterTexture.setLeftView();
-                    this.collectibleCollision.collectLeft();
-                    if (this.figureCollision.isInLeftTunnel(character)) {
-                        this.figureCollision.setWalkThroughLeftTunnel(character);
+                    State.characterTexture.setLeftView();
+                    State.collectibleCollision.collectLeft();
+                    if (State.figureCollision.isInLeftTunnel(character)) {
+                        State.figureCollision.setWalkThroughLeftTunnel(character);
                     }
                 }
                 break;
             case MoveDirectionType.right:
-                if (canChangeMovement || !this.figureCollision.stuckRight(character)) {
+                if (canChangeMovement || !State.figureCollision.stuckRight(character)) {
                     character.currentX += character.stepSize;
-                    this.characterTexture.setRightView();
-                    this.collectibleCollision.collectRight();
-                    if (this.figureCollision.isInRightTunnel(character)) {
-                        this.figureCollision.setWalkThroughRightTunnel(character);
+                    State.characterTexture.setRightView();
+                    State.collectibleCollision.collectRight();
+                    if (State.figureCollision.isInRightTunnel(character)) {
+                        State.figureCollision.setWalkThroughRightTunnel(character);
                     }
                 }
                 break;
@@ -88,6 +80,6 @@ export class CharacterLayer {
         //     character.height
         // );
         // CharacterLayerContext.context.fillStyle = character.color;
-        this.characterTexture.draw();
+        State.characterTexture.draw();
     }
 }

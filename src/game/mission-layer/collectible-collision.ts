@@ -1,31 +1,27 @@
 import {Collectible, character, collectible, powerUp} from '../game';
 
+import {State} from '../../application-state';
 import {CollectibleCoordinate} from './collectibles';
-import {MissionLayer} from './mission-layer';
-import {PowerUp} from './power-up';
 
 export class CollectibleCollision {
-    private readonly missionLayer = new MissionLayer();
-    private readonly powerUp = new PowerUp();
-
     collectRight(): void {
-        this.collectRightAction(this.missionLayer.collectibles, collectible);
-        this.collectRightAction(this.missionLayer.powerUps, powerUp);
+        this.collectRightAction(State.missionLayer.collectibles, collectible);
+        this.collectRightAction(State.missionLayer.powerUps, powerUp);
     }
 
     collectLeft(): void {
-        this.collectLeftAction(this.missionLayer.collectibles, collectible);
-        this.collectLeftAction(this.missionLayer.powerUps, powerUp);
+        this.collectLeftAction(State.missionLayer.collectibles, collectible);
+        this.collectLeftAction(State.missionLayer.powerUps, powerUp);
     }
 
     collectBottom(): void {
-        this.collectBottomAction(this.missionLayer.collectibles, collectible);
-        this.collectBottomAction(this.missionLayer.powerUps, powerUp);
+        this.collectBottomAction(State.missionLayer.collectibles, collectible);
+        this.collectBottomAction(State.missionLayer.powerUps, powerUp);
     }
 
     collectTop(): void {
-        this.collectTopAction(this.missionLayer.collectibles, collectible);
-        this.collectTopAction(this.missionLayer.powerUps, powerUp);
+        this.collectTopAction(State.missionLayer.collectibles, collectible);
+        this.collectTopAction(State.missionLayer.powerUps, powerUp);
     }
 
     getCollectibleOnWayX(coordinates: CollectibleCoordinate[]): CollectibleCoordinate[] {
@@ -41,17 +37,17 @@ export class CollectibleCollision {
     }
 
     removeCollected(coordinates: CollectibleCoordinate[], collected: CollectibleCoordinate, radius: number): void {
-        this.missionLayer.eraseCollectible(collected, radius);
-        if (this.missionLayer.isMissionCollectible(radius)) {
+        State.missionLayer.eraseCollectible(collected, radius);
+        if (State.missionLayer.isMissionCollectible(radius)) {
             const collectedIndex = coordinates.findIndex((coordinate) => {
                 return collected.centerX === coordinate.centerX && collected.centerY === coordinate.centerY;
             });
             coordinates.splice(collectedIndex, 1);
             if (coordinates.length === 0) {
-                this.missionLayer.setMissionComplete();
+                State.missionLayer.setMissionComplete();
             }
         } else {
-            this.powerUp.activatePowerUp();
+            State.powerUp.activatePowerUp();
         }
     }
 
