@@ -3,9 +3,9 @@ import {ElementStateClass, UIElements} from '../ui-layer/ui-layer';
 import {State} from '../../application-state';
 
 export class PowerUp {
-    static active: boolean = true;
+    static active: boolean;
     private readonly durationMs = 10000;
-    static timeoutId: NodeJS.Timeout;
+    private static timeoutId: NodeJS.Timeout;
     private static powerUpElement = document.querySelector(UIElements.powerUp);
 
     activatePowerUp(): void {

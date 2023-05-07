@@ -1,4 +1,5 @@
-import {Enemy, MoveDirectionType, character, enemies, gameSize} from '../game';
+import {MoveDirectionType, character, gameSizeModel} from '../game';
+import {Enemy, enemies} from './enemies';
 
 import {State} from '../../application-state';
 import {PowerUp} from '../mission-layer/power-up';
@@ -8,14 +9,34 @@ export class EnemyLayer {
     static readonly gameOverEventName = 'game-over';
     private _enemiesHandicapTick: number = 1;
     private enemiesHandicap: number = 0;
+    static enemies = [...enemies];
 
     constructor() {
-        enemies.forEach((enemy) => {
+        EnemyLayer.enemies.forEach((enemy) => {
             enemy.direction.moveDirection = this.getClosestToMove(enemy);
         });
+    }
+
+    addNewEnemies(): void {
+        const newEnemy: Enemy = {
+            width: 30,
+            height: 30,
+            currentX: 288,
+            currentY: 250,
+            startPositionX: 288,
+            startPositionY: 250,
+            stepSize: 1,
+            direction: {
+                moveDirection: null,
+                changeToDirection: null
+            },
+            blockDirections: []
+        };
+        const secondEnemyArriveMs = 2000;
         setTimeout(() => {
-            this.moveAction();
-        });
+            newEnemy.direction.moveDirection = this.getClosestToMove(newEnemy);
+            EnemyLayer.enemies.push(newEnemy);
+        }, secondEnemyArriveMs);
     }
 
     set enemiesHandicapTick(value: number) {
@@ -28,8 +49,8 @@ export class EnemyLayer {
     }
 
     draw(): void {
-        enemies.forEach((enemy) => {
-            EnemyLayerContext.context.clearRect(0, 0, gameSize.width, gameSize.height);
+        EnemyLayerContext.context.clearRect(0, 0, gameSizeModel.width, gameSizeModel.height);
+        EnemyLayer.enemies.forEach((enemy) => {
             State.enemyTexture.draw(enemy.currentX, enemy.currentY);
         });
     }
@@ -43,9 +64,9 @@ export class EnemyLayer {
         }
     }
 
-    defeateEnemyById(id: number): void {
-        enemies.splice(id, 1);
-        EnemyLayerContext.context.clearRect(0, 0, gameSize.width, gameSize.height);
+    defeatEnemyById(id: number): void {
+        EnemyLayer.enemies.splice(id, 1);
+        EnemyLayerContext.context.clearRect(0, 0, gameSizeModel.width, gameSizeModel.height);
     }
 
     private setGameOver(gameOver: boolean): void {
@@ -266,7 +287,7 @@ export class EnemyLayer {
     }
 
     private moveAction(): void {
-        enemies.forEach((enemy) => {
+        EnemyLayer.enemies.forEach((enemy) => {
             if (!PowerUp.active) {
                 this.setClosestMoveDirection(enemy);
             } else {
@@ -347,19 +368,19 @@ export class EnemyLayer {
 
     /** FIXME is this needed? */
     private getExtrimeState(enemy: Enemy): MoveDirectionType {
-        const onXStart = enemy.currentX === gameSize.shiftXY;
+        const onXStart = enemy.currentX === gameSizeModel.shiftXY;
         if (onXStart) {
             return MoveDirectionType.left;
         }
-        const onXEnd = enemy.currentX + enemy.width === gameSize.width - gameSize.shiftXY;
+        const onXEnd = enemy.currentX + enemy.width === gameSizeModel.width - gameSizeModel.shiftXY;
         if (onXEnd) {
             return MoveDirectionType.right;
         }
-        const onYStart = enemy.currentY === gameSize.shiftXY;
+        const onYStart = enemy.currentY === gameSizeModel.shiftXY;
         if (onYStart) {
             return MoveDirectionType.up;
         }
-        const onYEnd = enemy.currentY + enemy.height === gameSize.height - gameSize.shiftXY;
+        const onYEnd = enemy.currentY + enemy.height === gameSizeModel.height - gameSizeModel.shiftXY;
         if (onYEnd) {
             return MoveDirectionType.down;
         }

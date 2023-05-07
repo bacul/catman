@@ -1,4 +1,4 @@
-import {gameSize} from '../game';
+import {gameSizeModel} from '../game';
 
 export interface CollectibleCoordinate {
     centerX: number;
@@ -285,7 +285,7 @@ export const powerUps: CollectibleCoordinate[] = [
 
 function getCoordinates(row: number, column: number): CollectibleCoordinate {
     return {
-        centerX: column * 15 + gameSize.shiftXY,
-        centerY: row * 15 + gameSize.shiftXY
+        centerX: column * 15 + gameSizeModel.shiftXY,
+        centerY: row * 15 + gameSizeModel.shiftXY
     };
 }

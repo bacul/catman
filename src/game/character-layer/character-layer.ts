@@ -1,7 +1,8 @@
-import {MoveDirectionType, character, characterDirection, gameSize} from '../game';
+import {MoveDirectionType, character, gameSizeModel} from '../game';
 
 import {State} from '../../application-state';
 import {PowerUp} from '../mission-layer/power-up';
+import {characterDirection} from './character';
 import {CharacterLayerContext} from './character-layer-context';
 
 export class CharacterLayer {
@@ -85,7 +86,7 @@ export class CharacterLayer {
     }
 
     draw(): void {
-        CharacterLayerContext.context.clearRect(0, 0, gameSize.width, gameSize.height);
+        CharacterLayerContext.context.clearRect(0, 0, gameSizeModel.width, gameSizeModel.height);
         // CharacterLayerContext.context.fillRect(
         //     character.currentX,
         //     character.currentY,

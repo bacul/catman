@@ -1,5 +1,5 @@
 import {Figure, Path, Rectangle} from '../background-layer/figure';
-import {MovableEntity, gameSize} from '../game';
+import {MovableEntityModel, gameSizeModel} from '../game';
 
 interface HorizontalLine {
     start: number;
@@ -14,49 +14,49 @@ interface VerticalLine {
 }
 
 export class FigureCollision {
-    stuckRight(movableEntity: MovableEntity): boolean {
+    stuckRight(movableEntity: MovableEntityModel): boolean {
         return this.stuckRightPath(movableEntity) || this.stuckRightRectangle(movableEntity);
     }
 
-    stuckLeft(movableEntity: MovableEntity): boolean {
+    stuckLeft(movableEntity: MovableEntityModel): boolean {
         return this.stuckLeftPath(movableEntity) || this.stuckLeftRectangle(movableEntity);
     }
 
-    stuckBottom(movableEntity: MovableEntity): boolean {
+    stuckBottom(movableEntity: MovableEntityModel): boolean {
         return (
-            movableEntity.currentY + movableEntity.height >= gameSize.height - gameSize.shiftXY ||
+            movableEntity.currentY + movableEntity.height >= gameSizeModel.height - gameSizeModel.shiftXY ||
             this.stuckBottomRectangle(movableEntity) ||
             this.stuckBottomPath(movableEntity)
         );
     }
 
-    stuckTop(movableEntity: MovableEntity): boolean {
+    stuckTop(movableEntity: MovableEntityModel): boolean {
         return (
-            movableEntity.currentY <= gameSize.shiftXY ||
+            movableEntity.currentY <= gameSizeModel.shiftXY ||
             this.stuckTopPath(movableEntity) ||
             this.stuckTopRectangle(movableEntity)
         );
     }
 
-    isInLeftTunnel(movableEntity: MovableEntity): boolean {
+    isInLeftTunnel(movableEntity: MovableEntityModel): boolean {
         const inTunnelLeft = movableEntity.currentY === 295 && movableEntity.currentX < 70;
         return inTunnelLeft;
     }
 
-    setWalkThroughLeftTunnel(movableEntity: MovableEntity): void {
+    setWalkThroughLeftTunnel(movableEntity: MovableEntityModel): void {
         movableEntity.currentX = 505;
     }
 
-    isInRightTunnel(movableEntity: MovableEntity): boolean {
+    isInRightTunnel(movableEntity: MovableEntityModel): boolean {
         const inTunnelRight = movableEntity.currentY === 295 && movableEntity.currentX > 505;
         return inTunnelRight;
     }
 
-    setWalkThroughRightTunnel(movableEntity: MovableEntity): void {
+    setWalkThroughRightTunnel(movableEntity: MovableEntityModel): void {
         movableEntity.currentX = 70;
     }
 
-    private stuckRightRectangle(movableEntity: MovableEntity): boolean {
+    private stuckRightRectangle(movableEntity: MovableEntityModel): boolean {
         return Figure.rectangles.some((rectangle) => {
             const isWallPassed = rectangle.topLeftX + rectangle.width <= movableEntity.currentX + movableEntity.width;
             if (isWallPassed) {
@@ -72,7 +72,7 @@ export class FigureCollision {
         });
     }
 
-    private stuckRightPath(movableEntity: MovableEntity): boolean {
+    private stuckRightPath(movableEntity: MovableEntityModel): boolean {
         return Figure.paths.some((path) => {
             const isWallPassed = path.maxX < movableEntity.currentX;
             if (isWallPassed) {
@@ -104,7 +104,7 @@ export class FigureCollision {
         });
     }
 
-    private stuckLeftRectangle(movableEntity: MovableEntity): boolean {
+    private stuckLeftRectangle(movableEntity: MovableEntityModel): boolean {
         return Figure.rectangles.some((rectangle) => {
             const isWallPassed = rectangle.topLeftX >= movableEntity.currentX + movableEntity.width;
             if (isWallPassed) {
@@ -120,7 +120,7 @@ export class FigureCollision {
         });
     }
 
-    private stuckLeftPath(movableEntity: MovableEntity): boolean {
+    private stuckLeftPath(movableEntity: MovableEntityModel): boolean {
         return Figure.paths.some((path) => {
             const isWallPassed = path.minX > movableEntity.currentX;
             if (isWallPassed) {
@@ -152,7 +152,7 @@ export class FigureCollision {
         });
     }
 
-    private stuckBottomRectangle(movableEntity: MovableEntity): boolean {
+    private stuckBottomRectangle(movableEntity: MovableEntityModel): boolean {
         return Figure.rectangles.some((rectangle) => {
             const isWallPassed = rectangle.topLeftY < movableEntity.currentY + movableEntity.height;
             if (isWallPassed) {
@@ -168,7 +168,7 @@ export class FigureCollision {
         });
     }
 
-    private stuckBottomPath(movableEntity: MovableEntity): boolean {
+    private stuckBottomPath(movableEntity: MovableEntityModel): boolean {
         return Figure.paths.some((path) => {
             const isWallPassed = path.maxY < movableEntity.currentY + movableEntity.height;
             if (isWallPassed) {
@@ -200,7 +200,7 @@ export class FigureCollision {
         });
     }
 
-    private stuckTopRectangle(movableEntity: MovableEntity): boolean {
+    private stuckTopRectangle(movableEntity: MovableEntityModel): boolean {
         return Figure.rectangles.some((rectangle) => {
             const isWallPassed = rectangle.topLeftY + rectangle.height > movableEntity.currentY;
             if (isWallPassed) {
@@ -216,7 +216,7 @@ export class FigureCollision {
         });
     }
 
-    private stuckTopPath(movableEntity: MovableEntity): boolean {
+    private stuckTopPath(movableEntity: MovableEntityModel): boolean {
         return Figure.paths.some((path) => {
             const isWallPassed = path.minY > movableEntity.currentY + movableEntity.height;
             if (isWallPassed) {
@@ -248,25 +248,25 @@ export class FigureCollision {
         });
     }
 
-    private rectangleOnWayX(movableEntity: MovableEntity, rectangle: Rectangle): boolean {
+    private rectangleOnWayX(movableEntity: MovableEntityModel, rectangle: Rectangle): boolean {
         const topCornerOnWayY = movableEntity.currentY < rectangle.topLeftY + rectangle.height;
         const bottomCornerOnWayY = movableEntity.currentY + movableEntity.height > rectangle.topLeftY;
         return topCornerOnWayY && bottomCornerOnWayY;
     }
 
-    private rectangleOnWayY(movableEntity: MovableEntity, rectangle: Rectangle): boolean {
+    private rectangleOnWayY(movableEntity: MovableEntityModel, rectangle: Rectangle): boolean {
         const leftCornerOnWayX = movableEntity.currentX < rectangle.topLeftX + rectangle.width;
         const rightCornerOnWayX = movableEntity.currentX + movableEntity.width > rectangle.topLeftX;
         return leftCornerOnWayX && rightCornerOnWayX;
     }
 
-    private pathOnWayY(movableEntity: MovableEntity, path: Path): boolean {
+    private pathOnWayY(movableEntity: MovableEntityModel, path: Path): boolean {
         const leftCornerOnWayX = movableEntity.currentX < path.maxX;
         const rightCornerOnWayX = movableEntity.currentX + movableEntity.width > path.minX;
         return leftCornerOnWayX && rightCornerOnWayX;
     }
 
-    private pathOnWayX(movableEntity: MovableEntity, path: Path): boolean {
+    private pathOnWayX(movableEntity: MovableEntityModel, path: Path): boolean {
         const bottomCornerOnWayY = movableEntity.currentY + movableEntity.height > path.minY;
         const topCornerOnWayY = movableEntity.currentY < path.maxY;
         return bottomCornerOnWayY && topCornerOnWayY;

@@ -1,6 +1,6 @@
 import {Figure, PathCoordinates, pathBackgroundCoordinates} from './figure';
 
-import {background} from '../game';
+import {backgroundModel} from '../game';
 
 export class BackgroundLayer {
     private readonly context: CanvasRenderingContext2D;
@@ -59,25 +59,25 @@ export class BackgroundLayer {
                 rectangle.topLeftY,
                 rectangle.width,
                 rectangle.height,
-                background.borderRadius
+                backgroundModel.borderRadius
             );
             this.figureTip(rectangle.topLeftX, rectangle.topLeftY);
             this.figureTip(rectangle.topLeftX + rectangle.width, rectangle.topLeftY);
             this.figureTip(rectangle.topLeftX + rectangle.width, rectangle.topLeftY + rectangle.height);
             this.figureTip(rectangle.topLeftX, rectangle.topLeftY + rectangle.height);
-            this.context.strokeStyle = background.borderColor;
+            this.context.strokeStyle = backgroundModel.borderColor;
             if (rectangle.invisible) {
                 this.context.strokeStyle = '#000';
             }
             this.context.stroke();
-            this.context.strokeStyle = background.borderColor;
+            this.context.strokeStyle = backgroundModel.borderColor;
             this.context.closePath();
         });
     }
 
     private drawPath(path: PathCoordinates): void {
         this.context.beginPath();
-        this.context.moveTo(path.topLeftX + background.borderRadius, path.topLeftY);
+        this.context.moveTo(path.topLeftX + backgroundModel.borderRadius, path.topLeftY);
         path.points.forEach((line, index) => {
             if (index === 0) {
                 this.context.arcTo(
@@ -85,11 +85,11 @@ export class BackgroundLayer {
                     line.y,
                     path.points[index + 1].x,
                     path.points[index + 1].y,
-                    background.borderRadius
+                    backgroundModel.borderRadius
                 );
                 this.figureTip(line.x, line.y);
             } else if (index === path.points.length - 1) {
-                this.context.arcTo(line.x, line.y, path.points[0].x, path.points[0].y, background.borderRadius);
+                this.context.arcTo(line.x, line.y, path.points[0].x, path.points[0].y, backgroundModel.borderRadius);
                 this.figureTip(line.x, line.y);
             } else {
                 this.context.arcTo(
@@ -97,7 +97,7 @@ export class BackgroundLayer {
                     line.y,
                     path.points[index + 1].x,
                     path.points[index + 1].y,
-                    background.borderRadius
+                    backgroundModel.borderRadius
                 );
                 this.figureTip(line.x, line.y);
             }

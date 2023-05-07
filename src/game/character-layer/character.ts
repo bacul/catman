@@ -1,4 +1,4 @@
-import {MoveDirectionType, characterDirection} from '../game';
+import {MoveDirection, MoveDirectionType} from '../game';
 
 enum ControlKey {
     arrowUp = 'ArrowUp',
@@ -10,6 +10,32 @@ enum ControlKey {
     a = 'KeyA',
     d = 'KeyD'
 }
+
+export interface Character {
+    width: number;
+    height: number;
+    currentX: number;
+    currentY: number;
+    startPositionX: number;
+    startPositionY: number;
+    stepSize: number;
+    direction: MoveDirection;
+}
+
+export const character: Character = {
+    width: 30,
+    height: 30,
+    currentX: 288,
+    currentY: 430,
+    startPositionX: 288,
+    startPositionY: 430,
+    stepSize: 1,
+    direction: {
+        moveDirection: null,
+        changeToDirection: null
+    }
+};
+export const characterDirection: MoveDirection = character.direction;
 
 export class CharacterMovement {
     private _keyPressed: boolean;

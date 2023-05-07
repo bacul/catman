@@ -1,4 +1,4 @@
-import {collectible, gameSize, powerUp} from '../game';
+import {collectibleModel, gameSizeModel, powerUpModel} from '../game';
 import {CollectibleCoordinate, collectibles, powerUps} from './collectibles';
 
 import {State} from '../../application-state';
@@ -19,13 +19,13 @@ export class MissionLayer {
     }
 
     drawCollectibles(): void {
-        this.context.clearRect(0, 0, gameSize.width, gameSize.height);
+        this.context.clearRect(0, 0, gameSizeModel.width, gameSizeModel.height);
         MissionLayer.collectibles = collectibles.slice();
 
         this.collectibles.forEach((coordinate) => {
             this.context.beginPath();
-            this.context.arc(coordinate.centerX, coordinate.centerY, collectible.radius, 0, 2 * Math.PI);
-            this.context.fillStyle = collectible.сolor;
+            this.context.arc(coordinate.centerX, coordinate.centerY, collectibleModel.radius, 0, 2 * Math.PI);
+            this.context.fillStyle = collectibleModel.сolor;
             this.context.fill();
             this.context.closePath();
         });
@@ -50,8 +50,8 @@ export class MissionLayer {
         MissionLayer.powerUps = [...powerUps];
         this.powerUps.forEach((coordinate) => {
             this.context.beginPath();
-            this.context.arc(coordinate.centerX, coordinate.centerY, powerUp.radius, 0, 2 * Math.PI);
-            this.context.fillStyle = powerUp.сolor;
+            this.context.arc(coordinate.centerX, coordinate.centerY, powerUpModel.radius, 0, 2 * Math.PI);
+            this.context.fillStyle = powerUpModel.сolor;
             this.context.fill();
             this.context.closePath();
         });
@@ -63,7 +63,7 @@ export class MissionLayer {
     }
 
     isMissionCollectible(radius: number): boolean {
-        return radius === collectible.radius;
+        return radius === collectibleModel.radius;
     }
 
     static set score(value: number) {

@@ -9,99 +9,81 @@ export interface MoveDirection {
     moveDirection: MoveDirectionType;
 }
 
-export interface MovableEntity {
+export interface MovableEntityModel {
     width: number;
     height: number;
     currentX: number;
     currentY: number;
     stepSize: number;
-    direction: MoveDirection;
     startPositionX: number;
     startPositionY: number;
 }
-
-export interface Enemy extends MovableEntity {
-    blockDirections: MoveDirectionType[];
-}
-
-interface Background {
+interface BackgroundModel {
     borderColor: string;
     borderRadius: number;
 }
 
-interface GameSize {
+interface GameSizeModel {
     width: number;
     height: number;
     shiftXY: number;
 }
 
-export interface Collectible {
+export interface CollectibleModel {
     radius: number;
     сolor: string;
 }
 
-interface Game {
-    gameSize: GameSize;
-    character: MovableEntity;
-    background: Background;
-    enemies: Enemy[];
-    collectible: Collectible;
-    powerUp: Collectible;
+interface GameModel {
+    gameSizeModel: GameSizeModel;
+    characterModel: MovableEntityModel;
+    enemyModel: MovableEntityModel;
+    backgroundModel: BackgroundModel;
+    collectibleModel: CollectibleModel;
+    powerUpModel: CollectibleModel;
 }
 
-const game: Game = {
-    gameSize: {
+const gameModel: GameModel = {
+    gameSizeModel: {
         width: 605,
         height: 650,
         shiftXY: 100
     },
-    background: {
+    backgroundModel: {
         borderColor: '#007300',
         borderRadius: 5
     },
-    character: {
+    characterModel: {
         width: 30,
         height: 30,
         currentX: 288,
         currentY: 430,
         startPositionX: 288,
         startPositionY: 430,
-        stepSize: 1,
-        direction: {
-            moveDirection: null,
-            changeToDirection: null
-        }
+        stepSize: 1
     },
-    enemies: [
-        {
-            width: 30,
-            height: 30,
-            currentX: 288,
-            currentY: 250,
-            startPositionX: 288,
-            startPositionY: 250,
-            stepSize: 1,
-            direction: {
-                moveDirection: null,
-                changeToDirection: null
-            },
-            blockDirections: []
-        }
-    ],
-    collectible: {
+    enemyModel: {
+        width: 30,
+        height: 30,
+        currentX: 288,
+        currentY: 250,
+        startPositionX: 288,
+        startPositionY: 250,
+        stepSize: 1
+    },
+    collectibleModel: {
         radius: 3,
         сolor: '#ffb04b'
     },
-    powerUp: {
+    powerUpModel: {
         radius: 7,
         сolor: '#ffe04b'
     }
 };
 
-export const character: MovableEntity = game.character;
-export const enemies: Enemy[] = game.enemies;
-export const characterDirection: MoveDirection = game.character.direction;
-export const background: Background = game.background;
-export const gameSize: GameSize = game.gameSize;
-export const collectible: Collectible = game.collectible;
-export const powerUp: Collectible = game.powerUp;
+export const character: MovableEntityModel = gameModel.characterModel;
+export const enemyModel: MovableEntityModel = gameModel.enemyModel;
+export const backgroundModel: BackgroundModel = gameModel.backgroundModel;
+export const gameSizeModel: GameSizeModel = gameModel.gameSizeModel;
+export const collectibleModel: CollectibleModel = gameModel.collectibleModel;
+export const powerUpModel: CollectibleModel = gameModel.powerUpModel;

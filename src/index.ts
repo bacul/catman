@@ -1,4 +1,4 @@
-import {character, enemies, gameSize} from './game/game';
+import {character, gameSizeModel} from './game/game';
 import {UIElements, UILayer} from './game/ui-layer/ui-layer';
 
 import {State} from './application-state';
@@ -19,7 +19,10 @@ class Application {
         State.uiLayer.setGameLoaded();
 
         document.addEventListener(EnemyLayer.gameOverEventName, () => (this.gameOver = true));
-        document.addEventListener(UILayer.gameStartEventName, () => this.setMovablePosition());
+        document.addEventListener(UILayer.gameStartEventName, () => {
+            State.enemyLayer.addNewEnemies();
+            this.setMovablePosition();
+        });
         document.querySelector(UIElements.restart).addEventListener('click', this.restart.bind(this));
     }
 
@@ -37,7 +40,7 @@ class Application {
         State.uiLayer.restart();
         character.currentX = character.startPositionX;
         character.currentY = character.startPositionY;
-        enemies.forEach((enemy) => {
+        EnemyLayer.enemies.forEach((enemy) => {
             enemy.currentX = enemy.startPositionX;
             enemy.currentY = enemy.startPositionY;
         });
@@ -58,22 +61,24 @@ class Application {
 
     private setGameSize(): void {
         const outterBorderSizeAndPadding = 12;
-        const gameFieldShiftXY = gameSize.shiftXY * 2 - outterBorderSizeAndPadding;
+        const gameFieldShiftXY = gameSizeModel.shiftXY * 2 - outterBorderSizeAndPadding;
         document.querySelectorAll('.game-field').forEach((element) => {
             if (element.nodeName === 'CANVAS') {
-                element.setAttribute('width', `${gameSize.width}px`);
-                element.setAttribute('height', `${gameSize.height}px`);
+                element.setAttribute('width', `${gameSizeModel.width}px`);
+                element.setAttribute('height', `${gameSizeModel.height}px`);
             } else {
                 element.setAttribute(
                     'style',
-                    `width: ${gameSize.width - gameFieldShiftXY}px ;height: ${gameSize.height - gameFieldShiftXY}px`
+                    `width: ${gameSizeModel.width - gameFieldShiftXY}px ;height: ${
+                        gameSizeModel.height - gameFieldShiftXY
+                    }px`
                 );
             }
         });
-        document.querySelector('.ui-layer').setAttribute('style', `width: ${gameSize.width - gameFieldShiftXY}px`);
+        document.querySelector('.ui-layer').setAttribute('style', `width: ${gameSizeModel.width - gameFieldShiftXY}px`);
         document
             .querySelector('.ui-layer-overlay')
-            .setAttribute('style', `height: ${gameSize.height - gameFieldShiftXY}px`);
+            .setAttribute('style', `height: ${gameSizeModel.height - gameFieldShiftXY}px`);
     }
 }
 new Application();
