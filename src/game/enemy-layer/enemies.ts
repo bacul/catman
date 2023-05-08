@@ -1,4 +1,4 @@
-import {MovableEntity, MoveDirectionType} from '../game-model';
+import {MovableEntity, MoveDirectionType} from '../shared/movable-entity';
 
 import {AnimationStateType} from '../shared/texture/texture';
 

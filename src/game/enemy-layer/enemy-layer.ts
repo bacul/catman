@@ -1,9 +1,10 @@
-import {MoveDirectionType, gameSizeModel} from '../game-model';
 import {Enemy, enemies, getNewEnemy} from './enemies';
 
 import {State} from '../../application-state';
 import {character} from '../character-layer/character';
+import {gameSizeModel} from '../game-model';
 import {PowerUp} from '../mission-layer/power-up';
+import {MoveDirectionType} from '../shared/movable-entity';
 import {EnemyLayerContext} from './enemy-layer-context';
 
 export class EnemyLayer {

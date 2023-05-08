@@ -1,4 +1,4 @@
-import {MovableEntity} from '../game-model';
+import {MovableEntity} from '../shared/movable-entity';
 import {Texture} from '../shared/texture/texture';
 import {CharacterLayerContext} from './character-layer-context';
 

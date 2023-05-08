@@ -1,8 +1,9 @@
-import {MoveDirectionType, gameSizeModel} from '../game-model';
 import {character, characterDirection} from './character';
 
 import {State} from '../../application-state';
+import {gameSizeModel} from '../game-model';
 import {PowerUp} from '../mission-layer/power-up';
+import {MoveDirectionType} from '../shared/movable-entity';
 import {CharacterLayerContext} from './character-layer-context';
 
 export class CharacterLayer {
