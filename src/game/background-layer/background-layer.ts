@@ -7,6 +7,7 @@ export class BackgroundLayer {
     private readonly canvas: HTMLCanvasElement = document.querySelector('#background-layer');
     private textShiftX = 0;
     private textShiftY = 0;
+    private drawTip = false;
 
     constructor() {
         this.context = this.canvas.getContext('2d', {alpha: false});
@@ -34,22 +35,6 @@ export class BackgroundLayer {
         });
     }
 
-    private figureTip(x: number, y: number): void {
-        // this.context.font = '9px serif';
-        // this.context.fillStyle = '#fff';
-        // this.context.fillText(`${x}.${y}`, x - this.textShiftX, y - this.textShiftY);
-        // if (this.textShiftX === 0) {
-        //     this.textShiftX = 20;
-        // } else {
-        //     this.textShiftX = 0;
-        // }
-        // if (this.textShiftY === 0) {
-        //     this.textShiftY = 10;
-        // } else {
-        //     this.textShiftY = 0;
-        // }
-    }
-
     private drawRectangles(): void {
         Figure.rectangles.forEach((rectangle) => {
             this.context.beginPath();
@@ -61,10 +46,12 @@ export class BackgroundLayer {
                 rectangle.height,
                 backgroundModel.borderRadius
             );
-            this.figureTip(rectangle.topLeftX, rectangle.topLeftY);
-            this.figureTip(rectangle.topLeftX + rectangle.width, rectangle.topLeftY);
-            this.figureTip(rectangle.topLeftX + rectangle.width, rectangle.topLeftY + rectangle.height);
-            this.figureTip(rectangle.topLeftX, rectangle.topLeftY + rectangle.height);
+            if (this.drawTip) {
+                this.figureTip(rectangle.topLeftX, rectangle.topLeftY);
+                this.figureTip(rectangle.topLeftX + rectangle.width, rectangle.topLeftY);
+                this.figureTip(rectangle.topLeftX + rectangle.width, rectangle.topLeftY + rectangle.height);
+                this.figureTip(rectangle.topLeftX, rectangle.topLeftY + rectangle.height);
+            }
             this.context.strokeStyle = backgroundModel.borderColor;
             if (rectangle.invisible) {
                 this.context.strokeStyle = '#000';
@@ -87,10 +74,14 @@ export class BackgroundLayer {
                     path.points[index + 1].y,
                     backgroundModel.borderRadius
                 );
-                this.figureTip(line.x, line.y);
+                if (this.drawTip) {
+                    this.figureTip(line.x, line.y);
+                }
             } else if (index === path.points.length - 1) {
                 this.context.arcTo(line.x, line.y, path.points[0].x, path.points[0].y, backgroundModel.borderRadius);
-                this.figureTip(line.x, line.y);
+                if (this.drawTip) {
+                    this.figureTip(line.x, line.y);
+                }
             } else {
                 this.context.arcTo(
                     line.x,
@@ -99,10 +90,28 @@ export class BackgroundLayer {
                     path.points[index + 1].y,
                     backgroundModel.borderRadius
                 );
-                this.figureTip(line.x, line.y);
+                if (this.drawTip) {
+                    this.figureTip(line.x, line.y);
+                }
             }
         });
         this.context.stroke();
         this.context.closePath();
+    }
+
+    private figureTip(x: number, y: number): void {
+        this.context.font = '9px serif';
+        this.context.fillStyle = '#fff';
+        this.context.fillText(`${x}.${y}`, x - this.textShiftX, y - this.textShiftY);
+        if (this.textShiftX === 0) {
+            this.textShiftX = 20;
+        } else {
+            this.textShiftX = 0;
+        }
+        if (this.textShiftY === 0) {
+            this.textShiftY = 10;
+        } else {
+            this.textShiftY = 0;
+        }
     }
 }

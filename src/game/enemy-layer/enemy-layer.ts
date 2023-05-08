@@ -9,9 +9,12 @@ import {EnemyLayerContext} from './enemy-layer-context';
 
 export class EnemyLayer {
     static readonly gameOverEventName = 'game-over';
-    private _enemiesHandicapTick: number = 1;
+    private _enemiesHandicapTick: number = 2;
     private enemiesHandicap: number = 0;
     static enemies = [...enemies];
+    private _activeEnemies = 1;
+    private arriveEnemiesByTime = 1;
+    private defeatedEnemyDelayMs = 5000;
 
     constructor() {
         EnemyLayer.enemies.forEach((enemy) => {
@@ -19,13 +22,42 @@ export class EnemyLayer {
         });
     }
 
+    get activeEnemies(): number {
+        return this._activeEnemies;
+    }
+
+    set activeEnemies(value: number) {
+        this._activeEnemies = value;
+    }
+
     addNewEnemies(): void {
-        const secondEnemyArriveMs = 2000;
-        const newEnemy = getNewEnemy();
-        setTimeout(() => {
-            newEnemy.direction.moveDirection = this.getClosestToMove(newEnemy);
-            EnemyLayer.enemies.push(newEnemy);
-        }, secondEnemyArriveMs);
+        const secondEnemyArriveMs = 15000;
+        this.addNewEnemyWithDelay$(secondEnemyArriveMs).then(() => {
+            this.arriveEnemiesByTime += 1;
+        });
+
+        const thirdEnemyArriveMs = 20000;
+        this.addNewEnemyWithDelay$(thirdEnemyArriveMs).then(() => {
+            this.arriveEnemiesByTime += 1;
+        });
+
+        const fourthEnemyArriveMs = 30000;
+        this.addNewEnemyWithDelay$(fourthEnemyArriveMs).then(() => {
+            this.arriveEnemiesByTime += 1;
+        });
+    }
+
+    private addNewEnemyWithDelay$(delayMs: number): Promise<void> {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                const newEnemy = getNewEnemy();
+                newEnemy.direction.moveDirection = this.getClosestToMove(newEnemy);
+                EnemyLayer.enemies.push(newEnemy);
+                this.activeEnemies += 1;
+                this.arriveEnemiesByTime++;
+                resolve();
+            }, delayMs);
+        });
     }
 
     set enemiesHandicapTick(value: number) {
@@ -52,8 +84,17 @@ export class EnemyLayer {
     }
 
     defeatEnemyById(id: number): void {
-        EnemyLayer.enemies.splice(id, 1);
-        EnemyLayerContext.context.clearRect(0, 0, gameSizeModel.width, gameSizeModel.height);
+        if (~id) {
+            EnemyLayer.enemies.splice(id, 1);
+            EnemyLayerContext.context.clearRect(0, 0, gameSizeModel.width, gameSizeModel.height);
+            State.enemyLayer.activeEnemies = State.enemyLayer.activeEnemies - 1;
+
+            if (this._activeEnemies < this.arriveEnemiesByTime) {
+                this._activeEnemies += 1;
+                this.defeatedEnemyDelayMs += 1500;
+                this.addNewEnemyWithDelay$(this.defeatedEnemyDelayMs);
+            }
+        }
     }
 
     private setGameOver(gameOver: boolean): void {
