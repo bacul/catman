@@ -1,12 +1,13 @@
-import {MovableEntityModel, MoveDirection, MoveDirectionType} from '../game';
+import {MovableEntity, MoveDirectionType} from '../game';
 
-export interface Enemy extends MovableEntityModel {
+import {AnimationStateType} from '../texture/texture';
+
+export interface Enemy extends MovableEntity {
     blockDirections: MoveDirectionType[];
-    direction: MoveDirection;
 }
 
-export const enemies: Enemy[] = [
-    {
+export function getNewEnemy(): Enemy {
+    return {
         width: 30,
         height: 30,
         currentX: 288,
@@ -18,6 +19,17 @@ export const enemies: Enemy[] = [
             moveDirection: null,
             changeToDirection: null
         },
-        blockDirections: []
-    }
-];
+        blockDirections: [],
+        texture: {
+            direction: MoveDirectionType.down,
+            state: AnimationStateType.default,
+            spriteCoordinate: {
+                x: 0,
+                y: 0
+            },
+            size: 16
+        }
+    };
+}
+
+export const enemies: Enemy[] = [getNewEnemy()];

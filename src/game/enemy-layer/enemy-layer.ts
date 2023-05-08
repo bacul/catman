@@ -1,7 +1,8 @@
-import {MoveDirectionType, character, gameSizeModel} from '../game';
-import {Enemy, enemies} from './enemies';
+import {MoveDirectionType, gameSizeModel} from '../game';
+import {Enemy, enemies, getNewEnemy} from './enemies';
 
 import {State} from '../../application-state';
+import {character} from '../character-layer/character';
 import {PowerUp} from '../mission-layer/power-up';
 import {EnemyLayerContext} from './enemy-layer-context';
 
@@ -18,21 +19,8 @@ export class EnemyLayer {
     }
 
     addNewEnemies(): void {
-        const newEnemy: Enemy = {
-            width: 30,
-            height: 30,
-            currentX: 288,
-            currentY: 250,
-            startPositionX: 288,
-            startPositionY: 250,
-            stepSize: 1,
-            direction: {
-                moveDirection: null,
-                changeToDirection: null
-            },
-            blockDirections: []
-        };
         const secondEnemyArriveMs = 2000;
+        const newEnemy = getNewEnemy();
         setTimeout(() => {
             newEnemy.direction.moveDirection = this.getClosestToMove(newEnemy);
             EnemyLayer.enemies.push(newEnemy);
@@ -50,9 +38,7 @@ export class EnemyLayer {
 
     draw(): void {
         EnemyLayerContext.context.clearRect(0, 0, gameSizeModel.width, gameSizeModel.height);
-        EnemyLayer.enemies.forEach((enemy) => {
-            State.enemyTexture.draw(enemy.currentX, enemy.currentY);
-        });
+        State.enemyTexture.draw(EnemyLayer.enemies);
     }
 
     move(): void {
@@ -297,7 +283,7 @@ export class EnemyLayer {
                 case MoveDirectionType.up:
                     if (!State.figureCollision.stuckTop(enemy)) {
                         enemy.currentY -= enemy.stepSize;
-                        State.enemyTexture.setUpView();
+                        State.enemyTexture.setUpView(enemy);
                         if (!PowerUp.active) {
                             this.setGameOver(this.isGameOver(enemy, MoveDirectionType.up));
                         }
@@ -306,7 +292,7 @@ export class EnemyLayer {
                 case MoveDirectionType.down:
                     if (!State.figureCollision.stuckBottom(enemy)) {
                         enemy.currentY += enemy.stepSize;
-                        State.enemyTexture.setDownView();
+                        State.enemyTexture.setDownView(enemy);
                         if (!PowerUp.active) {
                             this.setGameOver(this.isGameOver(enemy, MoveDirectionType.down));
                         }
@@ -315,7 +301,7 @@ export class EnemyLayer {
                 case MoveDirectionType.left:
                     if (!State.figureCollision.stuckLeft(enemy)) {
                         enemy.currentX -= enemy.stepSize;
-                        State.enemyTexture.setLeftView();
+                        State.enemyTexture.setLeftView(enemy);
                         if (!PowerUp.active) {
                             this.setGameOver(this.isGameOver(enemy, MoveDirectionType.left));
                         }
@@ -327,7 +313,7 @@ export class EnemyLayer {
                 case MoveDirectionType.right:
                     if (!State.figureCollision.stuckRight(enemy)) {
                         enemy.currentX += enemy.stepSize;
-                        State.enemyTexture.setRightView();
+                        State.enemyTexture.setRightView(enemy);
                         if (!PowerUp.active) {
                             this.setGameOver(this.isGameOver(enemy, MoveDirectionType.right));
                         }

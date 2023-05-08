@@ -1,26 +1,30 @@
 import {Texture} from '../texture/texture';
-
+import {Enemy} from './enemies';
 import {EnemyLayerContext} from './enemy-layer-context';
 
 export class EnemyTexture extends Texture {
     private readonly image: CanvasImageSource;
+    protected animationTick: number = 0;
+    protected animationForwardDirection: boolean;
 
     constructor() {
         super();
         this.image = EnemyLayerContext.image;
     }
 
-    draw(x: number, y: number): void {
-        EnemyLayerContext.context.drawImage(
-            this.image,
-            this.texture.spriteCoordinate.x,
-            this.texture.spriteCoordinate.y,
-            this.texture.size,
-            this.texture.size,
-            x,
-            y,
-            30,
-            30
-        );
+    draw(enemies: Enemy[]): void {
+        enemies.forEach((enemy) => {
+            EnemyLayerContext.context.drawImage(
+                this.image,
+                enemy.texture.spriteCoordinate.x,
+                enemy.texture.spriteCoordinate.y,
+                enemy.texture.size,
+                enemy.texture.size,
+                enemy.currentX,
+                enemy.currentY,
+                30,
+                30
+            );
+        });
     }
 }

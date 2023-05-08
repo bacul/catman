@@ -1,3 +1,5 @@
+import {TextureModel} from './texture/texture';
+
 export enum MoveDirectionType {
     up = 1,
     down = 2,
@@ -9,6 +11,10 @@ export interface MoveDirection {
     moveDirection: MoveDirectionType;
 }
 
+export interface MovableEntity extends MovableEntityModel {
+    texture: TextureModel;
+    direction: MoveDirection;
+}
 export interface MovableEntityModel {
     width: number;
     height: number;
@@ -81,7 +87,7 @@ const gameModel: GameModel = {
     }
 };
 
-export const character: MovableEntityModel = gameModel.characterModel;
+export const characterModel: MovableEntityModel = gameModel.characterModel;
 export const enemyModel: MovableEntityModel = gameModel.enemyModel;
 export const backgroundModel: BackgroundModel = gameModel.backgroundModel;
 export const gameSizeModel: GameSizeModel = gameModel.gameSizeModel;

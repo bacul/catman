@@ -1,8 +1,9 @@
-import {character, gameSizeModel} from './game/game';
 import {UIElements, UILayer} from './game/ui-layer/ui-layer';
 
 import {State} from './application-state';
+import {character} from './game/character-layer/character';
 import {EnemyLayer} from './game/enemy-layer/enemy-layer';
+import {gameSizeModel} from './game/game';
 
 class Application {
     private readonly applicationTickMs = 14;

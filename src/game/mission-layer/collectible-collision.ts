@@ -1,6 +1,7 @@
-import {character, collectibleModel, powerUpModel} from '../game';
+import {collectibleModel, powerUpModel} from '../game';
 
 import {State} from '../../application-state';
+import {character} from '../character-layer/character';
 import {EnemyLayer} from '../enemy-layer/enemy-layer';
 import {CollectibleCoordinate} from './collectibles';
 

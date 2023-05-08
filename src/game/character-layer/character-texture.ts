@@ -1,6 +1,5 @@
+import {MovableEntity} from '../game';
 import {Texture} from '../texture/texture';
-
-import {character} from '../game';
 import {CharacterLayerContext} from './character-layer-context';
 
 export class CharacterTexture extends Texture {
@@ -11,13 +10,13 @@ export class CharacterTexture extends Texture {
         this.image = CharacterLayerContext.image;
     }
 
-    draw(): void {
+    draw(character: MovableEntity): void {
         CharacterLayerContext.context.drawImage(
             this.image,
-            this.texture.spriteCoordinate.x,
-            this.texture.spriteCoordinate.y,
-            this.texture.size,
-            this.texture.size,
+            character.texture.spriteCoordinate.x,
+            character.texture.spriteCoordinate.y,
+            character.texture.size,
+            character.texture.size,
             character.currentX,
             character.currentY,
             30,

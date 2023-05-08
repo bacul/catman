@@ -1,13 +1,13 @@
-import {MoveDirectionType, character, gameSizeModel} from '../game';
+import {MoveDirectionType, gameSizeModel} from '../game';
+import {character, characterDirection} from './character';
 
 import {State} from '../../application-state';
 import {PowerUp} from '../mission-layer/power-up';
-import {characterDirection} from './character';
 import {CharacterLayerContext} from './character-layer-context';
 
 export class CharacterLayer {
     constructor() {
-        State.characterTexture.setDownView();
+        State.characterTexture.setDownView(character);
     }
 
     move(): void {
@@ -39,7 +39,7 @@ export class CharacterLayer {
             case MoveDirectionType.up:
                 if (canChangeMovement || !State.figureCollision.stuckTop(character)) {
                     character.currentY -= character.stepSize;
-                    State.characterTexture.setUpView();
+                    State.characterTexture.setUpView(character);
                     State.collectibleCollision.collectTop();
                     if (PowerUp.active) {
                         State.collectibleCollision.intersectWithEnemy();
@@ -49,7 +49,7 @@ export class CharacterLayer {
             case MoveDirectionType.down:
                 if (canChangeMovement || !State.figureCollision.stuckBottom(character)) {
                     character.currentY += character.stepSize;
-                    State.characterTexture.setDownView();
+                    State.characterTexture.setDownView(character);
                     State.collectibleCollision.collectBottom();
                     if (PowerUp.active) {
                         State.collectibleCollision.intersectWithEnemy();
@@ -59,7 +59,7 @@ export class CharacterLayer {
             case MoveDirectionType.left:
                 if (canChangeMovement || !State.figureCollision.stuckLeft(character)) {
                     character.currentX -= character.stepSize;
-                    State.characterTexture.setLeftView();
+                    State.characterTexture.setLeftView(character);
                     State.collectibleCollision.collectLeft();
                     if (State.figureCollision.isInLeftTunnel(character)) {
                         State.figureCollision.setWalkThroughLeftTunnel(character);
@@ -72,7 +72,7 @@ export class CharacterLayer {
             case MoveDirectionType.right:
                 if (canChangeMovement || !State.figureCollision.stuckRight(character)) {
                     character.currentX += character.stepSize;
-                    State.characterTexture.setRightView();
+                    State.characterTexture.setRightView(character);
                     State.collectibleCollision.collectRight();
                     if (State.figureCollision.isInRightTunnel(character)) {
                         State.figureCollision.setWalkThroughRightTunnel(character);
@@ -87,13 +87,6 @@ export class CharacterLayer {
 
     draw(): void {
         CharacterLayerContext.context.clearRect(0, 0, gameSizeModel.width, gameSizeModel.height);
-        // CharacterLayerContext.context.fillRect(
-        //     character.currentX,
-        //     character.currentY,
-        //     character.width,
-        //     character.height
-        // );
-        // CharacterLayerContext.context.fillStyle = character.color;
-        State.characterTexture.draw();
+        State.characterTexture.draw(character);
     }
 }

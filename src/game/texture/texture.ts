@@ -1,4 +1,4 @@
-import {MoveDirectionType} from '../game';
+import {MovableEntity, MoveDirectionType} from '../game';
 
 export interface SpriteCoordinate {
     x: number;
@@ -11,7 +11,7 @@ export enum AnimationStateType {
     end
 }
 
-export interface TextureImage {
+export interface TextureModel {
     size: number;
     spriteCoordinate: SpriteCoordinate;
     direction: MoveDirectionType;
@@ -19,149 +19,137 @@ export interface TextureImage {
 }
 
 export abstract class Texture {
-    protected readonly texture: TextureImage;
     protected animationTick: number = 0;
     protected animationForwardDirection: boolean;
     private readonly animationChangeEveryTick: number = 10;
 
-    constructor() {
-        this.texture = {
-            direction: MoveDirectionType.down,
-            state: AnimationStateType.default,
-            spriteCoordinate: {
-                x: 0,
-                y: 0
-            },
-            size: 16
-        };
+    setLeftView(movableEntity: MovableEntity): void {
+        movableEntity.texture.direction = MoveDirectionType.left;
+        this.setView(movableEntity);
     }
 
-    protected abstract draw(entityX: number, entityY: number): void;
-
-    setLeftView(): void {
-        this.texture.direction = MoveDirectionType.left;
-        this.setView();
+    setRightView(movableEntity: MovableEntity): void {
+        movableEntity.texture.direction = MoveDirectionType.right;
+        this.setView(movableEntity);
     }
 
-    setRightView(): void {
-        this.texture.direction = MoveDirectionType.right;
-        this.setView();
+    setDownView(movableEntity: MovableEntity): void {
+        movableEntity.texture.direction = MoveDirectionType.down;
+        this.setView(movableEntity);
     }
 
-    setDownView(): void {
-        this.texture.direction = MoveDirectionType.down;
-        this.setView();
+    setUpView(movableEntity: MovableEntity): void {
+        movableEntity.texture.direction = MoveDirectionType.up;
+        this.setView(movableEntity);
     }
 
-    setUpView(): void {
-        this.texture.direction = MoveDirectionType.up;
-        this.setView();
+    private setView(movableEntity: MovableEntity): void {
+        this.setAnimationState(movableEntity);
+        this.setTexture(movableEntity);
     }
 
-    private setView() {
-        this.setAnimationStateType();
-        this.setTextureByDirection();
-    }
-
-    private setAnimationStateType(): void {
+    private setAnimationState(movableEntity: MovableEntity): void {
         if (this.animationChangeEveryTick !== this.animationTick) {
             this.animationTick++;
         } else {
             this.animationTick = 0;
-            if (this.texture.state === AnimationStateType.end || this.texture.state === AnimationStateType.start) {
-                this.texture.state = AnimationStateType.default;
+            if (
+                movableEntity.texture.state === AnimationStateType.end ||
+                movableEntity.texture.state === AnimationStateType.start
+            ) {
+                movableEntity.texture.state = AnimationStateType.default;
                 this.animationForwardDirection = !this.animationForwardDirection;
                 return;
             }
             if (this.animationForwardDirection) {
-                this.texture.state = AnimationStateType.end;
+                movableEntity.texture.state = AnimationStateType.end;
             } else {
-                this.texture.state = AnimationStateType.start;
+                movableEntity.texture.state = AnimationStateType.start;
             }
         }
     }
 
-    private setTextureByDirection(): void {
-        switch (this.texture.direction) {
+    private setTexture(movableEntity: MovableEntity): void {
+        switch (movableEntity.texture.direction) {
             case MoveDirectionType.up:
-                this.setUpDirection();
+                this.setUpTexture(movableEntity);
                 break;
             case MoveDirectionType.down:
-                this.setDownDirection();
+                this.setDownTexture(movableEntity);
                 break;
             case MoveDirectionType.left:
-                this.setLeftDirection();
+                this.setLeftTexture(movableEntity);
                 break;
             case MoveDirectionType.right:
-                this.setRightDirection();
+                this.setRightTexture(movableEntity);
                 break;
         }
     }
 
-    private setUpDirection(): void {
-        switch (this.texture.state) {
+    private setUpTexture(movableEntity: MovableEntity): void {
+        switch (movableEntity.texture.state) {
             case AnimationStateType.default:
-                this.texture.spriteCoordinate.x = 16;
-                this.texture.spriteCoordinate.y = 0;
+                movableEntity.texture.spriteCoordinate.x = 16;
+                movableEntity.texture.spriteCoordinate.y = 0;
                 break;
             case AnimationStateType.start:
-                this.texture.spriteCoordinate.x = 16;
-                this.texture.spriteCoordinate.y = 16;
+                movableEntity.texture.spriteCoordinate.x = 16;
+                movableEntity.texture.spriteCoordinate.y = 16;
                 break;
             case AnimationStateType.end:
-                this.texture.spriteCoordinate.x = 16;
-                this.texture.spriteCoordinate.y = 32;
+                movableEntity.texture.spriteCoordinate.x = 16;
+                movableEntity.texture.spriteCoordinate.y = 32;
                 break;
         }
     }
 
-    private setDownDirection(): void {
-        switch (this.texture.state) {
+    private setDownTexture(movableEntity: MovableEntity): void {
+        switch (movableEntity.texture.state) {
             case AnimationStateType.default:
-                this.texture.spriteCoordinate.x = 0;
-                this.texture.spriteCoordinate.y = 0;
+                movableEntity.texture.spriteCoordinate.x = 0;
+                movableEntity.texture.spriteCoordinate.y = 0;
                 break;
             case AnimationStateType.start:
-                this.texture.spriteCoordinate.x = 0;
-                this.texture.spriteCoordinate.y = 16;
+                movableEntity.texture.spriteCoordinate.x = 0;
+                movableEntity.texture.spriteCoordinate.y = 16;
                 break;
             case AnimationStateType.end:
-                this.texture.spriteCoordinate.x = 0;
-                this.texture.spriteCoordinate.y = 32;
+                movableEntity.texture.spriteCoordinate.x = 0;
+                movableEntity.texture.spriteCoordinate.y = 32;
                 break;
         }
     }
 
-    private setRightDirection(): void {
-        switch (this.texture.state) {
+    private setRightTexture(movableEntity: MovableEntity): void {
+        switch (movableEntity.texture.state) {
             case AnimationStateType.default:
-                this.texture.spriteCoordinate.x = 32;
-                this.texture.spriteCoordinate.y = 0;
+                movableEntity.texture.spriteCoordinate.x = 32;
+                movableEntity.texture.spriteCoordinate.y = 0;
                 break;
             case AnimationStateType.start:
-                this.texture.spriteCoordinate.x = 32;
-                this.texture.spriteCoordinate.y = 16;
+                movableEntity.texture.spriteCoordinate.x = 32;
+                movableEntity.texture.spriteCoordinate.y = 16;
                 break;
             case AnimationStateType.end:
-                this.texture.spriteCoordinate.x = 32;
-                this.texture.spriteCoordinate.y = 32;
+                movableEntity.texture.spriteCoordinate.x = 32;
+                movableEntity.texture.spriteCoordinate.y = 32;
                 break;
         }
     }
 
-    private setLeftDirection(): void {
-        switch (this.texture.state) {
+    private setLeftTexture(movableEntity: MovableEntity): void {
+        switch (movableEntity.texture.state) {
             case AnimationStateType.default:
-                this.texture.spriteCoordinate.x = 48;
-                this.texture.spriteCoordinate.y = 0;
+                movableEntity.texture.spriteCoordinate.x = 48;
+                movableEntity.texture.spriteCoordinate.y = 0;
                 break;
             case AnimationStateType.start:
-                this.texture.spriteCoordinate.x = 48;
-                this.texture.spriteCoordinate.y = 16;
+                movableEntity.texture.spriteCoordinate.x = 48;
+                movableEntity.texture.spriteCoordinate.y = 16;
                 break;
             case AnimationStateType.end:
-                this.texture.spriteCoordinate.x = 48;
-                this.texture.spriteCoordinate.y = 32;
+                movableEntity.texture.spriteCoordinate.x = 48;
+                movableEntity.texture.spriteCoordinate.y = 32;
                 break;
         }
     }

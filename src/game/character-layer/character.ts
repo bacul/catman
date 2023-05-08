@@ -1,4 +1,6 @@
-import {MoveDirection, MoveDirectionType} from '../game';
+import {MovableEntity, MoveDirection, MoveDirectionType} from '../game';
+
+import {AnimationStateType} from '../texture/texture';
 
 enum ControlKey {
     arrowUp = 'ArrowUp',
@@ -11,18 +13,7 @@ enum ControlKey {
     d = 'KeyD'
 }
 
-export interface Character {
-    width: number;
-    height: number;
-    currentX: number;
-    currentY: number;
-    startPositionX: number;
-    startPositionY: number;
-    stepSize: number;
-    direction: MoveDirection;
-}
-
-export const character: Character = {
+export const character: MovableEntity = {
     width: 30,
     height: 30,
     currentX: 288,
@@ -33,6 +24,15 @@ export const character: Character = {
     direction: {
         moveDirection: null,
         changeToDirection: null
+    },
+    texture: {
+        direction: MoveDirectionType.down,
+        state: AnimationStateType.default,
+        spriteCoordinate: {
+            x: 0,
+            y: 0
+        },
+        size: 16
     }
 };
 export const characterDirection: MoveDirection = character.direction;
