@@ -1,4 +1,4 @@
-import {TextureModel} from './texture/texture';
+import {TextureModel} from './shared/texture/texture';
 
 export enum MoveDirectionType {
     up = 1,

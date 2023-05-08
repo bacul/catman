@@ -1,4 +1,4 @@
-import {Texture} from '../texture/texture';
+import {Texture} from '../shared/texture/texture';
 import {Enemy} from './enemies';
 import {EnemyLayerContext} from './enemy-layer-context';
 

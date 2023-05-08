@@ -2,12 +2,12 @@ import {BackgroundLayer} from './game/background-layer/background-layer';
 import {CharacterMovement} from './game/character-layer/character';
 import {CharacterLayer} from './game/character-layer/character-layer';
 import {CharacterTexture} from './game/character-layer/character-texture';
-import {FigureCollision} from './game/collision/wall-collision';
 import {EnemyLayer} from './game/enemy-layer/enemy-layer';
 import {EnemyTexture} from './game/enemy-layer/enemy-texture';
 import {CollectibleCollision} from './game/mission-layer/collectible-collision';
 import {MissionLayer} from './game/mission-layer/mission-layer';
 import {PowerUp} from './game/mission-layer/power-up';
+import {FigureCollision} from './game/shared/collision/wall-collision';
 import {UILayer} from './game/ui-layer/ui-layer';
 
 export class State {

@@ -1,4 +1,4 @@
-import {MovableEntity, MoveDirectionType} from '../game-model';
+import {MovableEntity, MoveDirectionType} from '../../game-model';
 
 export interface SpriteCoordinate {
     x: number;

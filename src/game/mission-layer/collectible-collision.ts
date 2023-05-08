@@ -1,4 +1,4 @@
-import {collectibleModel, powerUpModel} from '../game';
+import {collectibleModel, powerUpModel} from '../game-model';
 
 import {State} from '../../application-state';
 import {character} from '../character-layer/character';

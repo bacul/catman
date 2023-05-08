@@ -1,5 +1,5 @@
-import {MovableEntity} from '../game';
-import {Texture} from '../texture/texture';
+import {MovableEntity} from '../game-model';
+import {Texture} from '../shared/texture/texture';
 import {CharacterLayerContext} from './character-layer-context';
 
 export class CharacterTexture extends Texture {

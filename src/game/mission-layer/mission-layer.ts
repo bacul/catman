@@ -1,4 +1,4 @@
-import {collectibleModel, gameSizeModel, powerUpModel} from '../game';
+import {collectibleModel, gameSizeModel, powerUpModel} from '../game-model';
 import {CollectibleCoordinate, collectibles, powerUps} from './collectibles';
 
 import {State} from '../../application-state';

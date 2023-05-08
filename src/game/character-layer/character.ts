@@ -1,6 +1,6 @@
-import {MovableEntity, MoveDirection, MoveDirectionType} from '../game';
+import {MovableEntity, MoveDirection, MoveDirectionType} from '../game-model';
 
-import {AnimationStateType} from '../texture/texture';
+import {AnimationStateType} from '../shared/texture/texture';
 
 enum ControlKey {
     arrowUp = 'ArrowUp',

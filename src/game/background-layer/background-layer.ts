@@ -1,6 +1,6 @@
 import {Figure, PathCoordinates, pathBackgroundCoordinates} from './figure';
 
-import {backgroundModel} from '../game';
+import {backgroundModel} from '../game-model';
 
 export class BackgroundLayer {
     private readonly context: CanvasRenderingContext2D;

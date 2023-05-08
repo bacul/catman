@@ -1,6 +1,6 @@
-import {MovableEntity, MoveDirectionType} from '../game';
+import {MovableEntity, MoveDirectionType} from '../game-model';
 
-import {AnimationStateType} from '../texture/texture';
+import {AnimationStateType} from '../shared/texture/texture';
 
 export interface Enemy extends MovableEntity {
     blockDirections: MoveDirectionType[];

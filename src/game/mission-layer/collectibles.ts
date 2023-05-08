@@ -1,4 +1,4 @@
-import {gameSizeModel} from '../game';
+import {gameSizeModel} from '../game-model';
 
 export interface CollectibleCoordinate {
     centerX: number;

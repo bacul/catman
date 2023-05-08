@@ -1,4 +1,4 @@
-import {MoveDirectionType, gameSizeModel} from '../game';
+import {MoveDirectionType, gameSizeModel} from '../game-model';
 import {Enemy, enemies, getNewEnemy} from './enemies';
 
 import {State} from '../../application-state';

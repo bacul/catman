@@ -1,5 +1,5 @@
-import {Figure, Path, Rectangle} from '../background-layer/figure';
-import {MovableEntityModel, gameSizeModel} from '../game';
+import {Figure, Path, Rectangle} from '../../background-layer/figure';
+import {MovableEntityModel, gameSizeModel} from '../../game-model';
 
 interface HorizontalLine {
     start: number;
