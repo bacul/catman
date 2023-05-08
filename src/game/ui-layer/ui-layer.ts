@@ -1,5 +1,7 @@
 import {Language, defaultLanguage, russianLanguage} from './language/language';
 
+import {State} from '../../application-state';
+
 export enum UIElements {
     score = '.score-header',
     howToStart = '.how-to-start',
@@ -17,7 +19,6 @@ export enum ElementStateClass {
 
 export class UILayer {
     private readonly language: Language;
-    static gameStartEventName = 'game-start';
 
     constructor() {
         if (navigator.language === 'ru') {
@@ -59,12 +60,13 @@ export class UILayer {
         document.querySelector(UIElements.win).classList.remove(ElementStateClass.active);
         document.querySelector(UIElements.restart).classList.remove(ElementStateClass.active);
         document.addEventListener('keydown', UILayer.onKeyDownHandler, false);
+        this.setGameLoaded();
     }
 
     private static onKeyDownHandler() {
         UILayer.setGameStart();
         document.removeEventListener('keydown', UILayer.onKeyDownHandler, false);
-        document.dispatchEvent(new CustomEvent(UILayer.gameStartEventName));
+        document.dispatchEvent(new CustomEvent(State.gameStartEventName));
         document.querySelector(UIElements.restart).removeAttribute(ElementStateClass.disabled);
     }
 

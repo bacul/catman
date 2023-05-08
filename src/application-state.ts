@@ -1,13 +1,13 @@
 import {BackgroundLayer} from './game/background-layer/background-layer';
-import {CharacterMovement} from './game/character-layer/character';
 import {CharacterLayer} from './game/character-layer/character-layer';
+import {CharacterMovement} from './game/character-layer/character';
 import {CharacterTexture} from './game/character-layer/character-texture';
+import {CollectibleCollision} from './game/mission-layer/collectible-collision';
 import {EnemyLayer} from './game/enemy-layer/enemy-layer';
 import {EnemyTexture} from './game/enemy-layer/enemy-texture';
-import {CollectibleCollision} from './game/mission-layer/collectible-collision';
+import {FigureCollision} from './game/shared/collision/wall-collision';
 import {MissionLayer} from './game/mission-layer/mission-layer';
 import {PowerUp} from './game/mission-layer/power-up';
-import {FigureCollision} from './game/shared/collision/wall-collision';
 import {UILayer} from './game/ui-layer/ui-layer';
 
 export class State {
@@ -22,4 +22,7 @@ export class State {
     static readonly figureCollision = new FigureCollision();
     static readonly characterMovement = new CharacterMovement();
     static readonly collectibleCollision = new CollectibleCollision();
+    static readonly gameOverEventName = 'game-over';
+    static readonly gameStartEventName = 'game-start';
+    static gameOver: boolean;
 }

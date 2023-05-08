@@ -1,14 +1,31 @@
 import {character, characterDirection} from './character';
 
+import {AnimationStateType} from '../shared/texture/texture';
+import {CharacterLayerContext} from './character-layer-context';
+import {MoveDirectionType} from '../shared/movable-entity';
+import {PowerUp} from '../mission-layer/power-up';
 import {State} from '../../application-state';
 import {gameSizeModel} from '../game-model';
-import {PowerUp} from '../mission-layer/power-up';
-import {MoveDirectionType} from '../shared/movable-entity';
-import {CharacterLayerContext} from './character-layer-context';
 
 export class CharacterLayer {
     constructor() {
         State.characterTexture.setDownView(character);
+    }
+
+    restart(): void {
+        character.currentX = character.startPositionX;
+        character.currentY = character.startPositionY;
+        character.texture.direction = MoveDirectionType.down;
+        character.texture.state = AnimationStateType.default;
+        character.texture.spriteCoordinate = {
+            x: 0,
+            y: 0
+        };
+    }
+
+    draw(): void {
+        CharacterLayerContext.context.clearRect(0, 0, gameSizeModel.width, gameSizeModel.height);
+        State.characterTexture.draw(character);
     }
 
     move(): void {
@@ -84,10 +101,5 @@ export class CharacterLayer {
                 }
                 break;
         }
-    }
-
-    draw(): void {
-        CharacterLayerContext.context.clearRect(0, 0, gameSizeModel.width, gameSizeModel.height);
-        State.characterTexture.draw(character);
     }
 }

@@ -1,8 +1,7 @@
-import {collectibleModel, gameSizeModel, powerUpModel} from '../game-model';
 import {CollectibleCoordinate, collectibles, powerUps} from './collectibles';
+import {collectibleModel, gameSizeModel, powerUpModel} from '../game-model';
 
 import {State} from '../../application-state';
-import {EnemyLayer} from '../enemy-layer/enemy-layer';
 
 export class MissionLayer {
     private readonly context: CanvasRenderingContext2D;
@@ -16,6 +15,12 @@ export class MissionLayer {
         this.context = this.canvas.getContext('2d');
         MissionLayer.collectibles = collectibles.slice();
         MissionLayer.powerUps = [...powerUps];
+    }
+
+    restart(): void {
+        State.missionLayer.drawCollectibles();
+        State.missionLayer.drawPowerUps();
+        State.missionLayer.setScore(0);
     }
 
     drawCollectibles(): void {
@@ -58,7 +63,7 @@ export class MissionLayer {
     }
 
     setMissionComplete(): void {
-        document.dispatchEvent(new CustomEvent(EnemyLayer.gameOverEventName));
+        document.dispatchEvent(new CustomEvent(State.gameOverEventName));
         State.uiLayer.setGameWin();
     }
 

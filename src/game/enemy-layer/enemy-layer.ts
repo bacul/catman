@@ -1,25 +1,38 @@
 import {Enemy, enemies, getNewEnemy} from './enemies';
 
+import {EnemyLayerContext} from './enemy-layer-context';
+import {MoveDirectionType} from '../shared/movable-entity';
+import {PowerUp} from '../mission-layer/power-up';
 import {State} from '../../application-state';
 import {character} from '../character-layer/character';
 import {gameSizeModel} from '../game-model';
-import {PowerUp} from '../mission-layer/power-up';
-import {MoveDirectionType} from '../shared/movable-entity';
-import {EnemyLayerContext} from './enemy-layer-context';
 
 export class EnemyLayer {
-    static readonly gameOverEventName = 'game-over';
-    private _enemiesHandicapTick: number = 2;
+    private _enemiesHandicapTick: number = 1;
     private enemiesHandicap: number = 0;
     static enemies = [...enemies];
-    private _activeEnemies = 1;
-    private arriveEnemiesByTime = 1;
-    private defeatedEnemyDelayMs = 5000;
+    private readonly defaultEnemyCount = 1;
+    private _activeEnemies = this.defaultEnemyCount;
+    private arriveEnemiesByTime = this.defaultEnemyCount;
+    private readonly defaultDefeatedEnemyDelayMs = 5000;
+    private defeatedEnemyDelayMs = this.defaultDefeatedEnemyDelayMs;
+    private enemyArriveTimeoutIds: NodeJS.Timeout[] = [];
 
     constructor() {
         EnemyLayer.enemies.forEach((enemy) => {
             enemy.direction.moveDirection = this.getClosestToMove(enemy);
         });
+    }
+
+    restart(): void {
+        EnemyLayer.enemies = [getNewEnemy()];
+        this.defeatedEnemyDelayMs = this.defaultDefeatedEnemyDelayMs;
+        this.activeEnemies = this.defaultEnemyCount;
+        this.arriveEnemiesByTime = this.defaultEnemyCount;
+        this.enemyArriveTimeoutIds.forEach((timoutId) => {
+            clearTimeout(timoutId);
+        });
+        this.enemyArriveTimeoutIds = [];
     }
 
     get activeEnemies(): number {
@@ -32,32 +45,22 @@ export class EnemyLayer {
 
     addNewEnemies(): void {
         const secondEnemyArriveMs = 15000;
-        this.addNewEnemyWithDelay$(secondEnemyArriveMs).then(() => {
-            this.arriveEnemiesByTime += 1;
-        });
-
+        this.enemyArriveTimeoutIds.push(this.addNewEnemyWithDelay(secondEnemyArriveMs));
         const thirdEnemyArriveMs = 20000;
-        this.addNewEnemyWithDelay$(thirdEnemyArriveMs).then(() => {
-            this.arriveEnemiesByTime += 1;
-        });
-
+        this.enemyArriveTimeoutIds.push(this.addNewEnemyWithDelay(thirdEnemyArriveMs));
         const fourthEnemyArriveMs = 30000;
-        this.addNewEnemyWithDelay$(fourthEnemyArriveMs).then(() => {
-            this.arriveEnemiesByTime += 1;
-        });
+        this.enemyArriveTimeoutIds.push(this.addNewEnemyWithDelay(fourthEnemyArriveMs));
     }
 
-    private addNewEnemyWithDelay$(delayMs: number): Promise<void> {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                const newEnemy = getNewEnemy();
-                newEnemy.direction.moveDirection = this.getClosestToMove(newEnemy);
-                EnemyLayer.enemies.push(newEnemy);
-                this.activeEnemies += 1;
-                this.arriveEnemiesByTime++;
-                resolve();
-            }, delayMs);
-        });
+    private addNewEnemyWithDelay(delayMs: number): NodeJS.Timeout {
+        const timeoutId = setTimeout(() => {
+            const newEnemy = getNewEnemy();
+            newEnemy.direction.moveDirection = this.getClosestToMove(newEnemy);
+            EnemyLayer.enemies.push(newEnemy);
+            this.activeEnemies += 1;
+            this.arriveEnemiesByTime += 1;
+        }, delayMs);
+        return timeoutId;
     }
 
     set enemiesHandicapTick(value: number) {
@@ -92,14 +95,14 @@ export class EnemyLayer {
             if (this._activeEnemies < this.arriveEnemiesByTime) {
                 this._activeEnemies += 1;
                 this.defeatedEnemyDelayMs += 1500;
-                this.addNewEnemyWithDelay$(this.defeatedEnemyDelayMs);
+                this.enemyArriveTimeoutIds.push(this.addNewEnemyWithDelay(this.defeatedEnemyDelayMs));
             }
         }
     }
 
     private setGameOver(gameOver: boolean): void {
         if (gameOver) {
-            document.dispatchEvent(new CustomEvent(EnemyLayer.gameOverEventName));
+            document.dispatchEvent(new CustomEvent(State.gameOverEventName));
             State.uiLayer.setGameDefeat();
         }
     }

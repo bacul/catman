@@ -1,13 +1,9 @@
-import {UIElements, UILayer} from './game/ui-layer/ui-layer';
-
 import {State} from './application-state';
-import {character} from './game/character-layer/character';
-import {EnemyLayer} from './game/enemy-layer/enemy-layer';
+import {UIElements} from './game/ui-layer/ui-layer';
 import {gameSizeModel} from './game/game-model';
 
 class Application {
     private readonly applicationTickMs = 14;
-    private gameOver: boolean;
 
     constructor() {
         new State();
@@ -19,8 +15,8 @@ class Application {
         this.main();
         State.uiLayer.setGameLoaded();
 
-        document.addEventListener(EnemyLayer.gameOverEventName, () => (this.gameOver = true));
-        document.addEventListener(UILayer.gameStartEventName, () => {
+        document.addEventListener(State.gameOverEventName, () => (State.gameOver = true));
+        document.addEventListener(State.gameStartEventName, () => {
             State.enemyLayer.addNewEnemies();
             this.setMovablePosition();
         });
@@ -28,7 +24,7 @@ class Application {
     }
 
     private setMovablePosition(): void {
-        if (!this.gameOver) {
+        if (!State.gameOver) {
             setTimeout(() => {
                 State.characterLayer.move();
                 State.enemyLayer.move();
@@ -39,19 +35,11 @@ class Application {
 
     private restart(): void {
         State.uiLayer.restart();
-        character.currentX = character.startPositionX;
-        character.currentY = character.startPositionY;
-        EnemyLayer.enemies.forEach((enemy) => {
-            enemy.currentX = enemy.startPositionX;
-            enemy.currentY = enemy.startPositionY;
-        });
-        State.missionLayer.drawCollectibles();
-        State.missionLayer.drawPowerUps();
-        State.missionLayer.setScore(0);
+        State.characterLayer.restart();
+        State.enemyLayer.restart();
+        State.missionLayer.restart();
         this.setMovablePosition();
-
-        State.uiLayer.setGameLoaded();
-        this.gameOver = false;
+        State.gameOver = false;
     }
 
     private main() {
