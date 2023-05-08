@@ -26,19 +26,19 @@ export class CollectibleCollision {
         this.collectTopAction(State.missionLayer.powerUps, powerUpModel.radius);
     }
 
-    intersectWithEnemy(): void {
+    getIntersectEnemyId(): number {
         const intersectEnemyId = EnemyLayer.enemies.findIndex((enemy) => {
             const diffirenceLeftX = character.currentX - enemy.currentX;
-            const intersectLeft = diffirenceLeftX > 0 && diffirenceLeftX <= enemy.width;
+            const intersectLeft = diffirenceLeftX >= 0 && diffirenceLeftX <= enemy.width;
 
             const differenceRightX = enemy.currentX - character.currentX;
-            const intersectRight = differenceRightX > 0 && differenceRightX <= enemy.width;
+            const intersectRight = differenceRightX >= 0 && differenceRightX <= enemy.width;
 
             const differenceTopY = character.currentY - enemy.currentY;
-            const intersectTop = differenceTopY > 0 && differenceTopY <= enemy.height;
+            const intersectTop = differenceTopY >= 0 && differenceTopY <= enemy.height;
 
             const differenceBottomY = enemy.currentY - character.currentY;
-            const intersectBottom = differenceBottomY > 0 && differenceBottomY <= enemy.height;
+            const intersectBottom = differenceBottomY >= 0 && differenceBottomY <= enemy.height;
 
             if (intersectLeft || intersectRight) {
                 return intersectBottom || intersectTop;
@@ -47,9 +47,7 @@ export class CollectibleCollision {
                 return intersectLeft || intersectRight;
             }
         });
-        if (~intersectEnemyId) {
-            State.enemyLayer.defeatEnemyById(intersectEnemyId);
-        }
+        return intersectEnemyId;
     }
 
     private getCollectibleOnWayX(coordinates: CollectibleCoordinate[]): CollectibleCoordinate[] {

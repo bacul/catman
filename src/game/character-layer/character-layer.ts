@@ -43,7 +43,7 @@ export class CharacterLayer {
                     State.characterTexture.setUpView(character);
                     State.collectibleCollision.collectTop();
                     if (PowerUp.active) {
-                        State.collectibleCollision.intersectWithEnemy();
+                        State.enemyLayer.defeatEnemyById(State.collectibleCollision.getIntersectEnemyId());
                     }
                 }
                 break;
@@ -53,7 +53,7 @@ export class CharacterLayer {
                     State.characterTexture.setDownView(character);
                     State.collectibleCollision.collectBottom();
                     if (PowerUp.active) {
-                        State.collectibleCollision.intersectWithEnemy();
+                        State.enemyLayer.defeatEnemyById(State.collectibleCollision.getIntersectEnemyId());
                     }
                 }
                 break;
@@ -66,7 +66,7 @@ export class CharacterLayer {
                         State.figureCollision.setWalkThroughLeftTunnel(character);
                     }
                     if (PowerUp.active) {
-                        State.collectibleCollision.intersectWithEnemy();
+                        State.enemyLayer.defeatEnemyById(State.collectibleCollision.getIntersectEnemyId());
                     }
                 }
                 break;
@@ -79,7 +79,7 @@ export class CharacterLayer {
                         State.figureCollision.setWalkThroughRightTunnel(character);
                     }
                     if (PowerUp.active) {
-                        State.collectibleCollision.intersectWithEnemy();
+                        State.enemyLayer.defeatEnemyById(State.collectibleCollision.getIntersectEnemyId());
                     }
                 }
                 break;
