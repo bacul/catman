@@ -30,7 +30,7 @@ export class UILayer {
     private readonly language: Language;
 
     constructor() {
-        if (navigator.language === 'ru') {
+        if (navigator.language === 'ru' || navigator.language === 'ru-RU') {
             this.language = russianLanguage;
         } else {
             this.language = defaultLanguage;
