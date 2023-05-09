@@ -1,11 +1,12 @@
 import {Enemy, enemies, getNewEnemy} from './enemies';
 
-import {EnemyLayerContext} from './enemy-layer-context';
-import {MoveDirectionType} from '../shared/movable-entity';
-import {PowerUp} from '../mission-layer/power-up';
 import {State} from '../../application-state';
 import {character} from '../character-layer/character';
 import {gameSizeModel} from '../game-model';
+import {PowerUp} from '../mission-layer/power-up';
+import {FigureCollision} from '../shared/collision/wall-collision';
+import {MoveDirectionType} from '../shared/movable-entity';
+import {EnemyLayerContext} from './enemy-layer-context';
 
 export class EnemyLayer {
     private _enemiesHandicapTick: number = 1;
@@ -122,9 +123,15 @@ export class EnemyLayer {
         let blockedDirections = enemy.blockDirections;
         const canChangeOnClosest = this.canMove(enemy, farestDirection);
         if (canChangeOnClosest) {
-            blockedDirections = [];
-            enemy.direction.moveDirection = farestDirection;
-            return;
+            const inTunnel =
+                (enemy.currentX < 175 || enemy.currentX > 400) && enemy.currentY === FigureCollision.tunnelY;
+            if (!inTunnel) {
+                blockedDirections = [];
+                enemy.direction.moveDirection = farestDirection;
+                return;
+            } else {
+                return;
+            }
         }
 
         enemy.direction.changeToDirection = farestDirection;

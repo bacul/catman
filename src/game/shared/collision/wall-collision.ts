@@ -14,6 +14,8 @@ interface VerticalLine {
 }
 
 export class FigureCollision {
+    static readonly tunnelY = 295;
+
     stuckRight(movableEntity: MovableEntityModel): boolean {
         return this.stuckRightPath(movableEntity) || this.stuckRightRectangle(movableEntity);
     }
@@ -39,7 +41,7 @@ export class FigureCollision {
     }
 
     isInLeftTunnel(movableEntity: MovableEntityModel): boolean {
-        const inTunnelLeft = movableEntity.currentY === 295 && movableEntity.currentX < 70;
+        const inTunnelLeft = movableEntity.currentY === FigureCollision.tunnelY && movableEntity.currentX < 70;
         return inTunnelLeft;
     }
 
@@ -48,7 +50,7 @@ export class FigureCollision {
     }
 
     isInRightTunnel(movableEntity: MovableEntityModel): boolean {
-        const inTunnelRight = movableEntity.currentY === 295 && movableEntity.currentX > 505;
+        const inTunnelRight = movableEntity.currentY === FigureCollision.tunnelY && movableEntity.currentX > 505;
         return inTunnelRight;
     }
 

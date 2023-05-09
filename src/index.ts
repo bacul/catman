@@ -1,6 +1,6 @@
 import {State} from './application-state';
-import {UIElements} from './game/ui-layer/ui-layer';
 import {gameSizeModel} from './game/game-model';
+import {UIElements} from './game/ui-layer/ui-layer';
 
 class Application {
     private readonly applicationTickMs = 14;
@@ -76,6 +76,18 @@ class Application {
                     gameSizeModel.height - gameFieldShiftXY
                 }px`
             );
+        this.setScale();
+    }
+
+    private setScale(): void {
+        const gameHeightPx = document.body.getBoundingClientRect().height;
+        const htmlElement = document.querySelector('html');
+        const totalHeightPx = htmlElement.getBoundingClientRect().height;
+        const availablePx = totalHeightPx - gameHeightPx;
+        if (totalHeightPx > gameHeightPx) {
+            const increaseRating = Math.floor((availablePx / gameHeightPx) * 100);
+            htmlElement.setAttribute('style', `transform: scale(1.${increaseRating})`);
+        }
     }
 }
 new Application();
