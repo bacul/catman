@@ -1,5 +1,4 @@
 import {State} from './application-state';
-import {gameSizeModel} from './game/game-model';
 import {UIElements} from './game/ui-layer/ui-layer';
 
 class Application {
@@ -8,7 +7,7 @@ class Application {
     constructor() {
         new State();
         State.uiLayer.setLanguage();
-        this.setGameSize();
+        State.uiLayer.setGameSize();
         State.backgroundLayer.draw();
         State.missionLayer.drawCollectibles();
         State.missionLayer.drawPowerUps();
@@ -46,48 +45,6 @@ class Application {
         window.requestAnimationFrame(this.main.bind(this));
         State.characterLayer.draw();
         State.enemyLayer.draw();
-    }
-
-    private setGameSize(): void {
-        const outterBorderSizeAndPadding = 12;
-        const gameFieldShiftXY = gameSizeModel.shiftXY * 2 - outterBorderSizeAndPadding;
-        document.querySelectorAll('.game-field').forEach((element) => {
-            if (element.nodeName === 'CANVAS') {
-                element.setAttribute('width', `${gameSizeModel.width}px`);
-                element.setAttribute('height', `${gameSizeModel.height}px`);
-            } else {
-                element.setAttribute(
-                    'style',
-                    `width: ${gameSizeModel.width - gameFieldShiftXY}px ;height: ${
-                        gameSizeModel.height - gameFieldShiftXY
-                    }px`
-                );
-            }
-        });
-        document.querySelector('.ui-layer').setAttribute('style', `width: ${gameSizeModel.width - gameFieldShiftXY}px`);
-        document
-            .querySelector('.ui-layer-overlay')
-            .setAttribute('style', `height: ${gameSizeModel.height - gameFieldShiftXY}px`);
-        document
-            .querySelector('.modal')
-            .setAttribute(
-                'style',
-                `width: ${gameSizeModel.width - gameFieldShiftXY}px ;height: ${
-                    gameSizeModel.height - gameFieldShiftXY
-                }px`
-            );
-        this.setScale();
-    }
-
-    private setScale(): void {
-        const gameHeightPx = document.body.getBoundingClientRect().height;
-        const htmlElement = document.querySelector('html');
-        const totalHeightPx = htmlElement.getBoundingClientRect().height;
-        const availablePx = totalHeightPx - gameHeightPx;
-        if (totalHeightPx > gameHeightPx) {
-            const increaseRating = Math.floor((availablePx / gameHeightPx) * 100);
-            htmlElement.setAttribute('style', `transform: scale(1.${increaseRating})`);
-        }
     }
 }
 new Application();

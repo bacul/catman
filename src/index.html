@@ -9,59 +9,63 @@
         <link href="https://fonts.googleapis.com/css2?family=Play:wght@400&display=swap" rel="stylesheet" />
     </head>
     <body>
-        <div class="ui-layer">
-            <div class="ui-layer-overlay"></div>
-            <div class="score">
-                <div class="score-header"></div>
-                <div class="score-value">0</div>
-            </div>
-            <div class="state">
-                <div class="state-text-wrapper">
-                    <div class="state-text how-to-start"></div>
+        <div class="game-wrapper">
+            <div class="game">
+                <div class="ui-layer">
+                    <div class="ui-layer-overlay"></div>
+                    <div class="score">
+                        <div class="score-header"></div>
+                        <div class="score-value">0</div>
+                    </div>
+                    <div class="state">
+                        <div class="state-text-wrapper">
+                            <div class="state-text how-to-start"></div>
+                        </div>
+                        <div class="state-text-wrapper">
+                            <div class="state-text win-text"></div>
+                        </div>
+                        <div class="state-text-wrapper">
+                            <div class="state-text defeat-text"></div>
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <button type="button" class="restart-button button"></button>
+                        <button type="button" class="about-button button"></button>
+                    </div>
+                    <div class="modal about-modal">
+                        <div class="modal-header about-modal-header"></div>
+                        <div class="modal-body about-modal-body">
+                            <dl>
+                                <dt class="about-modal-developer"></dt>
+                                <dd>
+                                    <a href="https://github.com/bacul" target="_blank">bacul</a>
+                                </dd>
+                            </dl>
+                            <dl>
+                                <dt class="about-modal-asset"></dt>
+                                <dd>@lotus_totus</dd>
+                            </dl>
+                            <dl>
+                                <dt></dt>
+                                <dd>
+                                    <div></div>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                    <div class="power-up">
+                        <div class="power-up-duration"></div>
+                    </div>
                 </div>
-                <div class="state-text-wrapper">
-                    <div class="state-text win-text"></div>
+                <div class="canvas-wrapper game-field">
+                    <canvas class="canvas background-layer game-field" id="background-layer"></canvas>
+                    <canvas class="canvas mission-layer game-field" id="mission-layer"></canvas>
+                    <canvas class="canvas enemy-layer game-field" id="enemy-layer"></canvas>
+                    <canvas class="canvas character-layer game-field" id="character-layer"></canvas>
                 </div>
-                <div class="state-text-wrapper">
-                    <div class="state-text defeat-text"></div>
-                </div>
-            </div>
-            <div class="actions">
-                <button type="button" class="restart-button button"></button>
-                <button type="button" class="about-button button"></button>
-            </div>
-            <div class="modal about-modal">
-                <div class="modal-header about-modal-header"></div>
-                <div class="modal-body about-modal-body">
-                    <dl>
-                        <dt class="about-modal-developer"></dt>
-                        <dd>
-                            <a href="https://github.com/bacul" target="_blank">bacul</a>
-                        </dd>
-                    </dl>
-                    <dl>
-                        <dt class="about-modal-asset"></dt>
-                        <dd>@lotus_totus</dd>
-                    </dl>
-                    <dl>
-                        <dt></dt>
-                        <dd>
-                            <div></div>
-                        </dd>
-                    </dl>
-                </div>
-            </div>
-            <div class="power-up">
-                <div class="power-up-duration"></div>
+                <img id="character" src="assets/images/character.png" />
+                <img id="enemy" src="assets/images/enemy.png" />
             </div>
         </div>
-        <div class="canvas-wrapper game-field">
-            <canvas class="canvas background-layer game-field" id="background-layer"></canvas>
-            <canvas class="canvas mission-layer game-field" id="mission-layer"></canvas>
-            <canvas class="canvas enemy-layer game-field" id="enemy-layer"></canvas>
-            <canvas class="canvas character-layer game-field" id="character-layer"></canvas>
-        </div>
-        <img id="character" src="assets/images/character.png" />
-        <img id="enemy" src="assets/images/enemy.png" />
     </body>
 </html>

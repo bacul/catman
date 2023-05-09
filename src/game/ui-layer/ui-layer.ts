@@ -1,8 +1,11 @@
 import {Language, defaultLanguage, russianLanguage} from './language/language';
 
 import {State} from '../../application-state';
+import {gameSizeModel} from '../game-model';
 
 export enum UIElements {
+    game = '.game',
+    gameWrapper = '.game-wrapper',
     score = '.score-header',
     howToStart = '.how-to-start',
     win = '.win-text',
@@ -35,6 +38,48 @@ export class UILayer {
         document.addEventListener('keydown', UILayer.onKeyDownHandler, false);
         document.addEventListener('keydown', this.hideModal, false);
         document.querySelector(UIElements.aboutButton).addEventListener('click', this.toggleAboutModal);
+    }
+
+    setGameSize(): void {
+        const outterBorderSizeAndPadding = 12;
+        const gameFieldShiftXY = gameSizeModel.shiftXY * 2 - outterBorderSizeAndPadding;
+        document.querySelectorAll('.game-field').forEach((element) => {
+            if (element.nodeName === 'CANVAS') {
+                element.setAttribute('width', `${gameSizeModel.width}px`);
+                element.setAttribute('height', `${gameSizeModel.height}px`);
+            } else {
+                element.setAttribute(
+                    'style',
+                    `width: ${gameSizeModel.width - gameFieldShiftXY}px ;height: ${
+                        gameSizeModel.height - gameFieldShiftXY
+                    }px`
+                );
+            }
+        });
+        document.querySelector('.ui-layer').setAttribute('style', `width: ${gameSizeModel.width - gameFieldShiftXY}px`);
+        document
+            .querySelector('.ui-layer-overlay')
+            .setAttribute('style', `height: ${gameSizeModel.height - gameFieldShiftXY}px`);
+        document
+            .querySelector('.modal')
+            .setAttribute(
+                'style',
+                `width: ${gameSizeModel.width - gameFieldShiftXY}px ;height: ${
+                    gameSizeModel.height - gameFieldShiftXY
+                }px`
+            );
+        this.setScale();
+    }
+
+    private setScale(): void {
+        const gameWrapperHeight = document.querySelector(UIElements.gameWrapper).getBoundingClientRect().height;
+        const gameElement = document.querySelector(UIElements.game);
+        const gameElementHeight = gameElement.getBoundingClientRect().height;
+        const availablePx = gameWrapperHeight - gameElementHeight;
+        if (gameElementHeight < gameWrapperHeight) {
+            const increaseRating = Math.floor((availablePx / gameElementHeight) * 100);
+            gameElement.setAttribute('style', `transform: scale(1.${increaseRating})`);
+        }
     }
 
     setLanguage(): void {
