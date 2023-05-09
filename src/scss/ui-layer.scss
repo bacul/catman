@@ -86,10 +86,14 @@
     width: 100%;
 }
 
-.options-button,
 .about-button {
-    // TODO
-    display: none;
+    position: absolute;
+    bottom: 100%;
+    right: 0;
+    z-index: 1;
+    background-color: transparent;
+    border: 0;
+    color: white;
 }
 
 .restart-button {
@@ -167,3 +171,36 @@
         box-shadow: 0 0 20px 3px #fffef2;
     }
   }
+
+.modal {
+    position: absolute;
+    top: 46px;
+    padding: 20px;
+    background-color: black;
+    border: 2px solid #000;
+
+    transition: 0.3s ease-out opacity;
+    opacity: 0;
+    visibility: hidden;
+    z-index: -1;
+    &.active {
+        opacity: 1;
+        visibility: visible;
+        z-index: 100;
+    }
+}
+
+.modal-header {
+    margin-bottom: 22px;
+    font-size: 20px;
+    text-align: center;
+}
+
+dl {
+    display: flex;
+    margin-bottom: 18px;
+}
+
+dt {
+    margin-right: 5px;
+}

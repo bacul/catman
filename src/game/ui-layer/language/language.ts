@@ -4,6 +4,10 @@ export interface Language {
     win: string;
     defeat: string;
     restart: string;
+    aboutButton: string;
+    aboutModalHeader: string;
+    aboutModalDeveloper: string;
+    aboutModalAsset: string;
 }
 
 export const defaultLanguage: Language = {
@@ -11,7 +15,11 @@ export const defaultLanguage: Language = {
     howToStart: 'Press Any Key',
     win: 'You Win!',
     defeat: 'Defeat',
-    restart: 'restart'
+    restart: 'restart',
+    aboutButton: 'about',
+    aboutModalHeader: 'about',
+    aboutModalDeveloper: 'developer:',
+    aboutModalAsset: 'asset pack author:'
 };
 
 export const russianLanguage: Language = {
@@ -19,5 +27,9 @@ export const russianLanguage: Language = {
     howToStart: 'Нажмите Любую Клавишу',
     win: 'Победа!',
     defeat: 'Поражение',
-    restart: 'перезапуск'
+    restart: 'перезапуск',
+    aboutButton: 'об игре',
+    aboutModalHeader: 'об игре',
+    aboutModalDeveloper: 'разработчик:',
+    aboutModalAsset: 'ресурсы:'
 };

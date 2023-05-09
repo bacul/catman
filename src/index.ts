@@ -68,6 +68,14 @@ class Application {
         document
             .querySelector('.ui-layer-overlay')
             .setAttribute('style', `height: ${gameSizeModel.height - gameFieldShiftXY}px`);
+        document
+            .querySelector('.modal')
+            .setAttribute(
+                'style',
+                `width: ${gameSizeModel.width - gameFieldShiftXY}px ;height: ${
+                    gameSizeModel.height - gameFieldShiftXY
+                }px`
+            );
     }
 }
 new Application();

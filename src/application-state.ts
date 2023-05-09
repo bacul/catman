@@ -1,6 +1,6 @@
 import {BackgroundLayer} from './game/background-layer/background-layer';
 import {CharacterLayer} from './game/character-layer/character-layer';
-import {CharacterMovement} from './game/character-layer/character';
+import {CharacterMovement} from './game/character-layer/character-movement';
 import {CharacterTexture} from './game/character-layer/character-texture';
 import {CollectibleCollision} from './game/mission-layer/collectible-collision';
 import {EnemyLayer} from './game/enemy-layer/enemy-layer';

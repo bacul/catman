@@ -1,5 +1,13 @@
 @import 'ui-layer';
 
+html {
+    // TODO формула расчета scale
+    transform: scale(1.5);
+    transform-origin: top;
+    max-width: 100vw;
+    overflow-x: hidden;
+}
+
 * {
     padding: 0;
     margin: 0;
@@ -12,6 +20,15 @@ body {
     padding-bottom: 20px;
     font-family: 'Play', Arial, Helvetica,sans-serif;
     color: #fff;
+}
+
+body,
+button {
+    font-family: 'Play', Arial, Helvetica,sans-serif;
+}
+
+button {
+    cursor: pointer;
 }
 
 img {

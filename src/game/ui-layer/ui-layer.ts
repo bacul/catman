@@ -9,7 +9,13 @@ export enum UIElements {
     defeat = '.defeat-text',
     overlay = '.ui-layer-overlay',
     restart = '.restart-button',
-    powerUp = '.power-up'
+    powerUp = '.power-up',
+    modal = '.modal',
+    aboutButton = '.about-button',
+    aboutModal = '.about-modal',
+    aboutModalHeader = '.about-modal-header',
+    aboutModalDeveloper = '.about-modal-developer',
+    aboutModalAsset = '.about-modal-asset'
 }
 
 export enum ElementStateClass {
@@ -27,6 +33,8 @@ export class UILayer {
             this.language = defaultLanguage;
         }
         document.addEventListener('keydown', UILayer.onKeyDownHandler, false);
+        document.addEventListener('keydown', this.hideModal, false);
+        document.querySelector(UIElements.aboutButton).addEventListener('click', this.toggleAboutModal);
     }
 
     setLanguage(): void {
@@ -35,6 +43,10 @@ export class UILayer {
         document.querySelector(UIElements.win).innerHTML = this.language.win;
         document.querySelector(UIElements.defeat).innerHTML = this.language.defeat;
         document.querySelector(UIElements.restart).innerHTML = this.language.restart;
+        document.querySelector(UIElements.aboutButton).innerHTML = this.language.aboutButton;
+        document.querySelector(UIElements.aboutModalHeader).innerHTML = this.language.aboutModalHeader;
+        document.querySelector(UIElements.aboutModalDeveloper).innerHTML = this.language.aboutModalDeveloper;
+        document.querySelector(UIElements.aboutModalAsset).innerHTML = this.language.aboutModalAsset;
     }
 
     setGameLoaded(): void {
@@ -63,11 +75,24 @@ export class UILayer {
         this.setGameLoaded();
     }
 
+    toggleAboutModal(): void {
+        document.querySelector(UIElements.aboutModal).classList.toggle(ElementStateClass.active);
+    }
+
+    hideModal(event: KeyboardEvent): void {
+        if (event.code === 'Escape') {
+            document.querySelector(UIElements.modal).classList.remove(ElementStateClass.active);
+        }
+    }
+
     private static onKeyDownHandler() {
-        UILayer.setGameStart();
-        document.removeEventListener('keydown', UILayer.onKeyDownHandler, false);
-        document.dispatchEvent(new CustomEvent(State.gameStartEventName));
-        document.querySelector(UIElements.restart).removeAttribute(ElementStateClass.disabled);
+        const modalOpen = document.querySelector(UIElements.aboutModal).classList.contains(ElementStateClass.active);
+        if (!modalOpen) {
+            UILayer.setGameStart();
+            document.removeEventListener('keydown', UILayer.onKeyDownHandler, false);
+            document.dispatchEvent(new CustomEvent(State.gameStartEventName));
+            document.querySelector(UIElements.restart).removeAttribute(ElementStateClass.disabled);
+        }
     }
 
     private static setGameStart(): void {
