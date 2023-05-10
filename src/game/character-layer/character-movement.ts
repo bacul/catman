@@ -14,10 +14,19 @@ enum ControlKey {
 
 export class CharacterMovement {
     private _keyPressed: boolean;
+    private keyPressTimeoutId: NodeJS.Timer;
+    private readonly intentionDurationMs: number;
 
     constructor() {
         document.addEventListener('keydown', this.onKeyPressed.bind(this), false);
-        document.addEventListener('keyup', () => (this._keyPressed = false), false);
+        document.addEventListener(
+            'keyup',
+            () => {
+                clearTimeout(this.keyPressTimeoutId);
+                this.keyPressTimeoutId = setTimeout(() => (this._keyPressed = false), this.intentionDurationMs);
+            },
+            false
+        );
     }
 
     get keyPressed(): boolean {
