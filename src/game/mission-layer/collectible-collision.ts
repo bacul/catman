@@ -1,9 +1,9 @@
 import {collectibleModel, powerUpModel} from '../game-model';
 
+import {CollectibleCoordinate} from './collectibles';
+import {EnemyLayer} from '../enemy-layer/enemy-layer';
 import {State} from '../../application-state';
 import {character} from '../character-layer/character';
-import {EnemyLayer} from '../enemy-layer/enemy-layer';
-import {CollectibleCoordinate} from './collectibles';
 
 export class CollectibleCollision {
     collectRight(): void {
@@ -85,9 +85,8 @@ export class CollectibleCollision {
     private collectTopAction(coordinates: CollectibleCoordinate[], collectibleRadius: number): void {
         const collectibleOnWayY = this.getCollectibleOnWayY(coordinates);
         if (collectibleOnWayY.length) {
-            const characterBottomEdge = character.currentY + character.height;
             const collected = collectibleOnWayY.find((coordinate) => {
-                const passCollectible = coordinate.centerY - collectibleRadius > characterBottomEdge;
+                const passCollectible = coordinate.centerY - collectibleRadius > character.currentY;
                 if (passCollectible) {
                     return null;
                 }
@@ -106,7 +105,7 @@ export class CollectibleCollision {
         if (collectibleOnWayY.length) {
             const characterBottomEdge = character.currentY + character.height;
             const collected = collectibleOnWayY.find((coordinate) => {
-                const passCollectible = coordinate.centerY + collectibleRadius < character.currentY;
+                const passCollectible = coordinate.centerY + collectibleRadius < characterBottomEdge;
                 if (passCollectible) {
                     return null;
                 }
