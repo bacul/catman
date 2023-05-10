@@ -4,15 +4,12 @@ import {State} from '../../application-state';
 
 export class PowerUp {
     static active: boolean;
-    private readonly durationMs = 10000;
+    private readonly durationSeconds = 8;
     private static timeoutId: NodeJS.Timeout;
     private static powerUpElement = document.querySelector(UIElements.powerUp);
 
     activatePowerUp(): void {
-        if (PowerUp.timeoutId) {
-            PowerUp.powerUpElement.classList.remove(ElementStateClass.active);
-            clearTimeout(PowerUp.timeoutId);
-        }
+        this.cancelPowerUp();
 
         setTimeout(() => {
             PowerUp.active = true;
@@ -25,6 +22,13 @@ export class PowerUp {
             PowerUp.timeoutId = null;
             State.enemyLayer.enemiesHandicapTick = 1;
             PowerUp.powerUpElement.classList.remove(ElementStateClass.active);
-        }, this.durationMs);
+        }, this.durationSeconds * 1000);
+    }
+
+    cancelPowerUp(): void {
+        if (PowerUp.timeoutId) {
+            PowerUp.powerUpElement.classList.remove(ElementStateClass.active);
+            clearTimeout(PowerUp.timeoutId);
+        }
     }
 }

@@ -15,7 +15,7 @@ enum ControlKey {
 export class CharacterMovement {
     private _keyPressed: boolean;
     private keyPressTimeoutId: NodeJS.Timer;
-    private readonly intentionDurationMs: number;
+    private readonly intentionDurationMs: number = 800;
 
     constructor() {
         document.addEventListener('keydown', this.onKeyPressed.bind(this), false);

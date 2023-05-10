@@ -103,6 +103,7 @@ export class UILayer {
         document.querySelector(UIElements.overlay).classList.add(ElementStateClass.active);
         document.querySelector(UIElements.win).classList.add(ElementStateClass.active);
         document.querySelector(UIElements.restart).classList.add(ElementStateClass.active);
+        State.powerUp.cancelPowerUp();
     }
 
     setGameDefeat(): void {
